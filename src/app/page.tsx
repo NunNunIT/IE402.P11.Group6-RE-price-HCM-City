@@ -7,6 +7,8 @@ const GISMap = dynamic(() => import("@/components").then((mod) => mod.GISMap),
 
 export default function Home() {
   return (
-    <GISMap />
+    <div className="flex flex-col items-center justify-center min-h-[100dvh]">
+      <GISMap className="container" />
+    </div>
   );
 }
