@@ -1,0 +1,1 @@
+export { default as GISMap } from './gis-map';
