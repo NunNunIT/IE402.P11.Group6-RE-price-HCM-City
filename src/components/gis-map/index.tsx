@@ -26,8 +26,8 @@ interface IMapProps {
 export default function Map(props: IMapProps) {
   const {
     className,
-    zoom = 12,
-    center = [-118.805, 34.027]
+    zoom = 10,
+    center = [106.69508635065, 10.851985339727143]
   } = props;
 
   const mapDiv = useRef(null);
@@ -36,7 +36,7 @@ export default function Map(props: IMapProps) {
   }, [])
 
   return (
-    <div className={cn("relative max-sm:max-w-[100vw] max-w-[80vw] h-[50dvh] overflow-hidden", className)}>
+    <div className={cn("relative max-sm:max-w-[100vw] max-w-[80vw] h-[75dvh] overflow-hidden", className)}>
       <ArcgisMap
         className='h-full w-full'
         ref={mapDiv}
