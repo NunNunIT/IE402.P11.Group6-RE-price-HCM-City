@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 "use client";
 
 import * as React from "react";
@@ -30,11 +29,11 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      `inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-base font-medium 
-        ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 
-        focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 
-        border-b-[3px] data-[state=active]:border-red-500 
-        data-[state=active]:bg-white 
+      `inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-base font-medium
+        ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950
+        focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
+        border-b-[3px] data-[state=active]:border-red-500
+        data-[state=active]:bg-white
         hover:text-red-500 data-[state=active]:font-bold data-[state=active]:text-red-500
         dark:ring-offset-zinc-950 dark:focus-visible:ring-zinc-300 dark:data-[state=active]:bg-zinc-950`,
       className

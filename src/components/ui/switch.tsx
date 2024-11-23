@@ -54,7 +54,7 @@ const switchThumbVariants = cva(
 // Define the SwitchProps interface
 export interface SwitchProps
   extends React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>,
-    VariantProps<typeof switchRootVariants> {}
+  VariantProps<typeof switchRootVariants> { }
 
 // Create the Switch component using forwardRef for Radix Switch
 const Switch = React.forwardRef<
