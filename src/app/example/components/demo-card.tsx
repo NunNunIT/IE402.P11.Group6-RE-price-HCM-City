@@ -79,7 +79,7 @@ export default function DemoCard() {
           </CardContent>
           <div className="absolute inset-0 bg-primary/10 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
             <Button variant="secondary" onClick={() => toast.info("Interactive card clicked")}>
-              <Settings className="mr-1.5 size-4 -ml-0.5" /> Settings
+              <Settings className="mr-1 size-4 -ml-1" /> Settings
             </Button>
           </div>
         </Card>
