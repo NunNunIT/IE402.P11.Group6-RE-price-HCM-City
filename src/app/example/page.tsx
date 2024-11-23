@@ -1,10 +1,10 @@
 import { ToggleTheme } from "@/components";
-import { DemoButton, DemoCard, DemoCheckBox, DemoDialog, DemoDrawer, DemoDropDownMenu, DemoInput, DemoSheet } from "./components";
+import { DemoButton, DemoCard, DemoCheckBox, DemoDialog, DemoDrawer, DemoDropDownMenu, DemoInput, DemoSheet, DemoSonner } from "./components";
 
 export default function ExamplePage() {
   return (
     <main className="flex flex-col items-center justify-center">
-      <div className="flex justify-between items-center sticky top-0 bg-background py-2 w-full max-w-6xl mx-4 z-50">
+      <div className="flex justify-between items-center sticky top-0 bg-background p-2 py-8 w-full max-w-4xl mx-4 z-50">
         <h1 className="text-3xl font-bold">Example Page</h1>
         <ToggleTheme />
       </div>
@@ -20,6 +20,7 @@ export default function ExamplePage() {
         <DemoSheet />
         <DemoDropDownMenu />
         <DemoInput />
+        <DemoSonner />
       </div>
     </main>
   )
