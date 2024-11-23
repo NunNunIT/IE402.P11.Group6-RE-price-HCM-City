@@ -22,7 +22,7 @@ const CodeText: React.FC<CodeTextProps> = ({ children, className }) => {
 
   return (
     <div className={cn("relative group", className)}>
-      <pre className="p-4 bg-primary text-muted rounded-md overflow-x-auto">
+      <pre className="p-4 bg-primary text-muted rounded-md overflow-x-auto pr-[3.25rem]">
         <code>{children}</code>
       </pre>
       <Button
