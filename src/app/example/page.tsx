@@ -1,5 +1,5 @@
 import { ToggleTheme } from "@/components";
-import { DemoButton, DemoCard, DemoCheckBox, DemoDialog, DemoDrawer, DemoDropDownMenu, DemoSheet } from "./components";
+import { DemoButton, DemoCard, DemoCheckBox, DemoDialog, DemoDrawer, DemoDropDownMenu, DemoInput, DemoSheet } from "./components";
 
 export default function ExamplePage() {
   return (
@@ -19,6 +19,7 @@ export default function ExamplePage() {
         <DemoDrawer />
         <DemoSheet />
         <DemoDropDownMenu />
+        <DemoInput />
       </div>
     </main>
   )

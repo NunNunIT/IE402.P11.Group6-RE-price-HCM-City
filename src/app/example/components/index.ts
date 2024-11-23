@@ -6,3 +6,4 @@ export { default as DemoDialog } from "./demo-dialog";
 export { default as DemoDrawer } from "./demo-drawer";
 export { default as DemoSheet } from "./demo-sheet";
 export { default as DemoDropDownMenu } from "./demo-dropdown-menu";
+export { default as DemoInput } from "./demo-input";
