@@ -51,4 +51,4 @@ export default function Map(props: IMapProps) {
       </ArcgisMap>
     </div>
   );
-};
+}
