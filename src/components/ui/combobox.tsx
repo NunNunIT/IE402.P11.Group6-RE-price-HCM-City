@@ -72,7 +72,7 @@ export function Combobox({
                   key={item}
                   value={item}
                   className="dark:text-zinc-300 dark:bg-zinc-950"
-                  onSelect={(currentValue) => {
+                  onSelect={(currentValue: string) => {
                     onChange(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}

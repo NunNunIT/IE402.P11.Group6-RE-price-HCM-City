@@ -7,7 +7,7 @@ import { Search } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
-import { checkIncludeByAscii } from "@/utils/function"
+import { checkIncludeByAscii } from "@/utils/functions"
 
 
 const defaultFilter = (value: string, input: string) =>
