@@ -8,7 +8,7 @@ interface IDemoSectionProps {
 
 export default function DemoSection({ title, children, href }: IDemoSectionProps) {
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 bg-zinc-50 dark:bg-black p-4">
       <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
       {children}
       <Link
