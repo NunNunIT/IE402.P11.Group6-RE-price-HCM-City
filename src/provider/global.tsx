@@ -1,4 +1,5 @@
 import { ThemeProvider } from ".";
+import { Toaster } from "@/components/ui/sonner";
 
 
 export default function GlobalProvider({ children }: { children: React.ReactNode }) {
@@ -9,6 +10,7 @@ export default function GlobalProvider({ children }: { children: React.ReactNode
       enableSystem
     >
       {children}
+      <Toaster />
     </ThemeProvider>
   )
 }
