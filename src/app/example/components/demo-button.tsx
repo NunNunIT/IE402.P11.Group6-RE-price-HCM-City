@@ -34,7 +34,7 @@ export default function DemoButton() {
           {"import { Button } from '@/components/ui/button'"}
         </CodeText>
         <CodeText>
-          {`<Button variant="default" size="default" onClick={() => toast.info("Button clicked")}>
+          {`<Button variant="default" size="default" onClick={() => {}}>
   Default
 </Button>`}
         </CodeText>
