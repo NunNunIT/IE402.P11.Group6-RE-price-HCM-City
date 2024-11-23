@@ -22,7 +22,7 @@ const CodeText: React.FC<CodeTextProps> = ({ children, className }) => {
 
   return (
     <div className={cn("relative group", className)}>
-      <pre className="p-4 bg-muted text-muted-foreground border rounded-md overflow-x-auto">
+      <pre className="p-4 bg-primary text-muted rounded-md overflow-x-auto">
         <code>{children}</code>
       </pre>
       <Button
@@ -35,7 +35,7 @@ const CodeText: React.FC<CodeTextProps> = ({ children, className }) => {
         {copied ? (
           <Check className="h-4 w-4 text-green-500" />
         ) : (
-          <Copy className="h-4 w-4" />
+          <Copy className="h-4 w-4 text-muted-foreground" />
         )}
       </Button>
     </div>

@@ -13,7 +13,7 @@ export default function DemoSection({ title, children, href }: IDemoSectionProps
       {children}
       <Link
         href={href}
-        className="inline-flex items-center text-primary hover:underline"
+        className="inline-flex items-center text-muted hover:underline"
         target="_blank"
         rel="noopener noreferrer"
       >Read docs</Link>
