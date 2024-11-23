@@ -1,5 +1,5 @@
 import { ToggleTheme } from "@/components";
-import DemoButton from "./components/demo-button";
+import { DemoButton, DemoCard } from "./components";
 
 export default function ExamplePage() {
   return (
@@ -12,6 +12,7 @@ export default function ExamplePage() {
         <p className="text-lg text-muted-foreground">This page demonstrates various UI components.</p>
 
         <DemoButton />
+        <DemoCard />
       </div>
     </main>
   )
