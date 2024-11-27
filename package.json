@@ -38,6 +38,7 @@
     "embla-carousel-react": "^8.5.1",
     "ie402.p11.group6": "file:",
     "lucide-react": "^0.456.0",
+    "mongoose": "^8.8.3",
     "next": "14.2.17",
     "next-themes": "^0.4.3",
     "react": "^18",
