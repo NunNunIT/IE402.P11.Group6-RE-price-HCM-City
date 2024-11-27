@@ -11,6 +11,7 @@
   "dependencies": {
     "@arcgis/core": "^4.31.0",
     "@arcgis/map-components-react": "^4.31.2",
+    "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-accordion": "^1.2.1",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -38,6 +39,7 @@
     "embla-carousel-react": "^8.5.1",
     "ie402.p11.group6": "file:",
     "lucide-react": "^0.456.0",
+    "mongoose": "^8.8.3",
     "next": "14.2.17",
     "next-themes": "^0.4.3",
     "react": "^18",
@@ -51,6 +53,7 @@
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^3.1.0",
     "vaul": "^1.1.1",
+    "zod": "^3.23.8"
     "yet-another-react-lightbox": "^3.21.7"
   },
   "devDependencies": {
