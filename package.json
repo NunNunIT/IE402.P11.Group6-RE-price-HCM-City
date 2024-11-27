@@ -53,8 +53,8 @@
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^3.1.0",
     "vaul": "^1.1.1",
+    "yet-another-react-lightbox": "^3.21.7",
     "zod": "^3.23.8"
-    "yet-another-react-lightbox": "^3.21.7"
   },
   "devDependencies": {
     "@types/node": "^20",

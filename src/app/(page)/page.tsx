@@ -1,7 +1,5 @@
 // import dynamic from "next/dynamic";
 
-import { NewsCard, RealEstateCard } from "@/components/card";
-import LocationCard from "@/components/card/location";
 import { SearchTab } from "@/components/search";
 import { SeeMoreType1 } from "@/components/seeMore";
 import Image from "next/image";
