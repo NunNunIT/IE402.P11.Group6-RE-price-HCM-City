@@ -1,4 +1,4 @@
-const CONFIG_MAP = {
+export const CONFIG_MAP = {
   // map initialization options
   options: {
     basemap: 'gray'
@@ -23,4 +23,4 @@ const CONFIG_MAP = {
   }
 };
 
-export { CONFIG_MAP };
+export const LOCATION_API_URL_UNFORMATTED: string = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={}&lon={}`;

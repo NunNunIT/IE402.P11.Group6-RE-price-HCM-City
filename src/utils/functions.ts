@@ -1,3 +1,5 @@
+import { LOCATION_API_URL_UNFORMATTED } from "./constants";
+
 export function checkIncludeByAscii(str: string | null, searchStr: string | null): boolean {
   if (typeof str !== "string" || typeof searchStr !== "string") {
     return false;
@@ -34,17 +36,13 @@ export function unicodeToAscii(str?: string | null): string {
 
 export async function getRelativeLocation(
   location: TPosition,
-  language: TLocale = DEFAULT_LOCALE
 ): Promise<any> {
   const LOCATION_API_URL: string =
     LOCATION_API_URL_UNFORMATTED.replace("{}", location.lat.toString()).replace(
       "{}",
       location.long.toString()
     ) +
-    "&zoom=13" +
-    `&accept-language=${language}`;
-
-  // console.log(">> getRelativeLocation: LOCATION_API_URL:", LOCATION_API_URL);
+    "&zoom=13";
 
   try {
     const payload = await fetch(LOCATION_API_URL).then((res) => res.json());

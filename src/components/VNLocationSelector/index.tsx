@@ -3,8 +3,6 @@
 import React, { useState } from "react";
 
 import { Combobox } from "@/components/ui/combobox";
-import { Input } from "@/components/ui/input";
-
 import data from "./data.json";
 
 const VNLocationSelector = ({
