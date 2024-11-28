@@ -10,10 +10,10 @@ import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 
 export const AuthenticationDropdownMenu = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const { resolvedTheme, setTheme } = useTheme();
 
-  return !!session?.user?.id && (
+  return status === "authenticated" && !!session?.user?.id && (
     <DropdownMenu>
       <DropdownMenuTrigger className="md:block hidden" asChild>
         <Button variant="ghost" size="icon">
