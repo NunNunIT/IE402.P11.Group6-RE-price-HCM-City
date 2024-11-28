@@ -1,0 +1,1 @@
+export { default as ImageViewType1 } from "./type1"

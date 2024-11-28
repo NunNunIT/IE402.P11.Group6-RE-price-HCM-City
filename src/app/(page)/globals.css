@@ -72,3 +72,49 @@ body {
   --chart-4: 280 65% 60%;
   --chart-5: 340 75% 55%;
 }
+
+
+/* Swiper */
+@import "swiper/css";
+@import "swiper/css/pagination";
+@import "swiper/css/navigation";
+
+.swiper-button-next,
+.swiper-button-prev {
+  position: absolute;
+  top: 50%;
+  width: 3rem !important;
+  height: 3rem !important;
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-dark-7);
+  border-radius: 50%;
+  background-color: var(--color-dark-2-o40);
+  /* color: var(--swiper-navigation-color, var(--swiper-theme-color)); */
+  /* margin-right: 1rem; */
+  /* margin-left: 1rem; */
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 1rem !important;
+  color: var(--color-dark-10);
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  opacity: 0.8;
+  background-color: var(--color-dark-3);
+  color: #fff !important;
+}
+
+@media (max-width: 1024px) {
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none !important;
+  }
+}

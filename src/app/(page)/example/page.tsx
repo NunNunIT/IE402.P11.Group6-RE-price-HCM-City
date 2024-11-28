@@ -1,5 +1,5 @@
 import { ToggleTheme } from "@/components";
-import { DemoButton, DemoCard, DemoCheckBox, DemoDialog, DemoDrawer, DemoDropDownMenu, DemoInput, DemoSheet, DemoSonner } from "./components";
+// import { DemoButton, DemoCard, DemoCheckBox, DemoDialog, DemoDrawer, DemoDropDownMenu, DemoInput, DemoSheet, DemoSonner } from "./components";
 
 export default function ExamplePage() {
   return (
@@ -12,7 +12,13 @@ export default function ExamplePage() {
       <div className="w-full max-w-4xl space-y-8 m-4">
         <p className="text-lg text-muted-foreground">This page demonstrates various UI components.</p>
 
-        <DemoButton />
+        <div className="flex flex-row gap-8">
+          <p>Text</p>
+          <p>Text</p>
+          <p>Text</p>
+        </div>
+
+        {/* <DemoButton />
         <DemoCard />
         <DemoCheckBox />
         <DemoDialog />
@@ -20,7 +26,7 @@ export default function ExamplePage() {
         <DemoSheet />
         <DemoDropDownMenu />
         <DemoInput />
-        <DemoSonner />
+        <DemoSonner /> */}
       </div>
     </main>
   )
