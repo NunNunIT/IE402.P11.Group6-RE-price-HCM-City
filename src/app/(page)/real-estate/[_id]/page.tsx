@@ -1,19 +1,8 @@
-// import dynamic from "next/dynamic";
-
-import { GISMap } from "@/components";
-import { NewsCard, RealEstateCard } from "@/components/card";
-import LocationCard from "@/components/card/location";
-import { ImageViewType1 } from "@/components/imageView";
-import { SearchTab } from "@/components/search";
-import { SeeMoreType1 } from "@/components/seeMore";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { FaRegHeart } from "react-icons/fa";
-// import { GISMap } from "@/components";
-// const GISMap = dynamic(() => import("@/components").then((mod) => mod.GISMap),
-//   { ssr: false }
-// );
 import { FaLocationDot } from "react-icons/fa6";
+import { FaRegHeart } from "react-icons/fa";
+import { GISMap } from "@/components";
+import { ImageViewType1 } from "@/components/imageView";
 
 export default function Home() {
   return (

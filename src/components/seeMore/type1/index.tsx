@@ -1,12 +1,11 @@
 "use client";
 
+import { LocationCard, NewsCard, RealEstateCard } from "@/components/card";
+
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { LocationCard, RealEstateCard, NewsCard } from "@/components/card";
 
 export default function SeeMore({
   typeCard,
-  fetchLink,
   seeMoreLink,
   title,
 }: {
