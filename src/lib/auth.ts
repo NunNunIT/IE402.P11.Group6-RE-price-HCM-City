@@ -1,36 +1,22 @@
-import GitHub from "next-auth/providers/github";
-import Google from "next-auth/providers/google";
 import NextAuth from "next-auth";
+import { authConfig } from "./auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [GitHub, Google],
+  ...authConfig,
   callbacks: {
     authorized: async ({ auth }) => !!auth,
     redirect({ url, baseUrl }) {
       return url.startsWith(baseUrl) ? url : baseUrl;
     },
     session: async ({ session, token }) => {
-      // Add Google user data to the session object
-      if (token?.provider === 'google') {
-        session.user = {
-          id: token.sub,
-          email: token.email,
-          name: token.name,
-          image: token.picture,
-          emailVerified: null, // or provide a valid date if available
-        };
-      }
+      session.user = {
+        id: token.sub,
+        name: token.name,
+        email: token.email,
+        image: token.picture,
+        emailVerified: null,
+      };
 
-      // Add GitHub user data to the session object
-      if (token?.provider === 'github') {
-        session.user = {
-          id: token.sub,
-          email: token.email,
-          name: token.name,
-          image: token.picture,
-          emailVerified: null, // or provide a valid date if available
-        };
-      }
       return session;
     },
   },

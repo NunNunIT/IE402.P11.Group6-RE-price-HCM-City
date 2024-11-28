@@ -1,16 +1,17 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { LoginButton, LogoutButton } from "./authentication-button"
 
 import { Button } from "../ui/button"
 import { HiDotsVertical } from "react-icons/hi"
-import { ToggleTheme } from "../toggle-theme"
 import { useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
 
 export const AuthenticationDropdownMenu = () => {
   const { data: session } = useSession();
+  const { resolvedTheme, setTheme } = useTheme();
 
   return !!session?.user?.id && (
     <DropdownMenu>
@@ -28,17 +29,35 @@ export const AuthenticationDropdownMenu = () => {
             />
             <AvatarFallback>{(session.user.name ?? "U")[0]}</AvatarFallback>
           </Avatar>
-          <span>Tên user</span>
+          <span>{session.user.name}</span>
         </div>
 
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Chế độ tối
-            <DropdownMenuShortcut>
-              <ToggleTheme modal />
-            </DropdownMenuShortcut>
-          </DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              Chế độ sáng/tối
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup defaultValue={resolvedTheme} value={resolvedTheme} onValueChange={(value) => {
+                console.log("🚀 ~ AuthenticationDropdownMenu ~ value:", value)
+                setTheme(value)
+              }}>
+                <DropdownMenuRadioItem value="light">
+                  Light
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="dark">
+                  Dark
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+          {/* <DropdownMenuItem> */}
+          {/* Chế độ tối */}
+          {/* <DropdownMenuShortcut> */}
+          {/* <ToggleTheme isSub /> */}
+          {/* </DropdownMenuShortcut> */}
+          {/* </DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Quản lý</DropdownMenuItem>
@@ -50,7 +69,7 @@ export const AuthenticationDropdownMenu = () => {
         <LoginButton className="w-full">
           Đăng nhập
         </LoginButton>
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem className="!p-0">
           <LogoutButton className="w-full">
             Đăng xuất
           </LogoutButton>
