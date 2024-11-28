@@ -1,2 +1,3 @@
 export * from "./theme"
-export { default as GlobalProvider } from "./global"
+export * from "./global"
+export * from "./auth-dialog"
