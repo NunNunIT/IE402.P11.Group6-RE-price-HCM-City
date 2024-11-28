@@ -1,6 +1,6 @@
 "use client";
 
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PropsWithChildren, createContext, useContext, useState } from "react";
 
 import { LoginWithProviderButton } from "@/components/customize-ui/authentication-button";
@@ -20,6 +20,10 @@ export const AuthDialogProvider: React.FC<PropsWithChildren> = ({ children }) =>
       {status === "unauthenticated" && (
         <Dialog {...{ open, onOpenChange }}>
           <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Tiếp tục bằng đăng nhập</DialogTitle>
+              <DialogDescription>Hãy chọn một trong hai phương thức đăng nhập bên dưới</DialogDescription>
+            </DialogHeader>
             <LoginWithProviderButton provider="github">
               Đăng nhập với Github
             </LoginWithProviderButton>
