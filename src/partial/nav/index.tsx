@@ -1,30 +1,16 @@
-"use client";
-
-import * as React from "react";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { LoginButton, LogoutButton } from "@/components/customize-ui/authentication-button";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
 
+import { AuthenticationDropdownMenu } from "@/components/customize-ui/authentication-dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { FaBars } from "react-icons/fa6";
-import { HiDotsVertical } from "react-icons/hi";
 import { HiHomeModern } from "react-icons/hi2";
+import { LoginButton } from "@/components/customize-ui/authentication-button";
 import { PlusIcon } from "lucide-react";
-import { ToggleTheme } from "@/components";
 
 export default function NavBar() {
   return (
@@ -45,61 +31,13 @@ export default function NavBar() {
             <Button href="#" variant="ghost" className="font-semibold">
               Tin tức
             </Button>
-            {/* <Link href="#">Bất động sản</Link> */}
-            {/* <Link href="#">Địa điểm</Link> */}
-            {/* <Link href="#">Tin tức</Link> */}
           </div>
         </div>
 
         <div className="gap-3 md:flex hidden">
           <Button startIcon={<PlusIcon className="size-6" />}>Đăng tin</Button>
-          <Button>Đăng nhập</Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="md:block hidden" asChild>
-              <Button variant="ghost" size="icon">
-                <HiDotsVertical className="size-6 mx-auto" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <div className="flex flex-row items-center gap-3 p-2">
-                <Avatar>
-                  <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="@shadcn"
-                  />
-                  <AvatarFallback>AV</AvatarFallback>
-                </Avatar>
-                <span>Tên user</span>
-              </div>
-
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  Chế độ tối
-                  <DropdownMenuShortcut>
-                    <ToggleTheme />
-                  </DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Quản lý</DropdownMenuItem>
-              <DropdownMenuItem>Đăng tin</DropdownMenuItem>
-              <DropdownMenuItem>Bất động sản</DropdownMenuItem>
-              <DropdownMenuItem>Biến động</DropdownMenuItem>
-              <DropdownMenuItem>Tin tức</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <LoginButton>
-                  Đăng nhập
-                </LoginButton>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <LogoutButton>
-                  Đăng xuất
-                </LogoutButton>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <LoginButton>Đăng nhập</LoginButton>
+          <AuthenticationDropdownMenu />
         </div>
 
         <div className="md:hidden block">
