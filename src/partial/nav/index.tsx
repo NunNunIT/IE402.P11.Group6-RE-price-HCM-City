@@ -8,7 +8,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
@@ -16,12 +15,7 @@ import {
 import { LoginButton, LogoutButton } from "@/components/customize-ui/authentication-button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 
@@ -29,7 +23,6 @@ import { Button } from "@/components/ui/button";
 import { FaBars } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
 import { HiHomeModern } from "react-icons/hi2";
-import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import { ToggleTheme } from "@/components";
 
