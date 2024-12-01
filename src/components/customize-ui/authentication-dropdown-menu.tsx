@@ -41,7 +41,6 @@ export const AuthenticationDropdownMenu = () => {
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               <DropdownMenuRadioGroup defaultValue={resolvedTheme} value={resolvedTheme} onValueChange={(value) => {
-                console.log("🚀 ~ AuthenticationDropdownMenu ~ value:", value)
                 setTheme(value)
               }}>
                 <DropdownMenuRadioItem value="light">
@@ -53,12 +52,6 @@ export const AuthenticationDropdownMenu = () => {
               </DropdownMenuRadioGroup>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
-          {/* <DropdownMenuItem> */}
-          {/* Chế độ tối */}
-          {/* <DropdownMenuShortcut> */}
-          {/* <ToggleTheme isSub /> */}
-          {/* </DropdownMenuShortcut> */}
-          {/* </DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         {hasPermission(session.user, "has:manage") && (
