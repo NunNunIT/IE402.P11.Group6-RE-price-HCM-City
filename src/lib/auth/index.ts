@@ -3,7 +3,6 @@ import NextAuth from "next-auth";
 import { authConfig } from "./config";
 import { createUserFromSocial } from "../services";
 
-export { authConfig };
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
   callbacks: {

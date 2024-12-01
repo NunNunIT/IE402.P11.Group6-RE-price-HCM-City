@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import { authConfig } from "./lib/auth";
+import { authConfig } from "./lib/auth/config";
 
 const middleware = NextAuth(authConfig).auth;
 
