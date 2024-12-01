@@ -11,7 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return url.startsWith(baseUrl) ? url : baseUrl;
     },
     jwt: async ({ token }) => {
-      const { _id } = await createUserFromSocial({
+      const { _id, role } = await createUserFromSocial({
         email: token.email,
         socialType: token.provider as ENUM_SOCIAL_TYPE,
         metadata: {
@@ -20,7 +20,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       })
 
-      token._id = _id;
+      token._id = _id.toString();
+      token.role = role;
 
       return token;
     },
@@ -31,6 +32,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: token.email,
         image: token.picture,
         emailVerified: undefined,
+        role: token.role,
       };
 
       return session;

@@ -6,6 +6,7 @@ import { LoginButton, LogoutButton } from "./authentication-button"
 
 import { Button } from "../ui/button"
 import { HiDotsVertical } from "react-icons/hi"
+import { hasPermission } from "@/utils/functions";
 import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 
@@ -60,7 +61,9 @@ export const AuthenticationDropdownMenu = () => {
           {/* </DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Quản lý</DropdownMenuItem>
+        {hasPermission(session.user, "has:manage") && (
+          <DropdownMenuItem>Quản lý</DropdownMenuItem>
+        )}
         <DropdownMenuItem>Đăng tin</DropdownMenuItem>
         <DropdownMenuItem>Bất động sản</DropdownMenuItem>
         <DropdownMenuItem>Biến động</DropdownMenuItem>

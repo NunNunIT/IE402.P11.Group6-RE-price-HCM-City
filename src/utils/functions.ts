@@ -1,4 +1,7 @@
-import { LOCATION_API_URL_UNFORMATTED } from "./constants";
+import { LOCATION_API_URL_UNFORMATTED, ROLES } from "./constants";
+
+import { IUser } from "@/lib/model";
+import { TPermission } from "@/types/types-import";
 
 export function checkIncludeByAscii(str: string | null, searchStr: string | null): boolean {
   if (typeof str !== "string" || typeof searchStr !== "string") {
@@ -52,4 +55,11 @@ export async function getRelativeLocation(
     console.error(">> Error in getRelativeLocation", error.message);
     return null;
   }
+}
+
+export const hasPermission = (
+  user: Pick<Partial<IUser>, "role">,
+  permission: TPermission,
+) => {
+  return ((ROLES[user.role] ?? []) as readonly TPermission[]).includes(permission);
 }
