@@ -1,16 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-
 import { AuthenticationDropdownMenu } from "@/components/customize-ui/authentication-dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { FaBars } from "react-icons/fa6";
 import { HiHomeModern } from "react-icons/hi2";
 import { LoginButton } from "@/components/customize-ui/authentication-button";
 import { PlusIcon } from "lucide-react";
+import { Sidebar } from "@/components/customize-ui/sidebar";
 
 export default function NavBar() {
   return (
@@ -41,51 +34,7 @@ export default function NavBar() {
         </div>
 
         <div className="md:hidden block">
-          <Sheet>
-            <SheetTrigger className="md:hidden block" asChild>
-              <Button variant="ghost" size="icon">
-                <FaBars className="size-6 mx-auto" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent>
-              <div className="flex flex-col gap-3 mt-16">
-                <div className="flex flex-row items-center gap-3 p-2">
-                  <Avatar>
-                    <AvatarImage
-                      src="https://github.com/shadcn.png"
-                      alt="@shadcn"
-                    />
-                    <AvatarFallback>AV</AvatarFallback>
-                  </Avatar>
-                  <span className="font-semibold">Tên user</span>
-                </div>
-                <Button variant="ghost" className="w-full justify-start">
-                  Chế độ tối
-                </Button>
-                <Button href="#" variant="ghost" className="w-full justify-start">
-                  Quản lý
-                </Button>
-                <Button href="#" variant="ghost" className="w-full justify-start">
-                  Đăng tin
-                </Button>
-                <Button href="#" variant="ghost" className="w-full justify-start">
-                  Bất động sản
-                </Button>
-                <Button href="#" variant="ghost" className="w-full justify-start">
-                  Biến động
-                </Button>
-                <Button href="#" variant="ghost" className="w-full justify-start">
-                  Tin tức
-                </Button>
-                <LoginButton variant="ghost" className="w-full justify-start">
-                  Đăng nhập
-                </LoginButton>
-                <LoginButton variant="ghost" className="w-full justify-start">
-                  Đăng xuất
-                </LoginButton>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <Sidebar />
         </div>
       </div>
     </div>
