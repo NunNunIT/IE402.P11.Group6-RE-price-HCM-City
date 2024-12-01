@@ -39,9 +39,9 @@ export interface IUser extends Document {
 const UserSchema = new Schema({
   username: { type: String, required: true },
   email: { type: String, required: true },
-  avt: { type: String, required: true },
-  phone: { type: String, required: true },
-  birthday: { type: Date, required: true },
+  avt: { type: String },
+  phone: { type: String },
+  birthday: { type: Date },
   gender: { type: String, enum: ENUM_GENDER, default: ENUM_GENDER.Unknown },
   address: {
     type: {
@@ -56,6 +56,7 @@ const UserSchema = new Schema({
       ward: "",
       street: "",
     },
+    _id: false,
   },
   locationFav: { type: [{ type: Schema.Types.ObjectId, ref: ENUM_REF_TYPE.Location }], default: [] },
   realEstatesFav: { type: [{ type: Schema.Types.ObjectId, ref: ENUM_REF_TYPE.RealEstate }], default: [] },
