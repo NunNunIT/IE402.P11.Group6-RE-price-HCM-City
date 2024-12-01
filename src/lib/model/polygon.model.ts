@@ -1,11 +1,11 @@
-import { Document, Schema, model, models } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 
 export interface IPoint {
   lat: number,
   long: number,
 }
 
-export interface IPolygon extends Document {
+export interface IPolygon {
   points: IPoint[],
 }
 
@@ -16,6 +16,6 @@ const PointSchema: Schema = new Schema({
 
 const PolygonSchema: Schema = new Schema({
   points: { type: [PointSchema], required: true },
-}, { timestamps: true });
+});
 
-export const Polygon = models?.Polygon ?? model<IPolygon>('Polygon', PolygonSchema);
+export const Polygon = models?.Polygon ?? model('Polygon', PolygonSchema);

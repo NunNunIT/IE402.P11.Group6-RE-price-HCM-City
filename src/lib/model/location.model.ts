@@ -1,8 +1,7 @@
-import { Document, Schema, model, models } from 'mongoose';
+import { ILocation, LocationSchema } from './locate.schema';
+import { Schema, model, models } from 'mongoose';
 
-import { ILocation } from './locate.schema';
-
-export interface ILocationModel extends Document {
+export interface ILocationModel {
   ggMapId?: string;
   ggMapUrl?: string;
   title: string;
@@ -21,15 +20,11 @@ const locationSchema = new Schema({
   title: { type: String, required: true },
   desc: { type: String, required: true },
   categories: { type: [String], default: [] },
-  locate: {
-    lat: { type: Number, required: true },
-    long: { type: Number, required: true },
-    ward: { type: Schema.Types.ObjectId, ref: 'Ward', required: true },  // Reference to Ward model
-  },
+  locate: LocationSchema,
   imageUrl: { type: [String], default: [] },
   avgStarGGMap: { type: Number },
   exts: { type: [String], default: [] },
   owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },  // Reference to User model
 }, { timestamps: true });
 
-export const Location = models?.Location ?? model<ILocationModel>('Location', locationSchema);
+export const Location = models?.Location ?? model('Location', locationSchema);

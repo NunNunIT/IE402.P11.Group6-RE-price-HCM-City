@@ -1,5 +1,5 @@
-import { Document, Schema, model, models } from "mongoose";
 import { ILocation, LocationSchema } from "./locate.schema";
+import { Schema, model, models } from "mongoose";
 
 export interface IReply {
   date: Date;
@@ -21,7 +21,7 @@ const QASchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User' }, // Assuming 'User' model exists
   content: { type: String, required: true },
   replies: [ReplySchema],
-}, { _id: false });
+});
 
 export interface IInfo {
   bed: number;
@@ -35,7 +35,8 @@ const InfoSchema = new Schema({
   // Add other fields as needed (e.g. parking spaces, floors)
 }, { _id: false });
 
-export interface IRealEstate extends Document {
+export interface IRealEstate {
+  _id: string;
   title: string;
   desc: string;
   price: number;
@@ -67,4 +68,4 @@ const RealEstateSchema = new Schema({
   owner: { type: Schema.Types.ObjectId, ref: 'User', required: true } // Reference to User model
 }, { timestamps: true });
 
-export const RealEstate = models?.RealEstate ?? model<IRealEstate>('RealEstate', RealEstateSchema);
+export const RealEstate = models?.RealEstate ?? model('RealEstate', RealEstateSchema);

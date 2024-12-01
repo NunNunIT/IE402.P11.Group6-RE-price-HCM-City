@@ -1,6 +1,6 @@
-import { Document, Schema, model, models } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 
-export interface INews extends Document {
+export interface INews {
   title: string;
   content: string;
   owner: string;  // Reference to User model
@@ -14,4 +14,4 @@ const newsSchema = new Schema({
   reviews: { type: [{ type: Schema.Types.ObjectId, ref: 'Review' }], default: [] },
 }, { timestamps: true });
 
-export const News = models?.News ?? model<INews>('News', newsSchema);
+export const News = models?.News ?? model('News', newsSchema);

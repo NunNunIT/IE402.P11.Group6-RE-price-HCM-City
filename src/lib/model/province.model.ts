@@ -1,7 +1,8 @@
-import { Document, Schema, model, models } from 'mongoose';
 import { IAnalysis, analysisSchema } from './analysis.schema';
+import { Schema, model, models } from 'mongoose';
 
-export interface IProvince extends Document {
+export interface IProvince {
+  _id: string;
   name: string;
   imageUrl: string[];
   analysis: IAnalysis;

@@ -1,7 +1,8 @@
 import { ENUM_GENDER, ENUM_REF_TYPE, ENUM_ROLE } from "@/utils";
 import { Schema, model, models } from "mongoose";
 
-interface INotification extends Document {
+interface INotification {
+  _id: string;
   title: string;
   content: string;
   link: string;
@@ -17,7 +18,8 @@ const NotificationSchema = new Schema({
   isSeen: { type: Boolean, default: false },
 });
 
-export interface IUser extends Document {
+export interface IUser {
+  _id: string;
   username: string;
   email: string;
   avt: string;
@@ -64,4 +66,4 @@ const UserSchema = new Schema({
   role: { type: String, enum: ENUM_ROLE, default: ENUM_ROLE.User },
 })
 
-export const User = models?.User ?? model<IUser>('User', UserSchema);
+export const User = models?.User ?? model('User', UserSchema);

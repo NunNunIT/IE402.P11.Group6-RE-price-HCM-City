@@ -2,7 +2,7 @@ import { Schema, model, models } from "mongoose";
 
 import { ENUM_REF_TYPE } from "@/utils";
 
-export interface IComment extends Document {
+export interface IComment {
   itemId: string;
   refType: ENUM_REF_TYPE;
   userId: string;
@@ -20,4 +20,4 @@ const CommentSchema = new Schema({
   content: { type: String, required: true },
 }, { timestamps: true });
 
-export const Comment = models?.Comment ?? model<IComment>('Comment', CommentSchema);
+export const Comment = models?.Comment ?? model('Comment', CommentSchema);
