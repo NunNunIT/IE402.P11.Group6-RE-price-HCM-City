@@ -1,6 +1,6 @@
-// import libs
-import { NextResponse } from "next/server";
 import { EResponseStatus } from ".";
+import { NextResponse } from "next/server";
+import { TBaseResponseProps } from "@/types/types-import";
 
 const baseResponse = (props: TBaseResponseProps) => {
   const { status, ...rest } = props;

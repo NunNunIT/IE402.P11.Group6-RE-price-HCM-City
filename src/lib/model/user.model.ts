@@ -1,6 +1,5 @@
 import { ENUM_GENDER, ENUM_REF_TYPE, ENUM_ROLE } from "@/utils";
-
-import { Schema } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 interface INotification extends Document {
   title: string;
