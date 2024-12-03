@@ -71,214 +71,227 @@ export default function InputForm() {
   };
 
   return (
-    <div className="max-w-5xl w-full mx-auto">
+    <div className="relative max-w-5xl w-full mx-auto my-3">
+      <h1 className="md:text-4xl text-2xl font-bold my-3">
+        Tạo tin đăng bán bất động sản
+      </h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tiêu đề</FormLabel>
-                <FormControl>
-                  <Input placeholder="Nhập tiêu đề" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Tiêu đề</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nhập tiêu đề" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="desc"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Mô tả</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="Nhập mô tả" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="desc"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Mô tả</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Nhập mô tả" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Loại hình</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={(value) => field.onChange(value)}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Chọn loại hình" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="land">Đất</SelectItem>
-                        <SelectItem value="house">Nhà</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg">
+            <FormField
+              control={form.control}
+              name="imgs"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Hình ảnh</FormLabel>
+                  <FormControl>
+                    <ImageDropZone
+                      value={field.value || []} // Đảm bảo giá trị mặc định là []
+                      onChange={field.onChange} // Sử dụng field.onChange để cập nhật giá trị
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-          <FormField
-            control={form.control}
-            name="area"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Diện tích</FormLabel>
-                <FormControl>
-                  <Input placeholder="Nhập diện tích" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg">
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Loại hình</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={(value) => field.onChange(value)}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Chọn loại hình" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="land">Đất</SelectItem>
+                          <SelectItem value="house">Nhà</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Giá bán</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Nhập giá bán"
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="legal"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Giấy tờ</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={(value) => field.onChange(value)}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Chọn loại giấy tờ" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="sodo">Sổ đỏ/ Sổ hồng</SelectItem>
+                          <SelectItem value="hopdong">
+                            Hợp đồng mua bán
+                          </SelectItem>
+                          <SelectItem value="dangchoso">Đang chờ sổ</SelectItem>
+                          <SelectItem value="khac">Khác</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="legal"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Giấy tờ</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={(value) => field.onChange(value)}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Chọn loại giấy tờ" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="sodo">Sổ đỏ/ Sổ hồng</SelectItem>
-                        <SelectItem value="hopdong">
-                          Hợp đồng mua bán
-                        </SelectItem>
-                        <SelectItem value="dangchoso">Đang chờ sổ</SelectItem>
-                        <SelectItem value="khac">Khác</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="area"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Diện tích</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nhập diện tích" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="interior"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nội thất</FormLabel>
-                <FormControl>
-                  <Input placeholder="Nhập nội thất (nếu có)" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Giá bán</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Nhập giá bán"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-          <FormField
-            control={form.control}
-            name="bedroom"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Số phòng ngủ</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Nhập số phòng ngủ"
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg">
+            <FormField
+              control={form.control}
+              name="interior"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Nội thất</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nhập nội thất (nếu có)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="bathroom"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Số phòng tắm</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Nhập số phòng tắm"
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="bedroom"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Số phòng ngủ</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Nhập số phòng ngủ"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="direction"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Hướng</FormLabel>
-                <FormControl>
-                  <Input placeholder="Nhập hướng" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="bathroom"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Số phòng tắm</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Nhập số phòng tắm"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="imgs"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Hình ảnh</FormLabel>
-                <FormControl>
-                  <ImageDropZone
-                    value={field.value || []} // Đảm bảo giá trị mặc định là []
-                    onChange={field.onChange} // Sử dụng field.onChange để cập nhật giá trị
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="direction"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Hướng</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nhập hướng" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-          <Button type="submit" className="w-full">
-            Gửi
-          </Button>
+          <div className="sticky bottom-0 p-2">
+            <Button type="submit" className="w-full">
+              Gửi
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
