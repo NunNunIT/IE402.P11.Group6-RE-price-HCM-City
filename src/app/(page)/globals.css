@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* body {
   font-family: Arial, Helvetica, sans-serif;
-}
+} */
 
 @layer utilities {
   .text-balance {
@@ -73,6 +73,49 @@ body {
   --chart-5: 340 75% 55%;
 }
 
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+html {
+  font-size: 16px;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+h4 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+h5 {
+  font-size: 1.125rem;
+  font-weight: bold;
+}
+
+h6 {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+p {
+  font-size: 1rem;
+  font-weight: normal;
+}
 
 /* Swiper */
 @import "swiper/css";
@@ -112,7 +155,6 @@ body {
 }
 
 @media (max-width: 1024px) {
-
   .swiper-button-prev,
   .swiper-button-next {
     display: none !important;
