@@ -1,45 +1,38 @@
 "use client";
 
-// Import libs
-import React, { useEffect, useState, useCallback } from "react";
-import { useMediaQuery } from "usehooks-ts";
-import { toast } from "sonner";
-
-// import components
 import {
   Dialog,
-  DialogContent,
   DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
-  DialogDescription,
 } from "@/components/ui/dialog";
+import { FaChevronDown, FaLocationDot } from "react-icons/fa6";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetFooter,
-  SheetDescription,
 } from "@/components/ui/sheet";
-import { FaCheck } from "react-icons/fa6";
+
+import { Button } from "@/components/ui/button";
 import { CiSearch } from "react-icons/ci";
+import { FaCheck } from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
 import { LocateIcon } from "lucide-react";
-import { FaLocationDot, FaChevronDown } from "react-icons/fa6";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-
-// import utils
 import { cn } from "@/lib/utils";
-import { checkIncludeByAscii } from "@/utils/functions";
-// import { getRelativeLocation } from "@/utils/functions";
-// import { SelectorVnLocation as selectData } from "../data-location-selector";
+import { getRelativeLocation } from "@/utils/functions";
 import selectData from "../data.json";
+import { toast } from "sonner";
+import { useMediaQuery } from "usehooks-ts";
 
 const Select: React.FC<ISelectorLocationComponentProps> = ({
   multiChoice = false,
@@ -55,11 +48,9 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
   onlySheet,
   positioning = false,
   typeOptions = 1,
-  currentPosition,
   setCurrentPosition,
   viewOnly = false,
 }) => {
-  // console.log("selectedValueselectedValueselectedValue", selectedValue);
   const isDesktop = useMediaQuery("(min-width: 860px)");
   const [searchText, setSearchText] = useState("");
   const [filteredOptions, setFilteredOptions] = useState<any[]>([selectData]);
@@ -81,24 +72,24 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
       return;
     }
 
-    // const success = async (position: GeolocationPosition) => {
-    //   const { latitude, longitude } = position.coords;
-    //   const newCurrentPosition = { lat: latitude, long: longitude };
-    //   setCurrentPosition(newCurrentPosition);
+    const success = async (position: GeolocationPosition) => {
+      const { latitude, longitude } = position.coords;
+      const newCurrentPosition = { lat: latitude, long: longitude };
+      setCurrentPosition(newCurrentPosition);
 
-    //   const payload = await getRelativeLocation(newCurrentPosition);
-    //   if (!payload) return;
+      const payload = await getRelativeLocation(newCurrentPosition);
+      if (!payload) return;
 
-    //   const {
-    //     address: { state: rawState },
-    //   } = payload;
-    //   if (!rawState) return;
+      const {
+        address: { state: rawState },
+      } = payload;
+      if (!rawState) return;
 
-    //   const state = rawState.replace("Tỉnh", "").replace("province", "").trim();
-    //   if (!state) return;
+      const state = rawState.replace("Tỉnh", "").replace("province", "").trim();
+      if (!state) return;
 
-    //   setSelectedValue(state);
-    // };
+      setSelectedValue(state);
+    };
 
     const error = (err: GeolocationPositionError) => {
       console.error("Error while getting current position:", err.message);
