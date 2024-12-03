@@ -6,7 +6,7 @@ import { ImageViewType1 } from "@/components/imageView";
 
 export default function Home() {
   return (
-    <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full max-w-[">
+    <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full max-w-6xl">
       <div className="w-full h-full bg-white dark:bg-zinc-900 p-3 space-y-3">
         <ImageViewType1 />
         <div className="flex flex-col gap-3">
@@ -23,13 +23,13 @@ export default function Home() {
         <div className="flex flex-row gap-6">
           <div className="flex flex-col">
             <span className="text-zinc-600 dark:text-zinc-400">Giá</span>
-            <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+            <span className="font-semibold text-zinc-900 dark:text-zinc-100 text-xl">
               500000
             </span>
           </div>
           <div className="flex flex-col">
             <span className="text-zinc-600 dark:text-zinc-400">Diện tích</span>
-            <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+            <span className="font-semibold text-zinc-900 dark:text-zinc-100 text-xl">
               50m2
             </span>
           </div>

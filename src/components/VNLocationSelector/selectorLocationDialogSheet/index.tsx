@@ -37,7 +37,7 @@ import { Badge } from "@/components/ui/badge";
 // import utils
 import { cn } from "@/lib/utils";
 import { checkIncludeByAscii } from "@/utils/functions";
-import { getRelativeLocation } from "@/utils/functions";
+// import { getRelativeLocation } from "@/utils/functions";
 // import { SelectorVnLocation as selectData } from "../data-location-selector";
 import selectData from "../data.json";
 
@@ -81,24 +81,24 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
       return;
     }
 
-    const success = async (position: GeolocationPosition) => {
-      const { latitude, longitude } = position.coords;
-      const newCurrentPosition = { lat: latitude, long: longitude };
-      setCurrentPosition(newCurrentPosition);
+    // const success = async (position: GeolocationPosition) => {
+    //   const { latitude, longitude } = position.coords;
+    //   const newCurrentPosition = { lat: latitude, long: longitude };
+    //   setCurrentPosition(newCurrentPosition);
 
-      const payload = await getRelativeLocation(newCurrentPosition);
-      if (!payload) return;
+    //   const payload = await getRelativeLocation(newCurrentPosition);
+    //   if (!payload) return;
 
-      const {
-        address: { state: rawState },
-      } = payload;
-      if (!rawState) return;
+    //   const {
+    //     address: { state: rawState },
+    //   } = payload;
+    //   if (!rawState) return;
 
-      const state = rawState.replace("Tỉnh", "").replace("province", "").trim();
-      if (!state) return;
+    //   const state = rawState.replace("Tỉnh", "").replace("province", "").trim();
+    //   if (!state) return;
 
-      setSelectedValue(state);
-    };
+    //   setSelectedValue(state);
+    // };
 
     const error = (err: GeolocationPositionError) => {
       console.error("Error while getting current position:", err.message);
