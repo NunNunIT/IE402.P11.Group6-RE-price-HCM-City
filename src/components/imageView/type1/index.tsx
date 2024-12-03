@@ -52,7 +52,7 @@ export default function App() {
                 height={500}
                 src={image}
                 alt={`Picture ${idx + 1}`}
-                className="object-cover h-full w-full max-h-[55dvh] aspect-[4/3] cursor-pointer"
+                className="object-cover h-full w-full max-h-[53dvh] aspect-[4/3] cursor-pointer"
               />
             </SwiperSlide>
           ))}
@@ -75,7 +75,7 @@ export default function App() {
                 height={500}
                 src={image}
                 alt={`Thumbnail ${idx + 1}`}
-                className="object-cover aspect-[4/3] cursor-pointer"
+                className="object-cover aspect-[4/3] max-h-36 cursor-pointer"
               />
             </SwiperSlide>
           ))}

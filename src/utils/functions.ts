@@ -32,26 +32,25 @@ export function unicodeToAscii(str?: string | null): string {
 }
 
 
-export async function getRelativeLocation(
-  location: TPosition,
-  language: TLocale = DEFAULT_LOCALE
-): Promise<any> {
-  const LOCATION_API_URL: string =
-    LOCATION_API_URL_UNFORMATTED.replace("{}", location.lat.toString()).replace(
-      "{}",
-      location.long.toString()
-    ) +
-    "&zoom=13" +
-    `&accept-language=${language}`;
+// export async function getRelativeLocation(
+//   location: TPosition,
+// ): Promise<any> {
+//   const LOCATION_API_URL: string =
+//     LOCATION_API_URL_UNFORMATTED.replace("{}", location.lat.toString()).replace(
+//       "{}",
+//       location.long.toString()
+//     ) +
+//     "&zoom=13" +
+//     `&accept-language=${language}`;
 
-  // console.log(">> getRelativeLocation: LOCATION_API_URL:", LOCATION_API_URL);
+//   // console.log(">> getRelativeLocation: LOCATION_API_URL:", LOCATION_API_URL);
 
-  try {
-    const payload = await fetch(LOCATION_API_URL).then((res) => res.json());
+//   try {
+//     const payload = await fetch(LOCATION_API_URL).then((res) => res.json());
 
-    return payload;
-  } catch (error) {
-    console.error(">> Error in getRelativeLocation", error.message);
-    return null;
-  }
-}
+//     return payload;
+//   } catch (error) {
+//     console.error(">> Error in getRelativeLocation", error.message);
+//     return null;
+//   }
+// }
