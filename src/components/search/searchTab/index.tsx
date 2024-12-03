@@ -1,33 +1,18 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { IoSearchOutline } from "react-icons/io5";
+
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabsType4";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { IoSearchOutline } from "react-icons/io5";
 import { SelectorLocationDialogSheet } from "@/components";
 import { useState } from "react";
+
 export default function TabsDemo() {
   const [searchProvince, setSearchProvince] = useState<string | string[]>(
     "Hồ Chí Minh"

@@ -1,20 +1,12 @@
 /* eslint-disable no-unused-vars */
+type TResponseData = Record<string, unknown>;
 
-type TResponseData = Record<string, unknown>; // Generic data type for payload or error
-
-interface TBaseResponseProps {
-  message: string;
-  status: EResponseStatus;
-  data?: TResponseData;
-  error?: Error | string;
-}
-
-interface TOkResponseProps {
+type TOkResponseProps = {
   message?: string;
   data?: TResponseData;
 }
 
-interface TNotOkResponseProps {
+type TNotOkResponseProps = {
   message?: string;
   error?: Error | string | undefined;
 }

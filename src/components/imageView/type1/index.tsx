@@ -1,24 +1,21 @@
 "use client";
-import React, { useRef, useState } from "react";
-// Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
-import Lightbox from "yet-another-react-lightbox";
+
 import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/thumbs";
+
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import React, { useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
+import Image from "next/image";
+import Lightbox from "yet-another-react-lightbox";
 import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
-import "yet-another-react-lightbox/plugins/thumbnails.css";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/free-mode";
-// import "swiper/css/navigation";
-import "swiper/css/thumbs";
-
-// import required modules
-import { FreeMode, Navigation, Thumbs } from "swiper/modules";
-import Image from "next/image";
 
 const dataImage = [
   "https://swiperjs.com/demos/images/nature-1.jpg",

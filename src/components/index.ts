@@ -1,3 +1,3 @@
 export { default as GISMap } from './gis-map';
 export { default as SelectorLocationDialogSheet } from './VNLocationSelector/selectorLocationDialogSheet';
-export * from './toggle-theme';
+export { default as ImageDropZone } from './ImageDropZone';

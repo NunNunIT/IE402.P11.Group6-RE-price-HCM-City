@@ -1,4 +1,6 @@
-const CONFIG_MAP = {
+import { ENUM_ROLE } from "./enums";
+
+export const CONFIG_MAP = {
   // map initialization options
   options: {
     basemap: 'gray'
@@ -21,6 +23,16 @@ const CONFIG_MAP = {
       content: '{snippet}'
     }
   }
-};
+} as const;
 
-export { CONFIG_MAP };
+export const LOCATION_API_URL_UNFORMATTED: string = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={}&lon={}`;
+
+export const ROLES = {
+  [ENUM_ROLE.Admin]: [
+    "has:manage",
+  ],
+  [ENUM_ROLE.Staff]: [
+    "has:manage",
+  ],
+  [ENUM_ROLE.User]: [],
+} as const
