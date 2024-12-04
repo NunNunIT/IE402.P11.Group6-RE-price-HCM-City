@@ -5,7 +5,6 @@ import { useRouter, useParams } from "next/navigation";
 import { IComment, INewsArticle } from "@/model";
 import Comments from "@/components/comments";
 import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 
 const FullNewsPage = () => {
   const { id } = useParams();
