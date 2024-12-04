@@ -1,9 +1,7 @@
-// components/RealEstateCard.tsx
-import React, { useState } from "react";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 import Image from "next/image";
 import Link from "next/link";
 import { LucideDot } from "lucide-react";
-import { HiOutlineLocationMarker } from "react-icons/hi";
 import { SaveBtn } from "@/components";
 
 interface RealEstateCardProps {

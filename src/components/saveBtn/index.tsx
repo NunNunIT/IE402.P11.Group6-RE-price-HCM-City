@@ -1,4 +1,5 @@
 "use client";
+
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import {
   Tooltip,
@@ -6,8 +7,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+
 import { toast } from "@/hooks/use-toast";
+import { useAuthWrapperFunction } from "@/hooks";
 
 export default function SaveBtn({
   component = "location",
@@ -18,23 +21,23 @@ export default function SaveBtn({
 
   const type = component == "location" ? "địa điểm" : "bất động sản";
 
-  const onLike = async () => {
-    setLike(!like);
-    like !== true
-      ? toast({
-          title: `Bạn đã lưu ${type}`,
-        })
-      : toast({
-          title: `Bạn đã bỏ lưu ${type}`,
-        });
-  };
+  const onLike = useCallback(async () => {
+    setLike(prev => {
+      toast({
+        title: `Bạn đã ${prev ? "bỏ lưu" : "lưu"} ${type}`,
+      })
+      return !prev;
+    });
+  }, [type]);
+
+  const onLikeWrapper = useAuthWrapperFunction(onLike);
 
   return (
     <>
       {!like ? (
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger onClick={onLike}>
+            <TooltipTrigger onClick={onLikeWrapper}>
               <FaRegHeart className="size-6 text-gray-600 hover:text-rose-600" />
             </TooltipTrigger>
             <TooltipContent>
@@ -45,7 +48,7 @@ export default function SaveBtn({
       ) : (
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger onClick={onLike}>
+            <TooltipTrigger onClick={onLikeWrapper}>
               <FaHeart className="size-6 text-rose-600" />
             </TooltipTrigger>
             <TooltipContent>
