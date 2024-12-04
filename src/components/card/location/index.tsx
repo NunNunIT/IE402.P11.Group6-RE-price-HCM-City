@@ -1,10 +1,17 @@
+"use client";
 // components/LocationCard.tsx
-import React from "react";
-import { FaStar } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
 import Image from "next/image";
 import { GoHeart } from "react-icons/go";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface LocationCardProps {
   image?: string;
@@ -23,9 +30,11 @@ const LocationCard: React.FC<LocationCardProps> = ({
   workshopType,
   rating,
 }) => {
+  const [like, setLike] = useState(false);
+
   return (
-    <Link href="#">
-      <div className="group max-w-sm overflow-hidden transition-shadow aspect-[3/3.3] h-fit">
+    <div className="group max-w-sm overflow-hidden transition-shadow aspect-[3/3.3] h-fit">
+      <Link href="#">
         {/* Image */}
         <div className="relative">
           <Image
@@ -59,8 +68,32 @@ const LocationCard: React.FC<LocationCardProps> = ({
             {location ?? "dia chi"} • {duration ?? "15m"}
           </p>
         </div>
-      </div>
-    </Link>
+      </Link>
+
+      {!like ? (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger onClick={() => setLike(!like)}>
+              <FaRegHeart className="size-6 text-gray-600 hover:text-rose-600" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Lưu bất động sản này</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      ) : (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger onClick={() => setLike(!like)}>
+              <FaHeart className="size-6 text-rose-600" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Bỏ lưu bất động sản này</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+    </div>
   );
 };
 

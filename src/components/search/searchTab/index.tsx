@@ -61,6 +61,7 @@ export default function TabsDemo() {
             type="text"
             placeholder="Tìm kiếm tin tức"
             startIcon={<IoSearchOutline className="size-6" />}
+            className="border-none"
           />
           <Button>
             <IoSearchOutline className="size-6" />

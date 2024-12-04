@@ -132,9 +132,9 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
 
   const renderSelectTrigger2 = () => (
     <div className="h-full flex flex-nowrap justify-center items-center gap-2 text-base min-w-[100px] text-nowrap cursor-pointer">
-      <FaLocationDot className="size-4 text-white" />
+      <FaLocationDot className="size-4 text-zinc-800" />
       {selectedValue}
-      <FaChevronDown className="size-2 text-white" />
+      <FaChevronDown className="size-2 text-zinc-800" />
     </div>
   );
 
