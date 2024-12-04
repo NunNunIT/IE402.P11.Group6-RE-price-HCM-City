@@ -26,6 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { ImageDropZone } from "@/components";
 import { Textarea } from "@/components/ui/textarea";
+import TranslateKey from "@/lib/func/transfer";
 
 const FormSchema = z.object({
   title: z.string().min(1, "Tên không được bỏ trống."),
@@ -38,7 +39,18 @@ const FormSchema = z.object({
   interior: z.string().optional(),
   bedroom: z.number().optional(),
   bathroom: z.number().optional(),
-  direction: z.string().optional(),
+  direction: z
+    .enum([
+      "nam",
+      "bac",
+      "tay",
+      "dong",
+      "taynam",
+      "taybac",
+      "dongbac",
+      "dongnam",
+    ])
+    .optional(),
 });
 
 export default function InputForm() {
@@ -54,7 +66,7 @@ export default function InputForm() {
       interior: "",
       bedroom: undefined,
       bathroom: undefined,
-      direction: "",
+      direction: undefined,
       imgs: [],
     },
   });
@@ -279,7 +291,32 @@ export default function InputForm() {
                 <FormItem>
                   <FormLabel className="font-semibold">Hướng</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nhập hướng" {...field} />
+                    <Select
+                      onValueChange={(value) => field.onChange(value)}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Chọn loại hướng" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {[
+                            "nam",
+                            "bac",
+                            "tay",
+                            "dong",
+                            "taynam",
+                            "taybac",
+                            "dongbac",
+                            "dongnam",
+                          ].map((item, index) => (
+                            <SelectItem key={index} value={item}>
+                              {TranslateKey(item)}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

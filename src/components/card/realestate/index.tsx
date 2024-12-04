@@ -1,22 +1,10 @@
 // components/RealEstateCard.tsx
-"use client";
-
 import React, { useState } from "react";
 import Image from "next/image";
-import { GoHeart } from "react-icons/go";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { FaLocationDot } from "react-icons/fa6";
 import { LucideDot } from "lucide-react";
 import { HiOutlineLocationMarker } from "react-icons/hi";
-
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { SaveBtn } from "@/components";
 
 interface RealEstateCardProps {
   image?: string;
@@ -35,7 +23,6 @@ const RealEstateCard: React.FC<RealEstateCardProps> = ({
   price,
   area,
 }) => {
-  const [like, setLike] = useState(false);
 
   return (
     <div className="group max-w-sm transition-shadow aspect-[3/4]">
@@ -70,29 +57,7 @@ const RealEstateCard: React.FC<RealEstateCardProps> = ({
         </div>
       </Link>
       <div className="w-full flex flex-row gap-1 justify-between items-center px-2">
-        {!like ? (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger onClick={() => setLike(!like)}>
-                <FaRegHeart className="size-6 text-gray-600 hover:text-rose-600" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Lưu bất động sản này</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        ) : (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger onClick={() => setLike(!like)}>
-                <FaHeart className="size-6 text-rose-600" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Bỏ lưu bất động sản này</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
+        <SaveBtn component="real-estate"/>
 
         <Link href="#" className="w-ful flex flex-row gap-1">
           <p className="text-lg font-bold text-red-500 dark:text-red-500">
