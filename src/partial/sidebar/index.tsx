@@ -14,28 +14,28 @@ import {
 // Menu items.
 const items = [
   {
-    title: "Home",
-    url: "#",
+    title: "Trang chủ",
+    url: "/",
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
+    title: "Quản lý bất động sản",
+    url: "/re-manage",
     icon: Inbox,
   },
   {
-    title: "Calendar",
-    url: "#",
+    title: "Quản lý địa điểm",
+    url: "/location-manage",
     icon: Calendar,
   },
   {
-    title: "Search",
-    url: "#",
+    title: "Quản lý tin tức",
+    url: "/news-manage",
     icon: Search,
   },
   {
-    title: "Settings",
-    url: "#",
+    title: "Xét duyệt",
+    url: "/accept-manage",
     icon: Settings,
   },
 ]
@@ -43,7 +43,7 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className="bg-white dark:bg-zinc-900">
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>

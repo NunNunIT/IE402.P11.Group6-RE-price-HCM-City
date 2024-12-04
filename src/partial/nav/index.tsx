@@ -5,6 +5,7 @@ import { LoginButton } from "@/components/customize-ui/authentication-button";
 import { PlusIcon } from "lucide-react";
 import { Sidebar } from "@/components/customize-ui/sidebar";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function NavBar() {
   return (
@@ -36,7 +37,12 @@ export default function NavBar() {
         </div>
 
         <div className="gap-3 md:flex hidden">
-          <Button href="/create-new-re" startIcon={<PlusIcon className="size-6" />}>Đăng tin</Button>
+          <Button
+            href="/create-new-re"
+            startIcon={<PlusIcon className="size-6" />}
+          >
+            Đăng tin
+          </Button>
           <LoginButton>Đăng nhập</LoginButton>
           <AuthenticationDropdownMenu />
         </div>
