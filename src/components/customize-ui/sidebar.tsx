@@ -6,20 +6,12 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 
 import { Button } from "../ui/button";
 import { FaBars } from "react-icons/fa6";
+import { NAVIGATION_MOBILE_DATA } from "@/data/navigation.data";
 import { Separator } from "../ui/separator";
-import { Switch } from "../ui/switch";
-import { hasPermission } from "@/utils";
-import { useCallback } from "react";
 import { useSession } from "next-auth/react";
-import { useTheme } from "next-themes";
 
 export function Sidebar() {
-  const { resolvedTheme, setTheme } = useTheme();
   const { data: session, status } = useSession();
-  const toggleTheme = useCallback(
-    () => setTheme((prev) => (prev === "dark" ? "light" : "dark")),
-    [setTheme]
-  );
 
   return (
     <Sheet>
@@ -43,64 +35,16 @@ export function Sidebar() {
             </div>
           )}
           <Separator />
-          <Button
-            variant="ghost"
-            className="w-full justify-between items-center"
-            onClick={toggleTheme}
-          >
-            <span>Chế độ tối</span>
-            <Switch
-              checked={resolvedTheme === "dark"}
-              onCheckedChange={toggleTheme}
-            />
-          </Button>
-          {status === "authenticated" &&
-            session?.user &&
-            hasPermission(session.user, "has:manage") && (
+          {NAVIGATION_MOBILE_DATA.map((data) => (
+            (!data.isNeedAuth || session?.user) && (
               <>
-                <Separator />
-                <Button
-                  href="#"
-                  variant="ghost"
-                  className="w-full justify-start"
-                >
-                  Quản lý
+                <Button key={data.title} href={data.link} variant="ghost" className="w-full justify-start">
+                  {data.title}
                 </Button>
+                {data.isNeedSeparator && <Separator />}
               </>
-            )}
-          <Separator />
-          <Button
-            href="/create-new-re"
-            variant="ghost"
-            className="w-full justify-start"
-          >
-            Đăng tin
-          </Button>
-          <Button
-            href="/real-estate"
-            variant="ghost"
-            className="w-full justify-start"
-          >
-            Bất động sản
-          </Button>
-          <Button
-            href="/analysis"
-            variant="ghost"
-            className="w-full justify-start"
-          >
-            Biến động
-          </Button>
-          <Button href="/news" variant="ghost" className="w-full justify-start">
-            Tin tức
-          </Button>
-          {status === "authenticated" && session?.user && (
-            <>
-              <Button href="#" variant="ghost" className="w-full justify-start">
-                Lưu
-              </Button>
-              <Separator />
-            </>
-          )}
+            )
+          ))}
           <LogoutButton variant="secondary" className="w-full justify-start">
             Đăng xuất
           </LogoutButton>

@@ -1,3 +1,5 @@
+"use server";
+
 import { AuthDialogProvider, ThemeProvider } from ".";
 
 import { SessionProvider } from "next-auth/react"
