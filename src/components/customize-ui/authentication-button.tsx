@@ -26,6 +26,6 @@ export function LoginWithProviderButton({ provider, ...props }: Omit<ButtonProps
 export function LogoutButton(props: Omit<ButtonProps, "onClick">) {
   const { status } = useSession();
   return status === "authenticated" && (
-    <Button onClick={() => signOut({ redirect: false })} {...props} />
+    <Button variant="secondary" onClick={() => signOut({ redirect: false })} {...props} />
   )
 }

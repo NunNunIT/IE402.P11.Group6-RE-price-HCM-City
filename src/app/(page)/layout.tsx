@@ -32,7 +32,6 @@ export default function RootLayout({
         className={`bg-zinc-50 dark:bg-black ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <GlobalProvider>
-          <NavBar />
           {children}
         </GlobalProvider>
         <Toaster />
