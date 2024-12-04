@@ -13,25 +13,19 @@ interface RealEstateCardProps {
 }
 
 export default function SearchResultCard({
-  images = [
-    "https://photo.rever.vn/v3/get/rvhe0PS+4VVS4Z8WZzoVBQToU5B4zzCZg5f9dc2EdjtJdprSpJtPtK0VShcsHCoQDDJ3cXBnMshiyvde_rN47nHA==/750x500/image.jpg",
-    "https://photo.rever.vn/v3/get/rvhe0PS+4VVS4Z8WZzoVBQToU5B4zzCZg5f9dc2EdjtJdprSpJtPtK0VShcsHCoQDDJ3cXBnMshiyvde_rN47nHA==/750x500/image.jpg",
-    "https://photo.rever.vn/v3/get/rvhe0PS+4VVS4Z8WZzoVBQToU5B4zzCZg5f9dc2EdjtJdprSpJtPtK0VShcsHCoQDDJ3cXBnMshiyvde_rN47nHA==/750x500/image.jpg",
-    "https://photo.rever.vn/v3/get/rvhe0PS+4VVS4Z8WZzoVBQToU5B4zzCZg5f9dc2EdjtJdprSpJtPtK0VShcsHCoQDDJ3cXBnMshiyvde_rN47nHA==/750x500/image.jpg",
-    "https://photo.rever.vn/v3/get/rvhe0PS+4VVS4Z8WZzoVBQToU5B4zzCZg5f9dc2EdjtJdprSpJtPtK0VShcsHCoQDDJ3cXBnMshiyvde_rN47nHA==/750x500/image.jpg",
-  ],
+  images,
   title,
   location,
   distance,
   price,
 }: RealEstateCardProps) {
   const [isLiked, setIsLiked] = useState(false); // Trạng thái yêu thích
-  const [showPopup, setShowPopup] = useState(false); // Trạng thái hiển thị popup
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleHeartClick = () => {
     setIsLiked(!isLiked);
     setShowPopup(true);
-    setTimeout(() => setShowPopup(false), 5000); // Ẩn popup sau 5 giây
+    setTimeout(() => setShowPopup(false), 5000);
   };
 
   const displayedImages = images.slice(0, 3); // Hiển thị 3 ảnh
