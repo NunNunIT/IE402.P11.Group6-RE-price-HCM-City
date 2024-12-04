@@ -5,7 +5,7 @@ import { Heart, MapPin } from "lucide-react";
 import Link from "next/link";
 
 interface RealEstateCardProps {
-  images: string[]; // Mảng ảnh
+  images?: string[]; // Mảng ảnh
   title?: string;
   location?: string;
   distance?: string;
