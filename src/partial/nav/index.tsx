@@ -34,7 +34,7 @@ export default function NavBar() {
           <AuthenticationDropdownMenu />
         </div>
 
-        <div className="md:hidden block">
+        <div className="md:hidden flex gap-2">
           <Sidebar />
         </div>
       </div>
