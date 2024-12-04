@@ -1,11 +1,22 @@
 // components/RealEstateCard.tsx
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { GoHeart } from "react-icons/go";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
+import { LucideDot } from "lucide-react";
+import { HiOutlineLocationMarker } from "react-icons/hi";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface RealEstateCardProps {
   image?: string;
@@ -13,6 +24,7 @@ interface RealEstateCardProps {
   location?: string;
   distance?: string;
   price?: string;
+  area?: number;
 }
 
 const RealEstateCard: React.FC<RealEstateCardProps> = ({
@@ -21,12 +33,15 @@ const RealEstateCard: React.FC<RealEstateCardProps> = ({
   location,
   distance,
   price,
+  area,
 }) => {
+  const [like, setLike] = useState(false);
+
   return (
-    <Link href="#">
-      <div className="group max-w-sm overflow-hidden transition-shadow aspect-[3/4]">
+    <div className="group max-w-sm transition-shadow aspect-[3/4]">
+      <Link href="#">
         {/* Image */}
-        <div className="relative">
+        <div className="relative h-48 rounded-xl overflow-hidden">
           <Image
             width={1000}
             height={500}
@@ -35,29 +50,61 @@ const RealEstateCard: React.FC<RealEstateCardProps> = ({
               "https://photo.rever.vn/v3/get/rvhe0PS+4VVS4Z8WZzoVBQToU5B4zzCZg5f9dc2EdjtJdprSpJtPtK0VShcsHCoQDDJ3cXBnMshiyvde_rN47nHA==/750x500/image.jpg"
             }
             alt={title ?? "Name"}
-            className="object-cover rounded-xl w-full h-48 aspect-[4/3] group-hover:scale-105 ease-in duration-300"
+            className="object-cover w-full h-full aspect-[4/3] group-hover:scale-105 ease-in duration-300"
           />
+          <span className="absolute p-2 bg-black/60 bottom-0 w-full text-sm text-green-300 dark:text-green-500">
+            Cách bạn {distance ?? "15m"}
+          </span>
         </div>
         {/* Content */}
-        <div className="p-2 h-full flex flex-col">
+        <div className="p-2 h-fit flex flex-col">
           <div className="flex flex-col">
             <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200 truncate line-clamp-2">
               {title ?? "Name"}
             </h3>
-            <p className="text-sm text-zinc-500">{location ?? "Địa chỉ"}</p>
-            <span className="text-sm text-green-500 dark:text-green-500">
-              Cách bạn {distance ?? "15m"}
-            </span>
-          </div>
-
-          <div className="w-full flex justify-end items-end">
-            <p className="text-lg font-bold text-red-500 dark:text-red-500 mt-2">
-              {price ?? "5000 VND"}
+            <p className="text-sm text-zinc-500 flex gap-2 flex-row">
+              <HiOutlineLocationMarker className="size-4 text-gray-800" />
+              {location ?? "Địa chỉ"}
             </p>
           </div>
         </div>
+      </Link>
+      <div className="w-full flex flex-row gap-1 justify-between items-center px-2">
+        {!like ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger onClick={() => setLike(!like)}>
+                <FaRegHeart className="size-6 text-gray-600 hover:text-rose-600" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Lưu bất động sản này</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger onClick={() => setLike(!like)}>
+                <FaHeart className="size-6 text-rose-600" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Bỏ lưu bất động sản này</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+
+        <Link href="#" className="w-ful flex flex-row gap-1">
+          <p className="text-lg font-bold text-red-500 dark:text-red-500">
+            {area ?? "25"} m<sup>2</sup>
+          </p>
+          <LucideDot className="text-red-500 dark:text-red-500" />
+          <p className="text-lg font-bold text-red-500 dark:text-red-500">
+            {price ?? "5000 VND"}
+          </p>
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 };
 
