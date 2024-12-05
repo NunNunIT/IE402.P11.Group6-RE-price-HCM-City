@@ -6,7 +6,7 @@ import { MockData } from "@/types/item";
 
 const mockDataAll: MockData[] = [
   {
-    type: "realestate",
+    type: "realEstate",
     value: {
       image: "/decorate/searchTab.jpg",
       title: "Real Estate Title",
@@ -38,7 +38,7 @@ const mockDataAll: MockData[] = [
     },
   },
   {
-    type: "realestate",
+    type: "realEstate",
     value: {
       image: "/decorate/searchTab.jpg",
       title: "Luxury Apartment",
@@ -59,7 +59,7 @@ const mockDataAll: MockData[] = [
     },
   },
   {
-    type: "realestate",
+    type: "realEstate",
     value: {
       image: "/decorate/searchTab.jpg",
       title: "Modern House",
