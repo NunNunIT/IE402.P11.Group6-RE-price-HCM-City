@@ -1,8 +1,8 @@
-export type ItemType = "realestate" | "location" | "news" | "all";
+export type ItemType = "realestate" | "location" | "all";
 
 export type MockData = {
   type: ItemType;
-  value: LocationCardProps | NewsCardProps | RealEstateCardProps;
+  value: LocationCardProps | RealEstateCardProps;
 };
 
 export interface LocationCardProps {
@@ -12,11 +12,6 @@ export interface LocationCardProps {
   duration?: string;
   workshopType?: string;
   rating?: number;
-}
-
-export interface NewsCardProps {
-  image?: string;
-  title?: string;
 }
 
 export interface RealEstateCardProps {

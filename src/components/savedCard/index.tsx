@@ -15,10 +15,6 @@ export default function SavedCards({
 }) {
   const mockDataAll: MockData[] = data ?? [
     {
-      type: "news",
-      value: { image: "/decorate/searchTab.jpg", title: "News Title" },
-    },
-    {
       type: "realestate",
       value: {
         image: "/decorate/searchTab.jpg",
@@ -37,13 +33,6 @@ export default function SavedCards({
         duration: "3 days",
         workshopType: "Technology",
         rating: 4.5,
-      },
-    },
-    {
-      type: "news",
-      value: {
-        image: "/decorate/searchTab.jpg",
-        title: "Second News Title",
       },
     },
     {
@@ -79,13 +68,6 @@ export default function SavedCards({
       },
     },
     {
-      type: "news",
-      value: {
-        image: "/decorate/searchTab.jpg",
-        title: "Third News Title",
-      },
-    },
-    {
       type: "realestate",
       value: {
         image: "/decorate/searchTab.jpg",
@@ -93,13 +75,6 @@ export default function SavedCards({
         location: "Florida",
         distance: "10km",
         price: "$350,000",
-      },
-    },
-    {
-      type: "news",
-      value: {
-        image: "/decorate/searchTab.jpg",
-        title: "Fourth News Title",
       },
     },
   ];
@@ -116,8 +91,6 @@ export default function SavedCards({
         return <RenderLocation />;
       case "realestate":
         return <RenderRealEstate />;
-      case "news":
-        return <RenderNews />;
       case "all":
         return <RenderAll />;
       default:
@@ -155,17 +128,6 @@ export default function SavedCards({
         .filter((item) => item.type === "realestate")
         .map((item, index) => (
           // <RealEstateCard key={index} />
-          <SavedCard key={index} type={item.type} value={item.value} />
-        ))}
-    </>
-  );
-
-  const RenderNews = () => (
-    <>
-      {itemData
-        .filter((item) => item.type === "news")
-        .map((item, index) => (
-          // <NewsCard key={index} />
           <SavedCard key={index} type={item.type} value={item.value} />
         ))}
     </>
