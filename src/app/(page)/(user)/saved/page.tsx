@@ -1,12 +1,13 @@
-import SavedCard from "@/components/savedCard";
-import { SearchBar } from "@/components/search";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import Image from "next/image";
 import { MockData } from "@/types/item";
+import SavedCard from "@/components/savedCard";
+import { SearchBar } from "@/components/search";
 
 const mockDataAll: MockData[] = [
   {
-    type: "realestate",
+    type: "realEstate",
     value: {
       image: "/decorate/searchTab.jpg",
       title: "Real Estate Title",
@@ -38,7 +39,7 @@ const mockDataAll: MockData[] = [
     },
   },
   {
-    type: "realestate",
+    type: "realEstate",
     value: {
       image: "/decorate/searchTab.jpg",
       title: "Luxury Apartment",
@@ -59,7 +60,7 @@ const mockDataAll: MockData[] = [
     },
   },
   {
-    type: "realestate",
+    type: "realEstate",
     value: {
       image: "/decorate/searchTab.jpg",
       title: "Modern House",
