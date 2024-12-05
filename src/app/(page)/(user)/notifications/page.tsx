@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+
 import NotificationCard from "@/components/card/notif-card";
 
 interface Notification {
@@ -11,28 +12,17 @@ interface Notification {
   title: string;
 }
 
-interface NotificationCardProps {
-  notification: Notification;
-  isRead: boolean;
-  onClick: () => void;
-}
-
 export default function NotificationsPage() {
   const [readNotifications, setReadNotifications] = useState([
     false,
     false,
     false,
   ]);
-  const [filter, setFilter] = useState("all");
 
   const handleNotificationClick = (index: number) => {
     const newReadNotifications = [...readNotifications];
     newReadNotifications[index] = true;
     setReadNotifications(newReadNotifications);
-  };
-
-  const markAllAsRead = () => {
-    setReadNotifications([true, true, true]);
   };
 
   const notifications: Notification[] = [

@@ -1,4 +1,4 @@
-export type ItemType = "realestate" | "location" | "all";
+export type ItemType = "realEstate" | "location" | "all";
 
 export type MockData = {
   type: ItemType;

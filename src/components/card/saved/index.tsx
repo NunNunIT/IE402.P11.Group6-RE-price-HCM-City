@@ -1,11 +1,11 @@
-import React from "react";
-import { IoTrashBin } from "react-icons/io5";
 import {
   ItemType,
   LocationCardProps,
   RealEstateCardProps,
 } from "@/types/item";
-import { LocationCard, RealEstateCard, NewsCard } from "@/components/card";
+import { LocationCard, NewsCard, RealEstateCard } from "@/components/card";
+
+import { IoTrashBin } from "react-icons/io5";
 
 interface SavedCardProps {
   type?: ItemType;
@@ -20,7 +20,7 @@ const RenderCard: React.FC<{ type?: ItemType; props: any }> = ({
   switch (type) {
     case "location":
       return <LocationCard {...props} />;
-    case "realestate":
+    case "realEstate":
       return <RealEstateCard {...props} />;
     default:
       return <div>No matching card type found.</div>;

@@ -1,8 +1,9 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { SavedCard } from "@/components/card";
 import { MockData } from "@/types/item";
+import { SavedCard } from "@/components/card";
+import { useState } from "react";
 
 export default function SavedCards({
   typeCard,
@@ -15,7 +16,7 @@ export default function SavedCards({
 }) {
   const mockDataAll: MockData[] = data ?? [
     {
-      type: "realestate",
+      type: "realEstate",
       value: {
         image: "/decorate/searchTab.jpg",
         title: "Real Estate Title",
@@ -47,7 +48,7 @@ export default function SavedCards({
       },
     },
     {
-      type: "realestate",
+      type: "realEstate",
       value: {
         image: "/decorate/searchTab.jpg",
         title: "Luxury Apartment",
@@ -68,7 +69,7 @@ export default function SavedCards({
       },
     },
     {
-      type: "realestate",
+      type: "realEstate",
       value: {
         image: "/decorate/searchTab.jpg",
         title: "Modern House",
@@ -77,7 +78,7 @@ export default function SavedCards({
         price: "$350,000",
       },
     },
-  ];
+  ] as const;
 
   const [itemData, setItemData] = useState<MockData[]>(mockDataAll);
 
@@ -89,7 +90,7 @@ export default function SavedCards({
     switch (typeCard) {
       case "location":
         return <RenderLocation />;
-      case "realestate":
+      case "realEstate":
         return <RenderRealEstate />;
       case "all":
         return <RenderAll />;
@@ -125,7 +126,7 @@ export default function SavedCards({
   const RenderRealEstate = () => (
     <>
       {itemData
-        .filter((item) => item.type === "realestate")
+        .filter((item) => item.type === "realEstate")
         .map((item, index) => (
           // <RealEstateCard key={index} />
           <SavedCard key={index} type={item.type} value={item.value} />

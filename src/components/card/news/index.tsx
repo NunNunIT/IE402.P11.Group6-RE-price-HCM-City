@@ -1,5 +1,3 @@
-// components/RealEstateCard.tsx
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,8 +9,7 @@ interface NewsCardProps {
 const NewsCard: React.FC<NewsCardProps> = ({ image, title }) => {
   return (
     <Link href="#">
-      <div className="group max-w-sm rounded-xl bg-white dark:bg-zinc-900 shadow-md overflow-hidden transition-shadow aspect-[3/3.5]">
-        {/* Image */}
+      <div className="group max-w-sm rounded-xl bg-white dark:bg-zinc-900 shadow-md transition-shadow aspect-[3/3.5]">
         <div className="relative">
           <Image
             width={1000}
@@ -25,7 +22,6 @@ const NewsCard: React.FC<NewsCardProps> = ({ image, title }) => {
             className="object-cover w-full h-48 aspect-[4/3] group-hover:scale-105 ease-in duration-300"
           />
         </div>
-        {/* Content */}
         <div className="p-2">
           <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200 truncate line-clamp-3">
             {title ?? "Name"}
