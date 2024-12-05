@@ -5,56 +5,43 @@ import React, { useState } from "react";
 import NotificationCard from "@/components/card/notif-card";
 
 interface Notification {
-  image: string;
-  name: string;
-  action: string;
-  time: string;
+  content: string;
   title: string;
+  link: string;
+  date: Date;
+  isSeen: boolean;
 }
 
 export default function NotificationsPage() {
-  const [readNotifications, setReadNotifications] = useState([
-    false,
-    false,
-    false,
+  const [notifications, setNotifications] = useState<Notification[]>([
+    {
+      content: "Bài đăng của bạn đã được quản trị viên phê duyệt",
+      title: "Bài đăng đã được phê duyệt",
+      link: "notifications/1",
+      date: new Date("2023-10-01T10:00:00Z"),
+      isSeen: false,
+    },
+    {
+      content: "Bài đăng của bạn đã được quản trị viên phê duyệt",
+      title: "Bài đăng đã được phê duyệt",
+      link: "notifications/1",
+      date: new Date("2023-10-01T10:00:00Z"),
+      isSeen: false,
+    },
+    {
+      content: "Bài đăng của bạn đã được quản trị viên phê duyệt",
+      title: "Bài đăng đã được phê duyệt",
+      link: "notifications/1",
+      date: new Date("2023-10-01T10:00:00Z"),
+      isSeen: false,
+    },
   ]);
 
   const handleNotificationClick = (index: number) => {
-    const newReadNotifications = [...readNotifications];
-    newReadNotifications[index] = true;
-    setReadNotifications(newReadNotifications);
+    const newNotifications = [...notifications];
+    newNotifications[index].isSeen = true;
+    setNotifications(newNotifications);
   };
-
-  const notifications: Notification[] = [
-    {
-      image:
-        "https://images.unsplash.com/photo-1485218126466-34e6392ec754?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxMHx8bGFkeXxlbnwwfDB8fHwxNzMyMDI1NDIxfDA&ixlib=rb-4.0.3&q=80&w=1080",
-      name: "Hewan D.",
-      action: "made a new post",
-      time: "about 22 hours ago",
-      title:
-        "Build a static website with Markdown content, using Nuxt and Fusionable (server API approach)",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1485218126466-34e6392ec754?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxMHx8bGFkeXxlbnwwfDB8fHwxNzMyMDI1NDIxfDA&ixlib=rb-4.0.3&q=80&w=1080",
-      name: "Hewan D.",
-      action: "made a new post",
-      time: "about 22 hours ago",
-      title:
-        "Build a static website with Markdown content, using Nuxt and Fusionable (server API approach)",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1485218126466-34e6392ec754?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxMHx8bGFkeXxlbnwwfDB8fHwxNzMyMDI1NDIxfDA&ixlib=rb-4.0.3&q=80&w=1080",
-      name: "Hewan D.",
-      action: "made a new post",
-      time: "about 22 hours ago",
-      title:
-        "Build a static website with Markdown content, using Nuxt and Fusionable (server API approach)",
-    },
-  ];
-
 
   return (
     <div className="w-full h-full bg-gray-100 dark:bg-gray-900">
@@ -68,7 +55,7 @@ export default function NotificationsPage() {
               <NotificationCard
                 key={index}
                 notification={notification}
-                isRead={readNotifications[index]}
+                isRead={notification.isSeen}
                 onClick={() => handleNotificationClick(index)}
               />
             ))}
