@@ -6,10 +6,6 @@ import { MockData } from "@/types/item";
 
 const mockDataAll: MockData[] = [
   {
-    type: "news",
-    value: { image: "/decorate/searchTab.jpg", title: "News Title" },
-  },
-  {
     type: "realestate",
     value: {
       image: "/decorate/searchTab.jpg",
@@ -28,13 +24,6 @@ const mockDataAll: MockData[] = [
       duration: "3 days",
       workshopType: "Technology",
       rating: 4.5,
-    },
-  },
-  {
-    type: "news",
-    value: {
-      image: "/decorate/searchTab.jpg",
-      title: "Second News Title",
     },
   },
   {
@@ -70,13 +59,6 @@ const mockDataAll: MockData[] = [
     },
   },
   {
-    type: "news",
-    value: {
-      image: "/decorate/searchTab.jpg",
-      title: "Third News Title",
-    },
-  },
-  {
     type: "realestate",
     value: {
       image: "/decorate/searchTab.jpg",
@@ -84,13 +66,6 @@ const mockDataAll: MockData[] = [
       location: "Florida",
       distance: "10km",
       price: "$350,000",
-    },
-  },
-  {
-    type: "news",
-    value: {
-      image: "/decorate/searchTab.jpg",
-      title: "Fourth News Title",
     },
   },
 ];
@@ -115,10 +90,9 @@ export default function SavedPage() {
 
       <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 my-6">
         <Tabs defaultValue="all" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all">Tất cả</TabsTrigger>
             <TabsTrigger value="realestate">Bất động sản</TabsTrigger>
-            <TabsTrigger value="news">Tin tức</TabsTrigger>
             <TabsTrigger value="location">Địa điểm</TabsTrigger>
           </TabsList>
           <TabsContent value="all">
@@ -126,9 +100,6 @@ export default function SavedPage() {
           </TabsContent>
           <TabsContent value="realestate">
             <SavedCard typeCard="realestate" />
-          </TabsContent>
-          <TabsContent value="news">
-            <SavedCard typeCard="news" />
           </TabsContent>
           <TabsContent value="location">
             <SavedCard typeCard="location" />

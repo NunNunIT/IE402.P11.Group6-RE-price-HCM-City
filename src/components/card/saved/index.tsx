@@ -3,14 +3,13 @@ import { IoTrashBin } from "react-icons/io5";
 import {
   ItemType,
   LocationCardProps,
-  NewsCardProps,
   RealEstateCardProps,
 } from "@/types/item";
 import { LocationCard, RealEstateCard, NewsCard } from "@/components/card";
 
 interface SavedCardProps {
   type?: ItemType;
-  value?: LocationCardProps | NewsCardProps | RealEstateCardProps;
+  value?: LocationCardProps | RealEstateCardProps;
   removeFunction?: () => void;
 }
 
@@ -23,8 +22,6 @@ const RenderCard: React.FC<{ type?: ItemType; props: any }> = ({
       return <LocationCard {...props} />;
     case "realestate":
       return <RealEstateCard {...props} />;
-    case "news":
-      return <NewsCard {...props} />;
     default:
       return <div>No matching card type found.</div>;
   }
