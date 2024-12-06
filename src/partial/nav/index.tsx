@@ -1,3 +1,4 @@
+import { AuthNavButton } from "@/components/customize-ui";
 import { AuthenticationDropdownMenu } from "@/components/customize-ui/authentication-dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { HiHomeModern } from "react-icons/hi2";
@@ -29,12 +30,12 @@ export default function NavBar() {
         </div>
 
         <div className="gap-3 md:flex hidden">
-          <Button
+          <AuthNavButton
             href="/create-new-re"
             startIcon={<PlusIcon className="size-6" />}
           >
             Đăng tin
-          </Button>
+          </AuthNavButton>
           <LoginButton>Đăng nhập</LoginButton>
           <AuthenticationDropdownMenu />
         </div>
