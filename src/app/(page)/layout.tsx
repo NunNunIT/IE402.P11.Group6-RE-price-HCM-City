@@ -1,20 +1,12 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-
 import "./globals.css";
-import { GlobalProvider } from "@/provider";
-import NavBar from "@/partial/nav";
-import { Toaster } from "@/components/ui/toaster";
 
-const geistSans = localFont({
-  src: "../../fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "../../fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+import { Be_Vietnam_Pro } from "next/font/google";
+import { GlobalProvider } from "@/provider";
+import type { Metadata } from "next";
+
+const be_vietnam_pro = Be_Vietnam_Pro({
+  weight: "500",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -28,14 +20,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`bg-zinc-50 dark:bg-black ${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html
+      lang="vi"
+      className={be_vietnam_pro.className}
+    >
+      <body className={`bg-zinc-50 dark:bg-black antialiased`}>
         <GlobalProvider>
           {children}
         </GlobalProvider>
-        <Toaster />
       </body>
     </html>
   );
