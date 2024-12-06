@@ -21,7 +21,7 @@ export default function SeeMore({
     switch (typeCard) {
       case "location":
         return RenderLocation();
-      case "realestate":
+      case "realEstate":
         return RenderRealEstate();
       case "news":
         return RenderNews();

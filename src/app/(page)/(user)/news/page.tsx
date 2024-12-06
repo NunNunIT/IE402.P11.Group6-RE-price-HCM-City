@@ -1,4 +1,4 @@
-import { NewsCard, RealEstateCard } from "@/components/card";
+import { NewsCard } from "@/components/card";
 import { SeeMoreType1 } from "@/components/seeMore";
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
           <NewsCard key={index} />
         ))}
       </div>
-      <SeeMoreType1 typeCard="realestate" title="Bất động sản" />
+      <SeeMoreType1 typeCard="realEstate" title="Bất động sản" />
     </div>
   );
 }
