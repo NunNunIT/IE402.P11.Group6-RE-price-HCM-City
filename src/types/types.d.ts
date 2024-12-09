@@ -3,7 +3,7 @@ type TResponseData = Record<string, unknown>;
 
 type TOkResponseProps = {
   message?: string;
-  data?: TResponseData;
+  data?: TResponseData | TResponseData[];
 }
 
 type TNotOkResponseProps = {
