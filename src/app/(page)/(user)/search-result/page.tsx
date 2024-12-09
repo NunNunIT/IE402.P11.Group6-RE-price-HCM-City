@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { FaLocationDot } from "react-icons/fa6";
-import { FaRegHeart } from "react-icons/fa";
-import { GISMap } from "@/components";
-import { ImageViewType1 } from "@/components/imageView";
-import { SearchTab } from "@/components/search";
-import { SeeMoreType1 } from "@/components/seeMore";
 import { NewsCard, SearchResultCard } from "@/components/card";
+
+import { SearchTab } from "@/components/search";
+import dynamic from "next/dynamic";
+
+const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
 export default function SearchResultPage() {
   return (
@@ -31,7 +29,7 @@ export default function SearchResultPage() {
           </div>
         </div>
       </div>
-      <GISMap className="container" />
+      <GISMap />
     </div>
   );
 }
