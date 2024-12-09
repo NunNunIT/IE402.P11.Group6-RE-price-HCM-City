@@ -1,14 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { FaLocationDot } from "react-icons/fa6";
-import { GISMap, SaveBtn } from "@/components";
-import { ImageViewType1 } from "@/components/imageView";
 import Image from "next/image";
+import { ImageViewType1 } from "@/components/imageView";
+import { SaveBtn } from "@/components";
 import TranslateKey from "@/lib/func/transfer";
+import dynamic from "next/dynamic";
+
+const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
 export default function Page() {
   return (
-    <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full mx-auto">
-      <div className="w-full h-full bg-white dark:bg-zinc-900 p-3 space-y-6">
+    <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full mx-auto p-3">
+      <div className="w-full h-full bg-white dark:bg-zinc-900 space-y-6 pr-3">
         <ImageViewType1 />
         <div className="flex flex-col gap-3">
           <h1 className="font-bold text-3xl">

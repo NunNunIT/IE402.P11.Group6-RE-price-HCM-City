@@ -2,6 +2,9 @@ import NextBundleAnalyzer from '@next/bundle-analyzer';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    instrumentationHook: true,
+  },
   images: {
     dangerouslyAllowSVG: true,
     remotePatterns: [
