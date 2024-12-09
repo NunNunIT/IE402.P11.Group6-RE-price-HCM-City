@@ -1,63 +1,95 @@
-"use client";
+'use client'
 
-import { setAssetPath as setCalciteComponentsAssetPath } from "@esri/calcite-components/dist/components";
+import { Point, Polygon } from '@arcgis/core/geometry';
+import { districts, places } from './assets';
+import { useEffect, useRef, useState } from 'react';
 
-setCalciteComponentsAssetPath(
-  "https://js.arcgis.com/calcite-components/2.13.2/assets"
-);
-
-import "@arcgis/map-components/dist/components/arcgis-map";
-import "@arcgis/map-components/dist/components/arcgis-legend";
-import "@arcgis/map-components/dist/components/arcgis-zoom";
-// import "@arcgis/map-components/dist/components/arcgis-search";
-import {
-  ArcgisLegend,
-  ArcgisMap,
-  ArcgisZoom,
-} from "@arcgis/map-components-react";
-import { cn } from "@/lib/utils";
-import { useEffect, useRef } from "react";
-import "./style.css";
+import Graphic from '@arcgis/core/Graphic';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import Map from '@arcgis/core/Map';
+import MapControls from './controls';
+import MapView from '@arcgis/core/views/MapView';
+import { cn } from '@/lib/utils';
+import { loadCss } from './utils';
 
 interface IMapProps {
-  className?: string;
   zoom?: number;
-  center?: number[];
+  center?: [number, number];
+  className?: string;
 }
 
-export default function Map(props: IMapProps) {
-  const {
-    className,
-    zoom = 10,
-    center = [106.69508635065, 10.851985339727143],
-  } = props;
+const DEFAULT_PROPS = {
+  zoom: 10,
+  center: [106.69508635065, 10.851985339727143]
+}
 
-  const mapDiv = useRef(null);
+export default function MapComponent(props: IMapProps) {
+  props = Object.assign(DEFAULT_PROPS, props);
+  const mapRef = useRef<HTMLDivElement>(null)
+  const view = useRef<MapView>(null)
+  const [zoom, setZoom] = useState(props.zoom)
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    loadCss()
+
+    const map = new Map({ basemap: 'topo-vector' })
+
+    view.current = new MapView({
+      container: mapRef.current,
+      map: map,
+      center: props.center,
+      zoom
+    })
+
+    // const districtLayer = new GraphicsLayer();
+    // districts.forEach((district) => {
+    //   const graphic = new Graphic({
+    //     geometry: new Polygon({
+    //       rings: [district.rings],
+    //     }),
+    //     symbol: district.symbol,
+    //     // attributes: polylineAtt
+    //   })
+    //   districtLayer.add(graphic)
+    // })
+    // map.add(districtLayer);
+
+    // const placeLayer = new GraphicsLayer();
+    // places.forEach(async function (place) {
+    //   place.forEach(async function (data) {
+    //     // console.log("🚀 ~ data:", data)
+    //     // const graphic = new Graphic({
+    //     //   geometry: new Point({
+    //     //     x: data.locationlat,
+    //     //     y: data.locationlong,
+    //     //   }),
+    //     //   symbol: data.symbol,
+    //     //   // attributes: data,
+    //     // });
+    //     // placeLayer.add(graphic);
+    //   });
+    // });
+    // map.add(placeLayer);
+
+    // const streetLayer = new GraphicsLayer();
+    // streets.forEach((street) => {
+    //   streetLayer.add(new Graphic(street))
+    // })
+    // map.add(streetLayer);
+
+    view.current?.watch('zoom', (newZoom) => {
+      setZoom(newZoom)
+    })
+
+    return () => { if (view) view.current?.destroy() }
+  }, [])
 
   return (
-    <div
-      className={cn(
-        "relative max-sm:max-w-[100vw] max-w-[80vw] h-[100%] overflow-hidden",
-        className
-      )}
-    >
-      <ArcgisMap
-        className="h-full w-full"
-        ref={mapDiv}
-        onArcgisViewReadyChange={(event: CustomEvent) => {
-          console.log("MapView ready", event);
-        }}
-        zoom={zoom}
-        center={center}
-      >
-        <ArcgisZoom className="absolute top-4 left-4" position="top-left" />
-        <ArcgisLegend
-          className="absolute bottom-0 left-0 right-0"
-          position="bottom-left"
-        />
-      </ArcgisMap>
+    <div className='sticky top-[5.75rem] max-h-[calc(100dvh_-_6.5rem)]'>
+      <div className={cn("relative h-full w-full", props.className)}>
+        <div ref={mapRef} className="h-full w-full" />
+        <MapControls view={view.current} zoom={zoom} />
+      </div>
     </div>
-  );
+  )
 }
