@@ -23,7 +23,7 @@ const RealEstateCard: React.FC<Props> = ({ data }) => {
         {/* Image */}
         <div className="relative h-48">
           <Image
-            unoptimized
+          unoptimized
             width={1000}
             height={500}
             src={

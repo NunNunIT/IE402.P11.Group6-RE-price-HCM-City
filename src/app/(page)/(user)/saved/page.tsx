@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import Image from "next/image";
 import { MockData } from "@/types/item";
-import SavedCard from "@/components/savedCard";
+import Wrapper from "./components/wrapper";
 import { SearchBar } from "@/components/search";
 
 const mockDataAll: MockData[] = [
@@ -74,8 +74,6 @@ const mockDataAll: MockData[] = [
 export default function SavedPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh]">
-      {/* <GISMap className="container" /> */}
-      {/* <div className="relative w-full h-[50dvh] -mt-[11rem] flex justify-center items-center z-10"> */}
       <div className="relative w-full h-[40dvh] flex justify-center items-center z-10">
         <Image
           src="/decorate/searchTab.jpg"
@@ -92,18 +90,14 @@ export default function SavedPage() {
       <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 my-6">
         <Tabs defaultValue="all" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="all">Tất cả</TabsTrigger>
             <TabsTrigger value="realEstate">Bất động sản</TabsTrigger>
             <TabsTrigger value="location">Địa điểm</TabsTrigger>
           </TabsList>
-          <TabsContent value="all">
-            <SavedCard typeCard="all" data={mockDataAll} />
-          </TabsContent>
           <TabsContent value="realEstate">
-            <SavedCard typeCard="realEstate" />
+            <Wrapper typeCard="realEstate" />
           </TabsContent>
           <TabsContent value="location">
-            <SavedCard typeCard="location" />
+            <Wrapper typeCard="location" />
           </TabsContent>
         </Tabs>
       </div>

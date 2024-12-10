@@ -19,7 +19,7 @@ const locationSchema = new Schema({
   ggMapUrl: { type: String, required: true },
   title: { type: String, required: true },
   desc: { type: String, required: true },
-  categories: { type: [String], default: [] },
+  category: { type: String, default: "default" },
   locate: LocationSchema,
   imageUrl: { type: [String], default: [] },
   avgStarGGMap: { type: Number },

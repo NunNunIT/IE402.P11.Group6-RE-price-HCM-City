@@ -6,7 +6,7 @@ interface NewsCardProps {
   title?: string;
 }
 
-const NewsCard = ({ data }: { data: NewsCardProps }) => {
+const NewsCard = ({ data }: { data?: NewsCardProps }) => {
   return (
     <Link href="/news/1">
       <div className="group max-w-sm rounded-xl bg-white dark:bg-zinc-900 shadow-md transition-shadow aspect-[3/3.5]">
