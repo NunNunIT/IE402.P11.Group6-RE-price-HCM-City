@@ -1,26 +1,42 @@
-import { Button } from "@/components/ui/button";
+import { ENUM_MARKER_SYMBOL } from "@/utils";
 import { FaLocationDot } from "react-icons/fa6";
-import Image from "next/image";
 import { ImageViewType1 } from "@/components/imageView";
 import { SaveBtn } from "@/components";
-import TranslateKey from "@/lib/func/transfer";
 import dynamic from "next/dynamic";
+import { notFound } from "next/navigation";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
-export default function Page() {
+interface IRealEstateDetailPageProps extends IDefaultPageProps {
+  params: { _id: string },
+}
+
+export default async function RealEstateDetailPage({ params: { _id } }: IRealEstateDetailPageProps) {
+  const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`)
+    .then(async (res) => {
+      const payload = await res.json();
+      return payload;
+    })
+    .then(async (payload) => {
+      const data = payload.data;
+      return data;
+    }).catch((error) => {
+      console.error("🚀 ~ .catch ~ error", error.message)
+      return null;
+    });
+  if (!data) return notFound();
+
   return (
     <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full mx-auto p-3">
       <div className="w-full h-full bg-white dark:bg-zinc-900 space-y-6 pr-3">
-        <ImageViewType1 />
+        <ImageViewType1 images={data.imageUrl} />
         <div className="flex flex-col gap-3">
           <h1 className="font-bold text-3xl">
-            Hiếm - khu vip nhà 4T - HXH - gần mặt tiền - Nguyễn Thái Sơn -
-            44m2(4.2 x 10.5) - nhỉnh 7 tỷ
+            {data.title}
           </h1>
           <div className="flex flex-row gap-2 items-center font-semibold">
             <FaLocationDot />
-            <span>Đường Nguyễn Thái Sơn, Phường 5, Gò Vấp, Hồ Chí Minh</span>
+            <span>{data.locate?.diachi}, {data.locate?.xa}, {data.locate?.huyen}, {data.locate?.tinh}</span>
           </div>
         </div>
         <div className="flex flex-row justify-between items-center gap-6">
@@ -28,7 +44,7 @@ export default function Page() {
             <div className="flex flex-col">
               <span className="text-zinc-600 dark:text-zinc-400">Giá</span>
               <span className="font-semibold text-red-600 dark:text-red-500 text-xl">
-                500000
+                {data.price} tỷ
               </span>
             </div>
             <div className="flex flex-col">
@@ -36,7 +52,7 @@ export default function Page() {
                 Diện tích
               </span>
               <span className="font-semibold text-red-600 dark:text-red-500 text-xl">
-                50 m<sup>2</sup>
+                {data.area} m<sup>2</sup>
               </span>
             </div>
           </div>
@@ -46,15 +62,11 @@ export default function Page() {
         <div className="flex flex-col gap-3">
           <h2 className="font-bold text-xl">Thông tin mô tả</h2>
           <div className="">
-            Vị trí: 1/ Gò Dầu, P. Tân Quý, Q. Tân Phú. Hẻm 4,5m, cách mặt tiền
-            chỉ 4 căn nhà, cách AEON MALL Tân Phú chỉ 400m, nhiều tiện ích xung
-            quanh. DT: 45m² (4,5*10m). Kết cấu: Trệt + 1 Lầu. Nhà có 2 PN + 2
-            WC. Nhà mới đẹp. Vào ở ngay. Sổ hồng riêng. LH Kỳ Duyên để xem nhà
-            trực tiếp.
+            {data.desc}
           </div>
         </div>
 
-        <div className="flex flex-col gap-3">
+        {/* <div className="flex flex-col gap-3">
           <h2 className="font-bold text-xl">Đặc điểm bất động sản</h2>
           <div className="grid grid-cols-2 gap-3">
             {Object.entries({
@@ -74,9 +86,9 @@ export default function Page() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
-        <div className="rounded-lg border-2 border-zinc-200 dark:border-zinc-800 p-3">
+        {/* <div className="rounded-lg border-2 border-zinc-200 dark:border-zinc-800 p-3">
           <h2 className="font-bold text-xl mb-1">Liên hệ</h2>
           <div className="flex flex-row">
             <Image
@@ -103,9 +115,11 @@ export default function Page() {
               </Button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
-      <GISMap className="container" />
+      <GISMap zoom={20} className="container" center={data.locate} points={[
+        { ...data.locate, title: data.title, type: ENUM_MARKER_SYMBOL.REAL_ESTATE },
+      ]} />
     </div>
   );
 }

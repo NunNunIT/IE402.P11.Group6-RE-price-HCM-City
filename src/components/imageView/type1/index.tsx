@@ -17,7 +17,7 @@ import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 
-const dataImage = [
+const dataImages = [
   "https://swiperjs.com/demos/images/nature-1.jpg",
   "https://swiperjs.com/demos/images/nature-2.jpg",
   "https://swiperjs.com/demos/images/nature-3.jpg",
@@ -27,14 +27,13 @@ const dataImage = [
   "https://swiperjs.com/demos/images/nature-7.jpg",
 ];
 
-export default function App() {
+export default function Gallery({ images = dataImages }: { images?: string[] }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [index, setIndex] = useState(-1); // Chỉ số ảnh đang được mở lightbox
 
   return (
     <>
       <div className="space-y-2">
-        {/* Swiper chính */}
         <Swiper
           spaceBetween={10}
           navigation={true}
@@ -42,9 +41,10 @@ export default function App() {
           modules={[FreeMode, Navigation, Thumbs]}
           className="mySwiper2"
         >
-          {dataImage.map((image, idx) => (
+          {images.map((image, idx) => (
             <SwiperSlide key={idx} onClick={() => setIndex(idx)}>
               <Image
+                unoptimized
                 width={500}
                 height={500}
                 src={image}
@@ -65,9 +65,10 @@ export default function App() {
           modules={[FreeMode, Navigation, Thumbs]}
           className="mySwiper"
         >
-          {dataImage.map((image, idx) => (
+          {images.map((image, idx) => (
             <SwiperSlide key={idx}>
               <Image
+                unoptimized
                 width={500}
                 height={500}
                 src={image}
@@ -81,7 +82,7 @@ export default function App() {
 
       {/* Lightbox */}
       <Lightbox
-        slides={dataImage.map((image) => ({ src: image }))}
+        slides={images.map((image) => ({ src: image }))}
         open={index >= 0}
         index={index}
         close={() => setIndex(-1)}

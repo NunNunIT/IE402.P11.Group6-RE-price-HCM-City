@@ -7,9 +7,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 import { useAuthWrapperFunction } from "@/hooks";
 
 interface RealEstateCardProps {
+  _id: string;
   imageUrl?: string;
   title?: string;
   location?: string;
@@ -22,6 +24,7 @@ interface RealEstateCardProps {
 }
 
 export default function SearchResultCard({
+  _id,
   imageUrl = "https://photo.rever.vn/v3/get/rvhe0PS+4VVS4Z8WZzoVBQToU5B4zzCZg5f9dc2EdjtJdprSpJtPtK0VShcsHCoQDDJ3cXBnMshiyvde_rN47nHA==/750x500/image.jpg",
   title = "Giỏ hàng chuyển nhượng căn hộ Vinhomes Ba Son 1PN, 2PN, 3PN",
   price = 1.6,
@@ -30,21 +33,20 @@ export default function SearchResultCard({
   owner,
   createdAt,
 }: RealEstateCardProps) {
-  const [isLiked, setIsLiked] = useState(false); // Trạng thái yêu thích
-  const [showPopup, setShowPopup] = useState(false); // Trạng thái hiển thị popup
+  const [isLiked, setIsLiked] = useState(false);
   const handleHeartClick = async () => {
-    setIsLiked(!isLiked);
-    setShowPopup(true);
-    setTimeout(() => setShowPopup(false), 5000); // Ẩn popup sau 5 giây
+    setIsLiked(prev => {
+      if (!prev) toast.success("Đã thêm vào danh sách yêu thích");
+      return !prev;
+    });
   };
   const onClickHeart = useAuthWrapperFunction(handleHeartClick);
   return (
     <Link
-      href="#"
+      href={_id ? `/real-estate/${_id}` : "#"}
       className="container w-full flex h-auto p-3 shadow-lg rounded cursor-pointer hover:shadow-xl"
     >
       <div className="w-[30%] flex flex-col gap-2 mr-2">
-        {/* Ảnh chính */}
         <div className="relative">
           <Image
             unoptimized
@@ -86,7 +88,8 @@ export default function SearchResultCard({
               <div>
                 <p className="text-xs font-semibold">{owner?.username ?? "Unknown"}</p>
                 <p className="text-[8px] text-gray-500">
-                  Ngày đăng: {new Date(createdAt).toLocaleDateString()}
+                  {/* Ngày đăng: {new Date(createdAt).toLocaleDateString()} */}
+                  Ngày đăng: {createdAt}
                 </p>
               </div>
             </div>
@@ -98,13 +101,6 @@ export default function SearchResultCard({
           </div>
         </div>
       </div>
-
-      {/* Hiển thị thông báo khi yêu thích */}
-      {showPopup && (
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-green-600 text-white py-2 px-4 rounded-full mt-4">
-          Đã lưu thành công!
-        </div>
-      )}
     </Link>
   );
 }

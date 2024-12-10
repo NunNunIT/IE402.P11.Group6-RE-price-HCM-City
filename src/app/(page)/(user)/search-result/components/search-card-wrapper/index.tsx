@@ -84,7 +84,7 @@ export const SearchResultCards = ({ searchParams }: IDefaultPageProps) => {
                 <SearchResultCard key={index} {...item} />
               ))}
             </div>
-          ) : (
+          ) : isLoadingMore && (
             <div className="flex justify-center items-center h-96">
               <p>Không có kết quả nào</p>
             </div>
