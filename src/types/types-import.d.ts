@@ -6,7 +6,7 @@ import { ENUM_RESPONSE_STATUS, ROLES, ENUM_ROLE } from "@/utils";
 type TBaseResponseProps = {
   message: string;
   status: ENUM_RESPONSE_STATUS;
-  data?: TResponseData;
+  data?: TResponseData | TResponseData[];
   error?: Error | string;
 }
 
