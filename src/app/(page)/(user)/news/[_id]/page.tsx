@@ -6,7 +6,7 @@ interface INewsDetailPageProps extends IDefaultPageProps {
 }
 
 export default async function NewsDetailPage({ params: { _id } }: INewsDetailPageProps) {
-  const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`)
+  const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news/${_id}`)
     .then(async (res) => {
       const payload = await res.json();
       return payload;
