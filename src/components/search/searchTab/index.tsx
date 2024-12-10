@@ -1,5 +1,6 @@
 "use client";
 
+import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem } from "@/components/customize-ui/combobox";
 import {
   Tabs,
   TabsContent,
@@ -8,9 +9,11 @@ import {
 } from "@/components/ui/tabsType4";
 
 import { Button } from "@/components/ui/button";
+import { FaLocationDot } from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
 import { IoSearchOutline } from "react-icons/io5";
 import { SelectorLocationDialogSheet } from "@/components";
+import VNLocationData from '../../VNLocationSelector/data.json';
 import { useState } from "react";
 
 export default function TabsDemo() {
@@ -45,11 +48,32 @@ export default function TabsDemo() {
             setCurrentPosition={setCurrentPosition}
             typeOptions={2}
           />
-          <Input
-            type="text"
-            placeholder="Nhập địa điểm tìm kiếm"
-            startIcon={<IoSearchOutline className="size-6" />}
-          />
+          <Combobox>
+            <ComboboxInput
+              startIcon={<IoSearchOutline className="size-6" />}
+              placeholder="Nhập địa điểm tìm kiếm"
+            />
+            <ComboboxContent>
+              {VNLocationData
+                .find((province) => province.Name === searchProvince)
+                ?.Districts
+                .map(({ Wards: wards, ...district }) => (
+                  wards.map((ward) => {
+                    const key = `${district.Id + (ward as any)?.Id}`;
+                    const label = `${ward.Level} ${(ward as any)?.Name}, ${district.Name}, ${searchProvince}`;
+                    return (
+                      <ComboboxItem key={key} value={label} label={
+                        (<div className="flex gap-2 items-center">
+                          <FaLocationDot className="size-5" />
+                          <span>{label}</span>
+                        </div>) as any
+                      } />
+                    );
+                  })
+                ))}
+              <ComboboxEmpty>Không tìm thấy</ComboboxEmpty>
+            </ComboboxContent>
+          </Combobox>
           <Button>
             <IoSearchOutline className="size-6" />
           </Button>

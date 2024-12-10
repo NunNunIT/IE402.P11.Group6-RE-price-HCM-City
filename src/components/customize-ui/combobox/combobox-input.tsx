@@ -1,12 +1,12 @@
+import { Input, InputProps } from '@/components/ui/input';
+
 import { ChevronDownIcon } from 'lucide-react';
-import type { ComponentPropsWithoutRef } from 'react';
-import { Input } from '@/components/ui/input';
 import { PopoverAnchor } from '@radix-ui/react-popover';
 import type { UseComboboxGetInputPropsReturnValue } from 'downshift';
 import { useComboboxContext } from './context';
 
 export type TComboboxInputProps = Omit<
-  ComponentPropsWithoutRef<'input'>,
+  InputProps,
   keyof UseComboboxGetInputPropsReturnValue
 >;
 
