@@ -8,7 +8,7 @@ interface NewsCardProps {
 
 const NewsCard: React.FC<NewsCardProps> = ({ image, title }) => {
   return (
-    <Link href="#">
+    <Link href="/news/1">
       <div className="group max-w-sm rounded-xl bg-white dark:bg-zinc-900 shadow-md transition-shadow aspect-[3/3.5]">
         <div className="relative">
           <Image
