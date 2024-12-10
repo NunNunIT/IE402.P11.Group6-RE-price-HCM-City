@@ -11,8 +11,8 @@ interface ISelectorLocationComponentProps {
   noTranslateOptions?: boolean;
   typeTrigger?: number;
   search?: boolean;
-  selectedValue: string | string[];
-  setSelectedValue: (value: string | string[]) => void;
+  selectedValue: T;
+  setSelectedValue: (value: T) => void;
   triggerCustomize?: any;
   children?: any;
   onlyDialog?: boolean;

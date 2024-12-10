@@ -68,3 +68,7 @@ export const hasPermission = (
 ) => {
   return ((ROLES[user.role] ?? []) as readonly TPermission[]).includes(permission);
 }
+
+export const objectToSearchParams = (obj: Record<string, any>): string => {
+  return new URLSearchParams(obj).toString();
+}
