@@ -43,7 +43,7 @@ const RealEstateCard: React.FC<Props> = ({ data }) => {
             {data?.title}
           </h3>
           <div className="text-sm text-zinc-500 flex gap-2 items-center">
-            {data?.locate?.diachi} {", "} {data?.locate?.xa} {", "}{" "}
+            {data?.locate?.diachi} {", "} {data?.locate?.xa} {", "}
             {data?.locate?.huyen} {", "}
             {data?.locate?.tinh}
           </div>
