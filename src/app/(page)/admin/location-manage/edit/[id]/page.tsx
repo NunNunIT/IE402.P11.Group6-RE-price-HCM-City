@@ -79,7 +79,7 @@ export default function AddLocation() {
                   <FormItem>
                     <FormLabel className="font-semibold">google map id</FormLabel>
                     <FormControl>
-                      <Input placeholder="Nhập ggMapId" {...field} />
+                      <Input placeholder="Nhập ggMapId" {...field}/>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

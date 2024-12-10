@@ -28,21 +28,18 @@ export const SearchResultCards = ({ searchParams }: IDefaultPageProps) => {
     return `/api/real-estates?${baseParams}&page=${pageIndex + 1}&limit=10`;
   };
 
-  const {
-    data,
-    error,
-    isLoading,
-    size,
-    setSize
-  } = useSWRInfinite(getKey, fetcher, {
-    revalidateFirstPage: false,
-    revalidateOnFocus: false,
-  });
+  const { data, error, isLoading, size, setSize } = useSWRInfinite(
+    getKey,
+    fetcher,
+    {
+      revalidateFirstPage: false,
+      revalidateOnFocus: false,
+    }
+  );
 
   const flattenedData = data ? data.flat() : [];
   const isLoadingMore =
-    isLoading ||
-    (size > 0 && data && typeof data[size - 1] === 'undefined');
+    isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
   const hasMoreData = !data || (data[size - 1] && data[size - 1].length > 0);
 
   useEffect(() => {
@@ -73,9 +70,16 @@ export const SearchResultCards = ({ searchParams }: IDefaultPageProps) => {
         </div>
         <div className="flex flex-col">
           <div className="px-4 mb-4">
-            <h1>Bất động sản tại {!!searchParams.ward && `${searchParams.ward}, `}{searchParams.district}, {searchParams.province}</h1>
+            <h1>
+              Bất động sản tại{" "}
+              <span className="text-orange-500">
+                {!!searchParams.ward && `${searchParams.ward}, `}
+                {searchParams.district}, {searchParams.province}
+              </span>{" "}
+            </h1>
             {!(isLoading || error) && (
-              <p>Hiện có {flattenedData.length} tin đăng bán tại khu vực này</p>)}
+              <p>Hiện có {flattenedData.length} tin đăng bán tại khu vực này</p>
+            )}
           </div>
 
           {flattenedData.length > 0 ? (
@@ -84,28 +88,28 @@ export const SearchResultCards = ({ searchParams }: IDefaultPageProps) => {
                 <SearchResultCard key={index} {...item} />
               ))}
             </div>
-          ) : isLoadingMore && (
-            <div className="flex justify-center items-center h-96">
-              <p>Không có kết quả nào</p>
-            </div>
+          ) : (
+            isLoadingMore && (
+              <div className="flex justify-center items-center h-96">
+                <p>Không có kết quả nào</p>
+              </div>
+            )
           )}
 
           {/* Loading Indicator */}
-          {isLoadingMore && (
-            <Skeleton className="w-full h-20" />
-          )}
+          {isLoadingMore && <Skeleton className="w-full h-20" />}
 
           {/* Intersection Observer Target */}
           {hasMoreData && <div ref={observerRef} className="h-10"></div>}
         </div>
-      </div >
+      </div>
       <GISMap
         zoom={15}
         center={flattenedData?.splice(-1)[0]?.locate}
-        points={flattenedData?.map(data => ({
+        points={flattenedData?.map((data) => ({
           ...data.locate,
           title: data.title,
-          type: ENUM_MARKER_SYMBOL.REAL_ESTATE
+          type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
         }))}
       />
     </>

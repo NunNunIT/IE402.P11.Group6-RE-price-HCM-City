@@ -1,12 +1,30 @@
-import path from "path";
-import { promises as fs } from "fs";
+import { badRequestResponse, errorResponse, notFoundResponse, successResponse } from "@/utils";
 
-export async function GET() {
-  const filePath = path.join(process.cwd(), "src/app/content/news.json");
-  const fileData = await fs.readFile(filePath, "utf-8");
-  const jsonData = JSON.parse(fileData);
-  return new Response(JSON.stringify(jsonData), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+import { NextRequest } from "next/server";
+import { News } from "@/lib/model"
+import { isValidObjectId } from "mongoose";
+
+export const GET = async (req: NextRequest, { params: { id } }: { params: { id: string } }) => {
+  try {
+    if (!id || !isValidObjectId(id))
+      return badRequestResponse({
+        message: "ID không hợp lệ",
+        error: "ID_IS_INVALID"
+      });
+
+    let news = await News.findById(id).lean();
+
+    if (!news)
+      return notFoundResponse({
+        message: "Không tìm thấy bất động sản",
+        error: "REAL_ESTATE_NOT_FOUND"
+      });
+
+    return successResponse({ data: news });
+  } catch (error) {
+    return errorResponse({
+      message: "Đã có lỗi xảy ra",
+      error
+    });
+  }
 }

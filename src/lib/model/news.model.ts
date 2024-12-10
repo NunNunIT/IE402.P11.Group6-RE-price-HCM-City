@@ -22,6 +22,7 @@ const newsSchema = new Schema(
 
 export interface INewsArticle {
   _id: string;
+  img: string;
   title: string;
   content: string;
   owner: string;
