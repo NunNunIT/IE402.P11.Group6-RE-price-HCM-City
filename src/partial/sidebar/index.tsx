@@ -1,5 +1,4 @@
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
-
 import {
   Sidebar,
   SidebarContent,
@@ -11,6 +10,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
+import Link from "next/link"
+
 // Menu items.
 const items = [
   {
@@ -20,22 +21,22 @@ const items = [
   },
   {
     title: "Quản lý bất động sản",
-    url: "/re-manage",
+    url: "/admin/re-manage",
     icon: Inbox,
   },
   {
     title: "Quản lý địa điểm",
-    url: "/location-manage",
+    url: "/admin/location-manage",
     icon: Calendar,
   },
   {
     title: "Quản lý tin tức",
-    url: "/news-manage",
+    url: "/admin/news-manage",
     icon: Search,
   },
   {
     title: "Xét duyệt",
-    url: "/accept-manage",
+    url: "/admin/accept-manage",
     icon: Settings,
   },
 ]
@@ -51,10 +52,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
