@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 
 import { SearchResultCard } from "@/components/card";
 import { SearchTab } from "@/components/search";
+import { Skeleton } from "@/components/ui/skeleton";
 import dynamic from "next/dynamic";
 import useSWRInfinite from "swr/infinite";
 
@@ -64,10 +65,6 @@ export const SearchResultCards = ({ searchParams }: IDefaultPageProps) => {
     };
   }, [size, isLoadingMore, hasMoreData, setSize]);
 
-  if (!isLoading && flattenedData.length === 0) {
-    return <div className="px-4">Không tìm thấy kết quả</div>;
-  }
-
   return (
     <>
       <div className="w-full h-full bg-white dark:bg-zinc-900 p-3 space-y-3">
@@ -76,34 +73,32 @@ export const SearchResultCards = ({ searchParams }: IDefaultPageProps) => {
         </div>
         <div className="flex flex-col">
           <div className="px-4 mb-4">
-            <h1>Bất động sản tại {searchParams.district}</h1>
-            <p>Hiện có {flattenedData.length} tin đăng bán tại khu vực này</p>
+            <h1>Bất động sản tại {!!searchParams.ward && `${searchParams.ward}, `}{searchParams.district}, {searchParams.province}</h1>
+            {!(isLoading || error) && (
+              <p>Hiện có {flattenedData.length} tin đăng bán tại khu vực này</p>)}
           </div>
 
-          <div className="w-full flex flex-col gap-3 md:p-0 p-2">
-            {flattenedData.map((item, index) => (
-              <SearchResultCard key={index} {...item} />
-            ))}
-          </div>
+          {flattenedData.length > 0 ? (
+            <div className="w-full flex flex-col gap-3 md:p-0 p-2">
+              {flattenedData.map((item, index) => (
+                <SearchResultCard key={index} {...item} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex justify-center items-center h-96">
+              <p>Không có kết quả nào</p>
+            </div>
+          )}
 
           {/* Loading Indicator */}
           {isLoadingMore && (
-            <div className="flex justify-center my-4">
-              <span>Đang tải thêm...</span>
-            </div>
+            <Skeleton className="w-full h-20" />
           )}
 
           {/* Intersection Observer Target */}
           {hasMoreData && <div ref={observerRef} className="h-10"></div>}
-
-          {/* Error Handling */}
-          {error && (
-            <div className="px-4 text-red-500">
-              Đã có lỗi xảy ra khi tải dữ liệu
-            </div>
-          )}
         </div>
-      </div>
+      </div >
       <GISMap
         zoom={15}
         center={flattenedData?.splice(-1)[0]?.locate}

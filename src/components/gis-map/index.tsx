@@ -33,6 +33,7 @@ const DEFAULT_PROPS = {
   center: { lat: 10.851985339727143, long: 106.69508635065 }
 }
 
+// TODO: don't trigger rerender when props change
 export default function MapComponent(props: IMapProps) {
   const mergedProps = { ...DEFAULT_PROPS, ...props };
   const mapRef = useRef<HTMLDivElement>(null)
