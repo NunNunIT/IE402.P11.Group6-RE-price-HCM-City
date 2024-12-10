@@ -33,4 +33,14 @@ interface SelectorLocationOption {
   isSelected?: boolean;
 }
 
+interface locate {
+  lat?: number;
+  long?: number;
+  ward?: any;
+  tinh?: string;
+  huyen?: string;
+  xa?: string;
+  diachi?: string;
+}
+
 
