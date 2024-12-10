@@ -1,4 +1,3 @@
-import { HiOutlineLocationMarker } from "react-icons/hi";
 import Image from "next/image";
 import Link from "next/link";
 import { LucideDot } from "lucide-react";
@@ -14,7 +13,7 @@ interface RealEstateCardProps {
 }
 
 interface Props {
-  data: RealEstateCardProps;
+  data?: RealEstateCardProps;
 }
 
 const RealEstateCard: React.FC<Props> = ({ data }) => {
