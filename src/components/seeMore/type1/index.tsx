@@ -16,6 +16,7 @@ export default function SeeMore({
 }) {
   // Mock data for rendering cards, replace with your fetched data
   const mockData = [1, 2, 3, 4, 5, 6, 7, 8];
+  
 
   const RenderCard = () => {
     switch (typeCard) {
@@ -41,7 +42,7 @@ export default function SeeMore({
   const RenderRealEstate = () => (
     <>
       {mockData.map((item, index) => (
-        <RealEstateCard key={index} />
+        <RealEstateCard key={index} data={undefined} />
       ))}
     </>
   );
