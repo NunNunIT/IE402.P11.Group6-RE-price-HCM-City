@@ -2,6 +2,8 @@ import NextBundleAnalyzer from '@next/bundle-analyzer';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  transpilePackages: ['@arcgis/core'],
   experimental: {
     instrumentationHook: true,
   },

@@ -10,7 +10,7 @@
     "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
-    "@arcgis/core": "^4.31.0",
+    "@arcgis/core": "^4.31.6",
     "@arcgis/map-components-react": "^4.31.2",
     "@hookform/resolvers": "^3.9.1",
     "@next/bundle-analyzer": "^15.0.3",
