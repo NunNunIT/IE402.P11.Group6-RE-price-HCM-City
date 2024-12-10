@@ -16,7 +16,9 @@ export const GET = async (req: NextRequest) => {
       ...(province ? { "locate.tinh": province } : {}),
       ...(district ? { "locate.huyen": district } : {}),
       ...(ward ? { "locate.xa": ward } : {}),
-    }).limit(limit).skip((page - 1) * limit).lean();
+    })
+      // .populate("owner", "username avt")
+      .limit(limit).skip((page - 1) * limit).lean();
 
     realEstates = realEstates.map(({ imageUrl, ...realEstate }) => ({
       ...realEstate,

@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
-type TPosition = {
-  lat: number;
-  long: number;
-};
+interface IDefaultPageProps {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+interface IDefaultLayoutProps extends Omit<IDefaultPageProps, "searchParams"> {
+  children: React.ReactNode;
+}
 
 interface ISelectorLocationComponentProps {
   title?: string;
