@@ -15,6 +15,7 @@ import { HiDotsVertical } from "react-icons/hi";
 import { IoIosNotifications } from "react-icons/io";
 import { LogoutButton } from "./authentication-button";
 import { NAVIGATION_OPTIONS_DATA } from "@/data/navigation.data";
+import { isVisibleContext } from "@/utils";
 import { useSession } from "next-auth/react";
 
 export const AuthenticationDropdownMenu = () => {
@@ -43,9 +44,9 @@ export const AuthenticationDropdownMenu = () => {
             </div>
             <DropdownMenuSeparator />
             {NAVIGATION_OPTIONS_DATA.map((data) => (
-              (!data.isNeedAuth || session?.user) && (
+              isVisibleContext(session, data) && (
                 <Fragment key={data.title}>
-                  <DropdownMenuItem >
+                  <DropdownMenuItem asChild>
                     <Button
                       href={data.link}
                       variant="ghost"

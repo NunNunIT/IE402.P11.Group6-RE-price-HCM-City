@@ -1,6 +1,8 @@
 import { LOCATION_API_URL_UNFORMATTED, ROLES } from "./constants";
 
+import { ENUM_ROLE } from "./enums";
 import { IUser } from "@/lib/model";
+import { Session } from "next-auth";
 import { TPermission } from "@/types/types-import";
 
 export function checkIncludeByAscii(str: string | null, searchStr: string | null): boolean {
@@ -71,4 +73,11 @@ export const hasPermission = (
 
 export const objectToSearchParams = (obj: Record<string, any>): string => {
   return new URLSearchParams(obj).toString();
+}
+
+export const isVisibleContext = (session: Session, data: { isNeedAuth?: boolean, isNeedHighPermission?: boolean }) => {
+  return (!data.isNeedAuth
+    || session?.user)
+    && (!data.isNeedHighPermission
+      || [ENUM_ROLE.Admin, ENUM_ROLE.Staff].includes(session?.user.role))
 }
