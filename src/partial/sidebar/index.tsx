@@ -1,5 +1,4 @@
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
-
 import {
   Sidebar,
   SidebarContent,
@@ -20,22 +19,22 @@ const items = [
   },
   {
     title: "Quản lý bất động sản",
-    url: "/re-manage",
+    url: "/admin/re-manage",
     icon: Inbox,
   },
   {
     title: "Quản lý địa điểm",
-    url: "/location-manage",
+    url: "/admin/location-manage",
     icon: Calendar,
   },
   {
     title: "Quản lý tin tức",
-    url: "/news-manage",
+    url: "/admin/news-manage",
     icon: Search,
   },
   {
     title: "Xét duyệt",
-    url: "/accept-manage",
+    url: "/admin/accept-manage",
     icon: Settings,
   },
 ]
