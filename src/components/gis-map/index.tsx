@@ -1,7 +1,6 @@
 'use client'
 
 import { Point, Polygon } from '@arcgis/core/geometry';
-import { districts, places } from './assets';
 import { useEffect, useRef, useState } from 'react';
 
 import Graphic from '@arcgis/core/Graphic';
@@ -10,85 +9,62 @@ import Map from '@arcgis/core/Map';
 import MapControls from './controls';
 import MapView from '@arcgis/core/views/MapView';
 import { cn } from '@/lib/utils';
-import { loadCss } from './utils';
+
+// Ensure CSS is loaded
+function loadCss() {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://js.arcgis.com/4.29/esri/themes/light/main.css';
+  document.head.appendChild(link);
+}
 
 interface IMapProps {
   zoom?: number;
-  center?: [number, number];
+  center?: { lat: number, long: number };
   className?: string;
+  points?: { lat: number, long: number }[];
 }
 
 const DEFAULT_PROPS = {
   zoom: 10,
-  center: [106.69508635065, 10.851985339727143]
+  center: { lat: 10.851985339727143, long: 106.69508635065 }
 }
 
 export default function MapComponent(props: IMapProps) {
-  props = Object.assign(DEFAULT_PROPS, props);
+  const mergedProps = { ...DEFAULT_PROPS, ...props };
   const mapRef = useRef<HTMLDivElement>(null)
-  const view = useRef<MapView>(null)
-  const [zoom, setZoom] = useState(props.zoom)
+  const view = useRef<MapView | null>(null)
+  const [zoom, setZoom] = useState(mergedProps.zoom)
 
   useEffect(() => {
     loadCss()
+
+    if (!mapRef.current) return;
 
     const map = new Map({ basemap: 'topo-vector' })
 
     view.current = new MapView({
       container: mapRef.current,
       map: map,
-      center: props.center,
-      zoom
+      center: [mergedProps.center.long, mergedProps.center.lat],
+      zoom: mergedProps.zoom
     })
 
-    // const districtLayer = new GraphicsLayer();
-    // districts.forEach((district) => {
-    //   const graphic = new Graphic({
-    //     geometry: new Polygon({
-    //       rings: [district.rings],
-    //     }),
-    //     symbol: district.symbol,
-    //     // attributes: polylineAtt
-    //   })
-    //   districtLayer.add(graphic)
-    // })
-    // map.add(districtLayer);
-
-    // const placeLayer = new GraphicsLayer();
-    // places.forEach(async function (place) {
-    //   place.forEach(async function (data) {
-    //     // console.log("🚀 ~ data:", data)
-    //     // const graphic = new Graphic({
-    //     //   geometry: new Point({
-    //     //     x: data.locationlat,
-    //     //     y: data.locationlong,
-    //     //   }),
-    //     //   symbol: data.symbol,
-    //     //   // attributes: data,
-    //     // });
-    //     // placeLayer.add(graphic);
-    //   });
-    // });
-    // map.add(placeLayer);
-
-    // const streetLayer = new GraphicsLayer();
-    // streets.forEach((street) => {
-    //   streetLayer.add(new Graphic(street))
-    // })
-    // map.add(streetLayer);
-
-    view.current?.watch('zoom', (newZoom) => {
+    const zoomHandle = view.current.watch('zoom', (newZoom) => {
       setZoom(newZoom)
-    })
+    });
 
-    return () => { if (view) view.current?.destroy() }
-  }, [])
+    return () => {
+      zoomHandle?.remove();
+      view.current?.destroy()
+    }
+  }, [mergedProps.center, mergedProps.zoom])
 
   return (
     <div className='sticky top-[5.75rem] max-h-[calc(100dvh_-_6.5rem)]'>
-      <div className={cn("relative h-full w-full", props.className)}>
+      <div className={cn("relative h-full w-full", mergedProps.className)}>
         <div ref={mapRef} className="h-full w-full" />
-        <MapControls view={view.current} zoom={zoom} />
+        {view.current && <MapControls view={view.current} zoom={zoom} />}
       </div>
     </div>
   )
