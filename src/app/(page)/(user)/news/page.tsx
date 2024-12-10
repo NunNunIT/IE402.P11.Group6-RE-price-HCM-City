@@ -9,7 +9,7 @@ export default function Home() {
           <NewsCard key={index} />
         ))}
       </div>
-      <SeeMoreType1 typeCard="realEstate" title="Bất động sản" />
+      <SeeMoreType1 typeCard="realEstate" title="Bất động sản" linkFetch="/api/news"/>
     </div>
   );
 }
