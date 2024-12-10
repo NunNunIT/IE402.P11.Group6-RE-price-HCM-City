@@ -1,4 +1,3 @@
-import useSWR from "swr";
 import Image from "next/image";
 import { SearchTab } from "@/components/search";
 import { SeeMoreType1 } from "@/components/seeMore";
