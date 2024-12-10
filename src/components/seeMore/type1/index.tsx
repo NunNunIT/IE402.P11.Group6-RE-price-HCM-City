@@ -21,7 +21,7 @@ export default function SeeMore({
   fetchLink?: string;
   seeMoreLink?: string;
   title?: string;
-  linkFetch: string;
+  linkFetch?: string;
 }) {
   const { data, error, isLoading } = useSWR(
     linkFetch, // Replace `page=1` with dynamic if needed
