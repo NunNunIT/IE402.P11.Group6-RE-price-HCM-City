@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { ENUM_MARKER_SYMBOL } from '@/utils';
 import Graphic from '@arcgis/core/Graphic';
@@ -37,33 +37,44 @@ export default function MapComponent(props: IMapProps) {
   const mergedProps = { ...DEFAULT_PROPS, ...props };
   const mapRef = useRef<HTMLDivElement>(null)
   const view = useRef<MapView | null>(null)
+  const map = useRef<Map | null>(null)
   const [zoom, setZoom] = useState(mergedProps.zoom)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadCss()
 
     if (!mapRef.current) return;
 
-    const map = new Map({ basemap: 'topo-vector' })
+    map.current = new Map({ basemap: 'topo-vector' })
 
     view.current = new MapView({
       container: mapRef.current,
-      map: map,
+      map: map.current,
       center: [mergedProps.center?.long, mergedProps.center?.lat],
       zoom: mergedProps.zoom
     })
 
-    const graphicsLayer = new GraphicsLayer();
-    map.add(graphicsLayer);
+    const zoomHandle = view.current.watch('zoom', (newZoom) => {
+      setZoom(newZoom)
+    });
 
-    // Add points to the map
+    return () => {
+      zoomHandle?.remove();
+      view.current?.destroy()
+    }
+  }, [mergedProps.center?.lat, mergedProps.center?.long, mergedProps.zoom])
+
+  useEffect(() => {
+    const graphicsLayer = new GraphicsLayer();
+    if (!map.current) return;
+    map.current.add(graphicsLayer);
+
     mergedProps.points?.forEach(point => {
       const graphicPoint = new Point({
         longitude: point.long,
         latitude: point.lat
       });
 
-      // Create a PictureMarkerSymbol
       const pictureMarkerSymbol = new PictureMarkerSymbol({
         url: `/symbols/${point.type ?? ENUM_MARKER_SYMBOL.DEFAULT}.png`,
         width: "32px",
@@ -85,17 +96,7 @@ export default function MapComponent(props: IMapProps) {
 
       graphicsLayer.add(pointGraphic);
     });
-
-    const zoomHandle = view.current.watch('zoom', (newZoom) => {
-      setZoom(newZoom)
-    });
-
-    return () => {
-      zoomHandle?.remove();
-      view.current?.destroy()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [mergedProps.points]);
 
   return (
     <div className='sticky top-[5.75rem] max-h-[calc(100dvh_-_6.5rem)]'>
