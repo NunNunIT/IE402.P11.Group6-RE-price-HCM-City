@@ -70,7 +70,7 @@ export default function MapComponent(props: IMapProps) {
       pointGraphicsLayerRef.current?.destroy();
       zoomHandle.remove();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -176,9 +176,11 @@ export default function MapComponent(props: IMapProps) {
           <Button variant="outline" onClick={togglePoints}>
             {isPointsVisible ? "Ẩn địa điểm" : "👁️ Hiển địa điểm"}
           </Button> */}
-          <Button variant="outline" onClick={toggleArea}>
-            {isAreaVisible ? "Ẩn vùng" : "👁️ Hiện vùng"}
-          </Button>
+          {mergedProps.isShowDistrict && (
+            <Button variant="outline" onClick={toggleArea}>
+              {isAreaVisible ? "Ẩn vùng" : "👁️ Hiện vùng"}
+            </Button>
+          )}
           {/* <Button variant="outline" onClick={toggleDrawing}>
             {isDrawing ? "✍️ Đang vẽ" : "✏️ Vẽ"}
           </Button> */}
