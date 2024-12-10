@@ -10,6 +10,7 @@ import { Fragment } from "react";
 import { IoIosNotifications } from "react-icons/io";
 import { NAVIGATION_MOBILE_DATA } from "@/data/navigation.data";
 import { Separator } from "../ui/separator";
+import { isVisibleContext } from "@/utils";
 import { useSession } from "next-auth/react";
 
 export function Sidebar() {
@@ -42,7 +43,7 @@ export function Sidebar() {
             )}
             <Separator />
             {NAVIGATION_MOBILE_DATA.map((data, index) => (
-              (!data.isNeedAuth || session?.user) && (
+              isVisibleContext(session, data) && (
                 <Fragment key={index}>
                   <Button key={data.title} href={data.link} variant="ghost" className="w-full justify-start">
                     {data.title}

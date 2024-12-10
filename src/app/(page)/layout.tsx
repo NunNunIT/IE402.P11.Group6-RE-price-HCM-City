@@ -25,7 +25,7 @@ export default function RootLayout({
       className={be_vietnam_pro.className}
       style={{ fontFamily: '__Be_Vietnam_Pro_3db0d5, __Be_Vietnam_Pro_Fallback_3db0d5 !important' }}
     >
-      <body className={`bg-zinc-50 dark:bg-black antialiased`}>
+      <body className={`unremoved-classname bg-zinc-50 dark:bg-black antialiased`}>
         <GlobalProvider>
           {children}
         </GlobalProvider>

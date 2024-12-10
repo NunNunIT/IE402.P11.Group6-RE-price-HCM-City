@@ -1,6 +1,8 @@
 import { LOCATION_API_URL_UNFORMATTED, ROLES } from "./constants";
 
+import { ENUM_ROLE } from "./enums";
 import { IUser } from "@/lib/model";
+import { Session } from "next-auth";
 import { TPermission } from "@/types/types-import";
 
 export function checkIncludeByAscii(str: string | null, searchStr: string | null): boolean {
@@ -36,6 +38,11 @@ export function unicodeToAscii(str?: string | null): string {
     .replace(p, (c) => b.charAt(a.indexOf(c)));
 }
 
+export function checkByAscii(str: string, searchStr: string): boolean {
+  return (
+    unicodeToAscii(str.trim().toLowerCase()) === unicodeToAscii(searchStr.trim().toLowerCase())
+  );
+}
 
 export async function getRelativeLocation(
   location: TPosition,
@@ -62,4 +69,15 @@ export const hasPermission = (
   permission: TPermission,
 ) => {
   return ((ROLES[user.role] ?? []) as readonly TPermission[]).includes(permission);
+}
+
+export const parseObjectToSearchParams = (obj: Record<string, any>): string => {
+  return new URLSearchParams(obj).toString();
+}
+
+export const isVisibleContext = (session: Session, data: { isNeedAuth?: boolean, isNeedHighPermission?: boolean }) => {
+  return (!data.isNeedAuth
+    || session?.user)
+    && (!data.isNeedHighPermission
+      || [ENUM_ROLE.Admin, ENUM_ROLE.Staff].includes(session?.user.role))
 }

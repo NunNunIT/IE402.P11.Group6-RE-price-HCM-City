@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
-type TPosition = {
-  lat: number;
-  long: number;
-};
+interface IDefaultPageProps {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+interface IDefaultLayoutProps extends Omit<IDefaultPageProps, "searchParams"> {
+  children: React.ReactNode;
+}
 
 interface ISelectorLocationComponentProps {
   title?: string;
@@ -11,8 +14,8 @@ interface ISelectorLocationComponentProps {
   noTranslateOptions?: boolean;
   typeTrigger?: number;
   search?: boolean;
-  selectedValue: string | string[];
-  setSelectedValue: (value: string | string[]) => void;
+  selectedValue: T;
+  setSelectedValue: (value: T) => void;
   triggerCustomize?: any;
   children?: any;
   onlyDialog?: boolean;
@@ -31,6 +34,16 @@ interface SelectorLocationOption {
   Img?: string;
   Districts?: any[];
   isSelected?: boolean;
+}
+
+interface locate {
+  lat?: number;
+  long?: number;
+  ward?: any;
+  tinh?: string;
+  huyen?: string;
+  xa?: string;
+  diachi?: string;
 }
 
 
