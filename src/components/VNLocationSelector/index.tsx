@@ -22,7 +22,7 @@ import { ComboboxDrawer } from "../customize-ui";
 import VNLocationData from "../VNLocationSelector/data.json";
 
 // import utils
-import { ELocationType, checkIncludeByAscii } from "@/utils";
+import { ENUM_LOCATION_TYPE, checkIncludeByAscii } from "@/utils";
 import { cn } from "@/lib/utils";
 
 interface ILocation {
@@ -40,7 +40,7 @@ type TLocationSelectProps = Omit<
 > & {
   value: ILocation;
   onChange: Dispatch<SetStateAction<ILocation>>;
-  depthLevel?: ELocationType;
+  depthLevel?: ENUM_LOCATION_TYPE;
   placeholders?: {
     province?: string;
     district?: string;
@@ -52,7 +52,7 @@ type TLocationSelectProps = Omit<
 
 export default function LocationSelect(
   { value: location, onChange: setLocation, className,
-    depthLevel = ELocationType.WARD,
+    depthLevel = ENUM_LOCATION_TYPE.WARD,
     placeholders, modal,
     disabled,
     ...props
@@ -68,17 +68,17 @@ export default function LocationSelect(
       : undefined;
 
     return {
-      ...(depthLevel >= ELocationType.PROVINCE
+      ...(depthLevel >= ENUM_LOCATION_TYPE.PROVINCE
         && {
         provinces: VNLocationData.map((province) => province.Name),
       }),
-      ...(depthLevel >= ELocationType.DISTRICT
+      ...(depthLevel >= ENUM_LOCATION_TYPE.DISTRICT
         && {
         districts: selectedProvince
           ? selectedProvince.Districts.map(district => district.Name)
           : [],
       }),
-      ...(depthLevel >= ELocationType.WARD
+      ...(depthLevel >= ENUM_LOCATION_TYPE.WARD
         && {
         wards: selectedDistrict
           ? selectedDistrict.Wards.map((ward: any) => ward.Name || ward.Level)
@@ -97,15 +97,15 @@ export default function LocationSelect(
 
     if (
       key === 'province'
-      && depthLevel >= ELocationType.DISTRICT
+      && depthLevel >= ENUM_LOCATION_TYPE.DISTRICT
     ) {
       newLocation.district = undefined;
-      if (depthLevel >= ELocationType.WARD) {
+      if (depthLevel >= ENUM_LOCATION_TYPE.WARD) {
         newLocation.ward = undefined;
       }
     } else if (
       key === 'district'
-      && depthLevel >= ELocationType.WARD
+      && depthLevel >= ENUM_LOCATION_TYPE.WARD
     ) {
       newLocation.ward = undefined;
     }
@@ -116,7 +116,7 @@ export default function LocationSelect(
 
   return (
     <div className={cn(className ?? "flex flex-col gap-2")}>
-      {depthLevel >= ELocationType.PROVINCE && (
+      {depthLevel >= ENUM_LOCATION_TYPE.PROVINCE && (
         !isMobile ? (
           <Combobox
             defaultValue={location?.province}
@@ -153,7 +153,7 @@ export default function LocationSelect(
         )
       )}
 
-      {depthLevel >= ELocationType.DISTRICT && (
+      {depthLevel >= ENUM_LOCATION_TYPE.DISTRICT && (
         !isMobile ? (
           <Combobox
             defaultValue={location?.district}
@@ -190,7 +190,7 @@ export default function LocationSelect(
         )
       )}
 
-      {depthLevel >= ELocationType.WARD && (
+      {depthLevel >= ENUM_LOCATION_TYPE.WARD && (
         !isMobile ? (
           <Combobox
             defaultValue={location?.ward}
