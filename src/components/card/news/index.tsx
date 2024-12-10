@@ -2,13 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface NewsCardProps {
+  _id?: string;
   imgUrl?: string;
   title?: string;
 }
 
 const NewsCard = ({ data }: { data?: NewsCardProps }) => {
   return (
-    <Link href="/news/1">
+    <Link href={data?._id ? `/news/${data._id}` : "#"}>
       <div className="group max-w-sm rounded-xl bg-white dark:bg-zinc-900 shadow-md transition-shadow aspect-[3/3.5]">
         <div className="relative">
           <Image

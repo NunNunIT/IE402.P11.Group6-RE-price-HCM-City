@@ -15,7 +15,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     <SidebarProvider>
       <AppSidebar />
       <div className="w-full">
-        <div className="w-full sticky top-0 p-3 bg-white dark:bg-zinc-900">
+        <div className="w-full sticky top-0 p-3 bg-white dark:bg-zinc-900 z-50">
           <SidebarTrigger />
         </div>
         {children}

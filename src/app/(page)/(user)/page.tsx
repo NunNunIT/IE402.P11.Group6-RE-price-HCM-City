@@ -1,4 +1,3 @@
-import useSWR from "swr";
 import Image from "next/image";
 import { SearchTab } from "@/components/search";
 import { SeeMoreType1 } from "@/components/seeMore";
@@ -22,12 +21,12 @@ export default function Home() {
         <SeeMoreType1
           typeCard="realEstate"
           title="Bất động sản"
-          linkFetch="/api/real-estates?limit=10&page=1"
+          linkFetch="/api/real-estates?page=1"
         />
         <SeeMoreType1
           typeCard="news"
           title="Tin tức"
-          linkFetch="/api/real-estates?limit=10&page=1"
+          linkFetch="/api/news?page=1"
         />
       </div>
     </div>

@@ -1,17 +1,18 @@
 'use client'
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Button, buttonVariants } from '../ui/button';
+import { Point, Polygon, } from '@arcgis/core/geometry';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { ENUM_MARKER_SYMBOL } from '@/utils';
 import Graphic from '@arcgis/core/Graphic';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Map from '@arcgis/core/Map';
-import MapControls from './controls';
 import MapView from '@arcgis/core/views/MapView';
 import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol";
-import { Point, } from '@arcgis/core/geometry';
 import PopupTemplate from "@arcgis/core/PopupTemplate";
 import { cn } from '@/lib/utils';
+import { districts } from './assets';
 
 // Ensure CSS is loaded
 function loadCss() {
@@ -26,11 +27,13 @@ interface IMapProps {
   center?: { lat: number, long: number };
   className?: string;
   points?: { lat: number, long: number, type?: ENUM_MARKER_SYMBOL, title: string, description: string }[];
+  isShowDistrict?: boolean;
 }
 
 const DEFAULT_PROPS = {
   zoom: 10,
-  center: { lat: 10.851985339727143, long: 106.69508635065 }
+  center: { lat: 10.851985339727143, long: 106.69508635065 },
+  isShowDistrict: false
 }
 
 // TODO: don't trigger rerender when props change
@@ -39,15 +42,19 @@ export default function MapComponent(props: IMapProps) {
   const mapRef = useRef<HTMLDivElement>(null)
   const viewRef = useRef<MapView | null>(null);
   const mapInstanceRef = useRef<Map | null>(null);
-  const graphicsLayerRef = useRef<GraphicsLayer | null>(null);
+  const [isAreaVisible, setIsAreaVisible] = useState(mergedProps.isShowDistrict);
+  const districtGraphicsLayerRef = useRef<GraphicsLayer | null>(null);
+  const pointGraphicsLayerRef = useRef<GraphicsLayer | null>(null);
   const [zoom, setZoom] = useState(mergedProps.zoom)
 
   useLayoutEffect(() => {
     loadCss();
     if (!mapRef.current) return;
     mapInstanceRef.current = new Map({ basemap: 'topo-vector' });
-    graphicsLayerRef.current = new GraphicsLayer();
-    mapInstanceRef.current.add(graphicsLayerRef.current);
+    pointGraphicsLayerRef.current = new GraphicsLayer();
+    districtGraphicsLayerRef.current = new GraphicsLayer();
+    mapInstanceRef.current.add(pointGraphicsLayerRef.current);
+    mapInstanceRef.current.add(districtGraphicsLayerRef.current);
     viewRef.current = new MapView({
       container: mapRef.current,
       map: mapInstanceRef.current,
@@ -60,14 +67,37 @@ export default function MapComponent(props: IMapProps) {
     return () => {
       viewRef.current?.destroy();
       mapInstanceRef.current?.destroy();
-      graphicsLayerRef.current?.destroy();
+      pointGraphicsLayerRef.current?.destroy();
       zoomHandle.remove();
     }
-  }, [mergedProps.center?.lat, mergedProps.center?.long, mergedProps.zoom])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    if (!graphicsLayerRef.current) return;
-    graphicsLayerRef.current.removeAll();
+    if (!mergedProps.isShowDistrict || !viewRef.current || !districtGraphicsLayerRef.current) return;
+    districtGraphicsLayerRef.current?.removeAll();
+    districts.forEach(district => {
+      const polygon = new Polygon({
+        rings: [district.rings]
+      });
+      const graphic = new Graphic({
+        geometry: polygon,
+        symbol: district.symbol,
+        attributes: {
+          name: district.name
+        },
+        popupTemplate: {
+          title: "{name}",
+          content: "This is {name}"
+        }
+      });
+      districtGraphicsLayerRef.current?.add(graphic);
+    })
+  }, [mergedProps.isShowDistrict]);
+
+  useEffect(() => {
+    if (!pointGraphicsLayerRef.current) return;
+    pointGraphicsLayerRef.current.removeAll();
     mergedProps.points?.forEach(point => {
       const graphicPoint = new Point({
         longitude: point.long,
@@ -79,7 +109,6 @@ export default function MapComponent(props: IMapProps) {
         width: "32px",
         height: "32px"
       });
-      console.log("🚀 ~ useEffect ~ point:", point)
 
       const pointGraphic = new Graphic({
         geometry: graphicPoint,
@@ -93,7 +122,7 @@ export default function MapComponent(props: IMapProps) {
           content: "{description}"
         })
       });
-      graphicsLayerRef.current?.add(pointGraphic);
+      pointGraphicsLayerRef.current?.add(pointGraphic);
     });
   }, [mergedProps.points]);
 
@@ -124,11 +153,41 @@ export default function MapComponent(props: IMapProps) {
     }
   }, [mergedProps.center, mergedProps.zoom]);
 
+  useEffect(() => {
+    if (!districtGraphicsLayerRef.current) return;
+    districtGraphicsLayerRef.current.visible = isAreaVisible;
+  }, [isAreaVisible]);
+
+  const toggleArea = useCallback(() => {
+    setIsAreaVisible(prev => !prev);
+    // Implement toggle area visibility logic here
+  }, []);
+
   return (
     <div className='sticky top-[5.75rem] max-h-[calc(100dvh_-_6.5rem)]'>
       <div className={cn("relative h-full w-full", mergedProps.className)}>
         <div ref={mapRef} className="h-full w-full" />
-        <MapControls view={viewRef.current} zoom={zoom} />
+        <div className="absolute bottom-4 left-4 flex flex-col space-y-2">
+          {/* <input
+            className="px-2 py-1 border rounded"
+            placeholder="Tìm một tọa độ"
+            onKeyDown={handleFindLocation}
+          />
+          <Button variant="outline" onClick={togglePoints}>
+            {isPointsVisible ? "Ẩn địa điểm" : "👁️ Hiển địa điểm"}
+          </Button> */}
+          {mergedProps.isShowDistrict && (
+            <Button variant="outline" onClick={toggleArea}>
+              {isAreaVisible ? "Ẩn vùng" : "👁️ Hiện vùng"}
+            </Button>
+          )}
+          {/* <Button variant="outline" onClick={toggleDrawing}>
+            {isDrawing ? "✍️ Đang vẽ" : "✏️ Vẽ"}
+          </Button> */}
+          <span className={buttonVariants({ variant: 'outline' })}>
+            Độ zoom: {zoom.toFixed(2)}
+          </span>
+        </div>
       </div>
     </div>
   )

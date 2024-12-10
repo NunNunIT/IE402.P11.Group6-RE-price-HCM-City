@@ -8,7 +8,7 @@ export const GET = async (req: NextRequest) => {
   const province = searchParams.get('province')
   const district = searchParams.get('district')
   const ward = searchParams.get('ward')
-  const limit = Number(searchParams.get('limit') ?? 10)
+  const limit = Number(searchParams.get('limit') ?? 12)
   const page = Number(searchParams.get('page') ?? 1)
 
   try {
