@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/tabsType4";
 
 import { Button } from "@/components/ui/button";
+import { FaLocationDot } from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
 import { IoSearchOutline } from "react-icons/io5";
 import { SelectorLocationDialogSheet } from "@/components";
@@ -60,7 +61,14 @@ export default function TabsDemo() {
                   wards.map((ward) => {
                     const key = `${district.Id + (ward as any)?.Id}`;
                     const label = `${ward.Level} ${(ward as any)?.Name}, ${district.Name}, ${searchProvince}`;
-                    return <ComboboxItem key={key} value={label} label={label} />
+                    return (
+                      <ComboboxItem key={key} value={label} label={
+                        (<div className="flex gap-2 items-center">
+                          <FaLocationDot className="size-5" />
+                          <span>{label}</span>
+                        </div>) as any
+                      } />
+                    );
                   })
                 ))}
               <ComboboxEmpty>Không tìm thấy</ComboboxEmpty>
