@@ -67,7 +67,7 @@ export default function AddLocation() {
     <div className="flex flex-col items-center p-5 min-h-[100dvh]">
       <div className="relative max-w-5xl w-full mx-auto my-3">
         <h1 className="md:text-4xl text-2xl font-bold my-3 text-center">
-          Tạo Location
+          Sửa Location
         </h1>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -180,7 +180,7 @@ export default function AddLocation() {
 
             <div className="sticky bottom-0 p-2">
               <Button type="submit" className="w-full">
-                Gửi
+                Sửa
               </Button>
             </div>
           </form>
