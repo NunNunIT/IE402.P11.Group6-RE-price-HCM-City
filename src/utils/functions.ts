@@ -36,6 +36,11 @@ export function unicodeToAscii(str?: string | null): string {
     .replace(p, (c) => b.charAt(a.indexOf(c)));
 }
 
+export function checkByAscii(str: string, searchStr: string): boolean {
+  return (
+    unicodeToAscii(str.trim().toLowerCase()) === unicodeToAscii(searchStr.trim().toLowerCase())
+  );
+}
 
 export async function getRelativeLocation(
   location: TPosition,
