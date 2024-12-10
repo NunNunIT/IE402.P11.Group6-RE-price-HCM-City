@@ -44,7 +44,7 @@ export default function SeeMore({
 
   const RenderLocation = () => (
     <>
-      {data?.data?.map((item: any, index: any) => (
+      {data?.map((item: any, index: any) => (
         <LocationCard key={index} />
       ))}
     </>
@@ -52,7 +52,7 @@ export default function SeeMore({
 
   const RenderRealEstate = () => (
     <>
-      {data?.data?.map((item: any, index: any) => (
+      {data?.map((item: any, index: any) => (
         <RealEstateCard key={index} data={item} />
       ))}
     </>
@@ -60,7 +60,7 @@ export default function SeeMore({
 
   const RenderNews = () => (
     <>
-      {data?.data?.map((item: any, index: any) => (
+      {data?.map((item: any, index: any) => (
         <NewsCard key={index} data={item} />
       ))}
     </>
