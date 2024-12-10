@@ -4,7 +4,8 @@ import { NextResponse } from "next/server";
 import { authConfig } from "./lib/auth/config";
 
 const privatePages: string[] = [
-  '/create-new-re'
+  '/create-new-re',
+  '/admin/*',
 ];
 
 const checkPathnameRegex = (pages: string[], pathName: string): boolean => {

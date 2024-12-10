@@ -1,7 +1,16 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+
 import { AppSidebar } from "@/partial/sidebar";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+// import { ENUM_ROLE } from "@/utils";
+// import { auth } from "@/lib/auth";
+// import { notFound } from "next/navigation";
+
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  // TODO: Uncomment this code to enable authentication
+  // const session = await auth();
+  // if (![ENUM_ROLE.Admin, ENUM_ROLE.Staff].includes(session?.user?.role)) return notFound();
+
   return (
     <SidebarProvider>
       <AppSidebar />
