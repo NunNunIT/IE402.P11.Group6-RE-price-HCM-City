@@ -1,6 +1,8 @@
 "use client"
 
 import * as React from "react"
+
+import { ChevronDown, MoreHorizontal } from "lucide-react"
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,10 +15,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -26,7 +24,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 import {
   Table,
   TableBody,
@@ -36,11 +33,14 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { ENUM_MARKER_SYMBOL } from "@/utils"
 import { ILocationModel } from "@/lib/model"
+import Image from "next/image"
+import { Input } from "@/components/ui/input"
 import { useAlertDialogWrapperFunction } from "@/hooks/use-alert-dialog"
 import { useRouter } from "next/navigation"
-import Image from "next/image"
-
 
 const data: (ILocationModel & { _id: any })[] = [
   {
@@ -49,7 +49,7 @@ const data: (ILocationModel & { _id: any })[] = [
     ggMapUrl: "https://maps.google.com/?q=abcdef1234567890",
     title: "Location One",
     desc: "Description for location one.",
-    categories: ["Park", "Nature"],
+    category: ENUM_MARKER_SYMBOL.PARK,
     locate: {
       lat: 34.0522,
       long: -118.2437,
@@ -69,7 +69,7 @@ const data: (ILocationModel & { _id: any })[] = [
     ggMapUrl: "https://maps.google.com/?q=1234567890abcdef",
     title: "Location Two",
     desc: "Description for location two.",
-    categories: ["Museum", "Historical"],
+    category: ENUM_MARKER_SYMBOL.MARKET,
     locate: {
       lat: 40.7128,
       long: -74.0060,
@@ -89,7 +89,7 @@ const data: (ILocationModel & { _id: any })[] = [
     ggMapUrl: "https://maps.google.com/?q=fedcba0987654321",
     title: "Location Three",
     desc: "Description for location three.",
-    categories: ["Restaurant", "Food"],
+    category: ENUM_MARKER_SYMBOL.APARTMENT,
     locate: {
       lat: 51.5074,
       long: -0.1278,
@@ -109,7 +109,7 @@ const data: (ILocationModel & { _id: any })[] = [
     ggMapUrl: "https://maps.google.com/?q=0987654321fedcba",
     title: "Location Four",
     desc: "Description for location four.",
-    categories: ["Shopping", "Mall"],
+    category: ENUM_MARKER_SYMBOL.SHOP,
     locate: {
       lat: 48.8566,
       long: 2.3522,

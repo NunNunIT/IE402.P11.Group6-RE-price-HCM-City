@@ -1,15 +1,14 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
+import useSWR from "swr";
 
 const RealEstateCard = dynamic(() => import("@/components/card/realestate"));
 const NewsCard = dynamic(() => import("@/components/card/news"));
 const LocationCard = dynamic(() => import("@/components/card/location"));
 
-import { Button } from "@/components/ui/button";
-import useSWR from "swr";
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json()).then((payload) => payload.data);
 
 export default function SeeMore({
   typeCard,
@@ -23,10 +22,7 @@ export default function SeeMore({
   title?: string;
   linkFetch?: string;
 }) {
-  const { data, error, isLoading } = useSWR(
-    linkFetch, // Replace `page=1` with dynamic if needed
-    fetcher
-  );
+  const { data, error, isLoading } = useSWR(linkFetch, fetcher);
 
   if (error) return <div>Error loading data: {error.message}</div>;
   if (isLoading) return <div>Loading...</div>;
@@ -65,7 +61,7 @@ export default function SeeMore({
   const RenderNews = () => (
     <>
       {data?.data?.map((item: any, index: any) => (
-        <NewsCard key={index} />
+        <NewsCard key={index} data={item} />
       ))}
     </>
   );
