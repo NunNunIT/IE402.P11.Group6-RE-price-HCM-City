@@ -36,39 +36,37 @@ const DEFAULT_PROPS = {
 export default function MapComponent(props: IMapProps) {
   const mergedProps = { ...DEFAULT_PROPS, ...props };
   const mapRef = useRef<HTMLDivElement>(null)
-  const view = useRef<MapView | null>(null)
-  const map = useRef<Map | null>(null)
+  const viewRef = useRef<MapView | null>(null);
+  const mapInstanceRef = useRef<Map | null>(null);
+  const graphicsLayerRef = useRef<GraphicsLayer | null>(null);
   const [zoom, setZoom] = useState(mergedProps.zoom)
 
   useLayoutEffect(() => {
-    loadCss()
-
+    loadCss();
     if (!mapRef.current) return;
-
-    map.current = new Map({ basemap: 'topo-vector' })
-
-    view.current = new MapView({
+    mapInstanceRef.current = new Map({ basemap: 'topo-vector' });
+    graphicsLayerRef.current = new GraphicsLayer();
+    mapInstanceRef.current.add(graphicsLayerRef.current);
+    viewRef.current = new MapView({
       container: mapRef.current,
-      map: map.current,
+      map: mapInstanceRef.current,
       center: [mergedProps.center?.long, mergedProps.center?.lat],
       zoom: mergedProps.zoom
     })
-
-    const zoomHandle = view.current.watch('zoom', (newZoom) => {
+    const zoomHandle = viewRef.current.watch('zoom', (newZoom) => {
       setZoom(newZoom)
     });
-
     return () => {
-      zoomHandle?.remove();
-      view.current?.destroy()
+      viewRef.current?.destroy();
+      mapInstanceRef.current?.destroy();
+      graphicsLayerRef.current?.destroy();
+      zoomHandle.remove();
     }
   }, [mergedProps.center?.lat, mergedProps.center?.long, mergedProps.zoom])
 
   useEffect(() => {
-    const graphicsLayer = new GraphicsLayer();
-    if (!map.current) return;
-    map.current.add(graphicsLayer);
-
+    if (!graphicsLayerRef.current) return;
+    graphicsLayerRef.current.removeAll();
     mergedProps.points?.forEach(point => {
       const graphicPoint = new Point({
         longitude: point.long,
@@ -80,6 +78,7 @@ export default function MapComponent(props: IMapProps) {
         width: "32px",
         height: "32px"
       });
+      console.log("🚀 ~ useEffect ~ point:", point)
 
       const pointGraphic = new Graphic({
         geometry: graphicPoint,
@@ -93,16 +92,42 @@ export default function MapComponent(props: IMapProps) {
           content: "{description}"
         })
       });
-
-      graphicsLayer.add(pointGraphic);
+      graphicsLayerRef.current?.add(pointGraphic);
     });
   }, [mergedProps.points]);
+
+  useEffect(() => {
+    if (!viewRef.current) return;
+    if (viewRef.current.ready) {
+      viewRef.current.goTo({
+        center: [mergedProps.center?.long, mergedProps.center?.lat],
+        zoom: mergedProps.zoom
+      }, {
+        duration: 1000,
+        easing: "ease-in-out"
+      }).catch((error) => {
+        console.error('Error in goTo:', error);
+      });
+    } else {
+      viewRef.current.when(() => {
+        viewRef.current?.goTo({
+          center: [mergedProps.center?.long, mergedProps.center?.lat],
+          zoom: mergedProps.zoom
+        }, {
+          duration: 1000,
+          easing: "ease-in-out"
+        }).catch((error) => {
+          console.error('Error in goTo:', error);
+        });
+      });
+    }
+  }, [mergedProps.center, mergedProps.zoom]);
 
   return (
     <div className='sticky top-[5.75rem] max-h-[calc(100dvh_-_6.5rem)]'>
       <div className={cn("relative h-full w-full", mergedProps.className)}>
         <div ref={mapRef} className="h-full w-full" />
-        {view.current && <MapControls view={view.current} zoom={zoom} />}
+        <MapControls view={viewRef.current} zoom={zoom} />
       </div>
     </div>
   )

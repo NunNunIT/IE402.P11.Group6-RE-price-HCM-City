@@ -106,9 +106,10 @@ export const SearchResultCards = ({ searchParams }: IDefaultPageProps) => {
       </div>
       <GISMap
         zoom={15}
-        center={flattenedData?.[0]?.locate}
+        center={flattenedData?.splice(-1)[0]?.locate}
         points={flattenedData?.map(data => ({
           ...data.locate,
+          title: data.title,
           type: ENUM_MARKER_SYMBOL.REAL_ESTATE
         }))}
       />
