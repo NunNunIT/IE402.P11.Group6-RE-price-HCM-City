@@ -22,3 +22,9 @@ export enum ENUM_ROLE {
   Staff = "Staff",
   User = "User",
 }
+
+export enum ELocationType {
+  PROVINCE = 1,
+  DISTRICT = 2,
+  WARD = 3,
+}

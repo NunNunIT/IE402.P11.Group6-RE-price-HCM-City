@@ -7,8 +7,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
   callbacks: {
     authorized: async ({ auth }) => !!auth,
-    redirect({ url, baseUrl }) {
-      return url.startsWith(baseUrl) ? url : baseUrl;
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
     },
     jwt: async ({ token }) => {
       const { _id, role } = await createUserFromSocial({

@@ -1,8 +1,9 @@
-import SavedCard from "@/components/savedCard";
-import { SearchBar } from "@/components/search";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import Image from "next/image";
 import { MockData } from "@/types/item";
+import SavedCard from "@/components/savedCard";
+import { SearchBar } from "@/components/search";
 
 const mockDataAll: MockData[] = [
   {
@@ -92,14 +93,14 @@ export default function SavedPage() {
         <Tabs defaultValue="all" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all">Tất cả</TabsTrigger>
-            <TabsTrigger value="realestate">Bất động sản</TabsTrigger>
+            <TabsTrigger value="realEstate">Bất động sản</TabsTrigger>
             <TabsTrigger value="location">Địa điểm</TabsTrigger>
           </TabsList>
           <TabsContent value="all">
             <SavedCard typeCard="all" data={mockDataAll} />
           </TabsContent>
-          <TabsContent value="realestate">
-            <SavedCard typeCard="realestate" />
+          <TabsContent value="realEstate">
+            <SavedCard typeCard="realEstate" />
           </TabsContent>
           <TabsContent value="location">
             <SavedCard typeCard="location" />

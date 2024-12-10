@@ -6,6 +6,7 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 
 import { Button } from "../ui/button";
 import { FaBars } from "react-icons/fa6";
+import { Fragment } from "react";
 import { IoIosNotifications } from "react-icons/io";
 import { NAVIGATION_MOBILE_DATA } from "@/data/navigation.data";
 import { Separator } from "../ui/separator";
@@ -40,14 +41,14 @@ export function Sidebar() {
               </div>
             )}
             <Separator />
-            {NAVIGATION_MOBILE_DATA.map((data) => (
+            {NAVIGATION_MOBILE_DATA.map((data, index) => (
               (!data.isNeedAuth || session?.user) && (
-                <>
+                <Fragment key={index}>
                   <Button key={data.title} href={data.link} variant="ghost" className="w-full justify-start">
                     {data.title}
                   </Button>
                   {data.isNeedSeparator && <Separator />}
-                </>
+                </Fragment>
               )
             ))}
             <LogoutButton variant="secondary" className="w-full justify-start">

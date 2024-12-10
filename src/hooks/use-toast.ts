@@ -1,6 +1,7 @@
 "use client"
 
 // Inspired by react-hot-toast library
+
 import * as React from "react"
 
 import type {
@@ -129,7 +130,7 @@ export const reducer = (state: State, action: Action): State => {
   }
 }
 
-const listeners: Array<(state: State) => void> = []
+const listeners: Array<(__state: State) => void> = []
 
 let memoryState: State = { toasts: [] }
 

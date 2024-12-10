@@ -1,7 +1,6 @@
 "use server";
 
-import { AuthDialogProvider, ThemeProvider } from ".";
-
+import { AuthDialogProvider } from ".";
 import { SessionProvider } from "next-auth/react"
 import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/lib/auth";
@@ -12,14 +11,8 @@ export async function GlobalProvider({ children }: { children: React.ReactNode }
   return (
     <SessionProvider session={session}>
       <AuthDialogProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-        >
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        {children}
+        <Toaster />
       </AuthDialogProvider>
     </SessionProvider>
   )
