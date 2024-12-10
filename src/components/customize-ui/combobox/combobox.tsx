@@ -15,6 +15,7 @@ import { ComboboxContext } from './context';
 import type { ComboboxItemBase } from './types';
 
 import { checkIncludeByAscii } from '@/utils';
+import { useDebounceValue } from 'usehooks-ts';
 
 const { stateChangeTypes } = useCombobox;
 
@@ -25,7 +26,7 @@ const defaultFilter = (inputValue: string, items: ComboboxItemBase[]) =>
       || checkIncludeByAscii(item.label, inputValue)
   );
 
-export type ComboboxProps = PropsWithChildren<{
+export type TComboboxProps = PropsWithChildren<{
   modal?: boolean;
   defaultValue?: string | null;
   value?: string | null;
@@ -43,7 +44,7 @@ export const Combobox = ({
   filterItems = defaultFilter,
   modal = false,
   children,
-}: ComboboxProps) => {
+}: TComboboxProps) => {
   const [items, setItems] = useState<ComboboxItemBase[]>([]),
     [filteredItems, setFilteredItems] = useState<ComboboxItemBase[]>(items);
   const [openedOnce, setOpenedOnce] = useState(false);
@@ -125,19 +126,22 @@ export const Combobox = ({
     defaultInputValue: defaultValue || '',
   });
 
+  const [debouncedInputValue, setDebouncedInputValue] = useDebounceValue(inputValue, 500);
+
   useEffect(() => {
     if (isOpen && !openedOnce) setOpenedOnce(isOpen);
   }, [isOpen, openedOnce]);
 
   useEffect(() => {
-    setFilteredItems(filterItems(inputValue, items));
-  }, [filterItems, inputValue, items]);
+    setFilteredItems(filterItems(debouncedInputValue, items));
+  }, [filterItems, debouncedInputValue, items]);
 
   useEffect(() => {
     if (defaultValue) {
       setInputValue(defaultValue);
+      setDebouncedInputValue(defaultValue);
     }
-  }, [defaultValue, setInputValue]);
+  }, [defaultValue, setDebouncedInputValue, setInputValue]);
 
   return (
     <ComboboxContext.Provider
