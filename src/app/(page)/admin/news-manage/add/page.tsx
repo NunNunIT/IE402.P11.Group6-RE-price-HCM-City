@@ -42,8 +42,8 @@ export default function NewsForm() {
   };
 
   return (
-    <div className="relative max-w-5xl w-full mx-auto my-3">
-      <h1 className="md:text-4xl text-2xl font-bold my-3 text-center">Tạo tin tức mới</h1>
+    <div className="relative max-w-5xl w-full mx-auto mt-3">
+      <h1 className="md:text-4xl text-2xl font-bold my-3 text-left">Tạo tin tức mới</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow-md">

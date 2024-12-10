@@ -41,8 +41,6 @@ type News = {
   id: string
   title: string
   date: string
-  status: "Nháp" | "Đã xuất bản" | "Lưu trữ"
-  views: number
 }
 
 const data: News[] = [
@@ -50,22 +48,16 @@ const data: News[] = [
     id: "1",
     title: "Gem Park - Lợi Cho Người Ở, Lãi Cho Người Đầu Tư",
     date: "2024-12-01",
-    status: "Đã xuất bản",
-    views: 150,
   },
   {
     id: "2",
     title: "News Title 2",
     date: "2023-10-02",
-    status: "Nháp",
-    views: 75,
   },
   {
     id: "3",
     title: "News Title 3",
     date: "2023-10-03",
-    status: "Lưu trữ",
-    views: 200,
   },
 ];
 
@@ -122,32 +114,6 @@ const columns: ColumnDef<News>[] = [
     cell: ({ row }) => <div>{row.getValue("date")}</div>,
   },
   {
-    accessorKey: "status",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Trạng thái
-        {column.getIsSorted() ? <ArrowUpDown /> : null}
-      </Button>
-    ),
-    cell: ({ row }) => <div className="capitalize">{row.getValue("status")}</div>,
-  },
-  {
-    accessorKey: "views",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Lượt xem
-        {column.getIsSorted() ? <ArrowUpDown /> : null}
-      </Button>
-    ),
-    cell: ({ row }) => <div>{row.getValue("views")}</div>,
-  },
-  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
@@ -199,8 +165,8 @@ export default function NewsManage() {
   })
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[100dvh] px-4 md:px-8">
-      <h1 className="md:text-4xl text-2xl font-bold my-3">Quản lý Tin tức</h1>
+    <div className="flex flex-col items-start justify-start min-h-[100dvh] px-4 md:px-8">
+      <h1 className="md:text-4xl text-2xl font-bold my-3">Quản lý tin tức</h1>
       <div className="w-full max-w-6xl mx-auto">
         <div className="flex items-center py-4">
           <Link href="/admin/news-manage/add">
