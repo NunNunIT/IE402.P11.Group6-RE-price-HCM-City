@@ -19,7 +19,7 @@ const fetcher = async (url: string) => {
   return payload.data as any[];
 };
 
-export const SearchResultCards = ({ searchParams }: IDefaultPageProps) => {
+export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const getKey = (pageIndex: number, previousPageData: any[]) => {
@@ -101,6 +101,7 @@ export const SearchResultCards = ({ searchParams }: IDefaultPageProps) => {
       </div >
       <GISMap
         zoom={15}
+        isShowDistrict
         center={flattenedData?.splice(-1)[0]?.locate}
         points={flattenedData?.map(data => ({
           ...data.locate,
@@ -112,4 +113,4 @@ export const SearchResultCards = ({ searchParams }: IDefaultPageProps) => {
   );
 };
 
-export default SearchResultCards;
+export default SearchCardWrapper;
