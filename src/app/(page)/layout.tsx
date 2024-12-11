@@ -1,8 +1,10 @@
 import "./globals.css";
 
 import { Be_Vietnam_Pro } from "next/font/google";
-import { GlobalProvider } from "@/provider";
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
+
+const GlobalProvider = dynamic(() => import("@/provider/global").then(mod => mod.GlobalProvider), { ssr: false });
 
 const be_vietnam_pro = Be_Vietnam_Pro({
   weight: "500",
