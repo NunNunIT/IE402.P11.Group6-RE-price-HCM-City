@@ -20,16 +20,16 @@ export const GET = async (req: NextRequest) => {
       // .populate("owner", "username avt")
       .limit(limit).skip((page - 1) * limit).lean();
 
-    realEstates = realEstates.map(({ imageUrl, ...realEstate }) => ({
+    realEstates = realEstates.map(({ imageUrls, ...realEstate }) => ({
       ...realEstate,
-      imageUrl: imageUrl[0],
+      imageUrl: imageUrls[0],
     }));
 
     return successResponse({ data: realEstates });
   } catch (error) {
     return errorResponse({
       message: "Đã có lỗi xảy ra",
-      error
+      error: error.message,
     });
   }
 }
