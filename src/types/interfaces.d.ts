@@ -46,4 +46,30 @@ interface locate {
   diachi?: string;
 }
 
+interface SelectOption {
+  value: string | any;
+  icon?: string | any;
+  emoji?: string | any;
+  label?: string;
+  price?: number;
+  days?: number;
+  desc?: string;
+  Id?: string;
+  Name?: string;
+  Img?: string;
+  isSelected?: boolean;
+
+  [key: string]: any;
+}
+
+interface IMetadataSelect {
+  translate?: string;
+  name?: string;
+  placeholder?: string;
+  multiChoice: boolean;
+  icon?: string;
+  label: string;
+  desc?: string;
+  options?: SelectOption[];
+}
 
