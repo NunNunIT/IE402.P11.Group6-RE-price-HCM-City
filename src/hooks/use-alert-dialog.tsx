@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback } from "react";
 import { useAlertDialogContext } from "@/provider/alert-dialog";
+import { useCallback } from "react";
 
 export function useAlertDialogWrapperFunction(callback: () => Promise<void>, options?: { title?: string, description?: string }) {
   const { onOpenChange, setTitle, setDescription, setAction } = useAlertDialogContext();
