@@ -1,11 +1,8 @@
 "use client";
 
-// import libs
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
-import { useTranslations } from "next-intl";
 import { IoIosArrowDown } from "react-icons/io";
-// import components
 import {
   Dialog,
   DialogContent,
@@ -32,20 +29,14 @@ import { LuChevronsUpDown } from "react-icons/lu";
 import { CiSearch } from "react-icons/ci";
 import { IoIosArrowForward } from "react-icons/io";
 
-import { Button } from "@mui/material";
 import { Input } from "@/components/ui/input";
-import IconDemandValue from "@/components/icon-demand-value";
 
-// import utils
 import { cn } from "@/lib/utils";
-import { checkIncludeByAscii } from "@/utils/function";
+import { checkIncludeByAscii } from "@/utils";
 import { Label } from "@/components/ui/label";
 
 const Select: React.FC<ISelectComponentProps> = ({
-  // label,
   error,
-  translate,
-  noTranslateOptions,
   search = false,
   type,
   metadataSelect,
@@ -60,8 +51,6 @@ const Select: React.FC<ISelectComponentProps> = ({
   icon = false,
   disabled = false,
 }) => {
-  const t = useTranslations(metadataSelect.translate || translate || "Profile");
-  const tCommon = useTranslations("common");
   const isDesktop = useMediaQuery("(min-width: 860px)");
   const [errorNull, setErrorNull] = useState(false);
 
@@ -73,9 +62,9 @@ const Select: React.FC<ISelectComponentProps> = ({
             <div className="inline-block mr-2 w-8 h-8">{metadataSelect.icon}</div>
           )}
           <div className="grid grid-cols-1">
-            <p className="text-left whitespace-normal tracking-normal">{t(metadataSelect.label)}</p>
+            <p className="text-left whitespace-normal tracking-normal">{metadataSelect.label}</p>
             <p className="text-left whitespace-normal tracking-normal text-zinc-500 text-sm">
-              {t(metadataSelect.desc)}
+              {metadataSelect.desc}
             </p>
           </div>
         </div>
@@ -86,7 +75,7 @@ const Select: React.FC<ISelectComponentProps> = ({
         </div>
       </div>
     ),
-    [metadataSelect.desc, metadataSelect.icon, metadataSelect.label, t]
+    [metadataSelect.desc, metadataSelect.icon, metadataSelect.label]
   );
 
   const renderSelectTrigger2 = useMemo(
@@ -97,47 +86,36 @@ const Select: React.FC<ISelectComponentProps> = ({
             selectedValue.length && selectedValue[0] != "" ? (
               selectedValue.map((item) => (
                 <div key={item} className="p-1 px-2 rounded-full bg-pri-red-1 text-base text-white">
-                  {t(item)}
+                  {item}
                 </div>
               ))
             ) : (
-              <p className="text-sm text-zinc-500">{t("placeholder")}</p>
+              <p className="text-sm text-zinc-500">placeholder</p>
             )
           ) : selectedValue != "" ? (
             <div className="p-1 px-2 rounded-full bg-pri-red-1 text-base text-white">
-              {t(selectedValue)}
+              {selectedValue}
             </div>
           ) : (
-            <p className="text-sm text-zinc-500">{t("placeholder")}</p>
+            <p className="text-sm text-zinc-500">placeholder</p>
           )}
         </div>
       </div>
     ),
-    [selectedValue, t]
-  );
-
-  const renderSelectTrigger3 = useMemo(
-    () => (
-      <div className="w-fit group rounded-md border border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 dark:bg-zinc-900">
-        <div className="text-sm">
-          {selectedValue ? `${t("language")}: ${t(selectedValue)}` : t("choose-language")}
-        </div>
-      </div>
-    ),
-    [selectedValue, t]
+    [selectedValue]
   );
 
   const renderSelectTrigger4 = useMemo(
     () => (
       <div className="cursor-pointer flex md:flex-col flex-row md:justify-between justify-start md:items-start items-center md:gap-1 gap-3 py-1 md:ml-2">
-        <span className="text-xs text-zinc-600 dark:text-zinc-300">{t(metadataSelect.desc)}</span>
+        <span className="text-xs text-zinc-600 dark:text-zinc-300">{metadataSelect.desc}</span>
         <div className="flex flex-row gap-1 flex-nowrap items-center text-sm line-clamp-1">
           <CiLocationOn className="size-5 text-pri-orange-1" />
           <span className="text-nowrap line-clamp-1 h-6">{selectedValue}</span>
         </div>
       </div>
     ),
-    [metadataSelect.desc, selectedValue, t]
+    [metadataSelect.desc, selectedValue]
   );
 
   const renderSelectTrigger5 = useMemo(() => triggerCustomize, [triggerCustomize]);
@@ -149,7 +127,7 @@ const Select: React.FC<ISelectComponentProps> = ({
           htmlFor={metadataSelect.label}
           className={cn("px-4 font-bold", error ? "text-red-500" : "text-black dark:text-white")}
         >
-          {t(metadataSelect.label)}
+          {metadataSelect.label}
         </label>
         <div
           className={cn(
@@ -160,17 +138,17 @@ const Select: React.FC<ISelectComponentProps> = ({
         >
           <span className="flex items-center">
             <span className={cn("block truncate capitalize", !selectedValue && "text-zinc-400")}>
-              {selectedValue ? t(selectedValue) : t(metadataSelect.placeholder)}
+              {selectedValue ? selectedValue : metadataSelect.placeholder}
             </span>
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-5">
             <LuChevronsUpDown aria-hidden="true" className="h-5 w-5 text-gray-400" />
           </span>
         </div>
-        {error && <p className="absolute font-medium bottom-0 px-4 text-red-500">{t(error)}</p>}
+        {error && <p className="absolute font-medium bottom-0 px-4 text-red-500">{error}</p>}
       </div>
     ),
-    [error, metadataSelect.label, metadataSelect.placeholder, selectedValue, t]
+    [error, metadataSelect.label, metadataSelect.placeholder, selectedValue]
   );
 
   const handleBlur = useCallback(() => {
@@ -189,20 +167,19 @@ const Select: React.FC<ISelectComponentProps> = ({
           className="font-medium text-zinc-800 dark:text-zinc-200 text-base flex flex-row gap-1"
         >
           {required && <span className="text-red-600 dark:text-red-500 text-base">*</span>}
-          {t(metadataSelect.label)}
+          {metadataSelect.label}
         </Label>
 
         <div className="relative pl-3">
           {desc && (
             <p className="text-zinc-600 dark:text-zinc-500 text-xs mb-1">
-              {t(metadataSelect.desc)}
+              {metadataSelect.desc}
             </p>
           )}
 
           <div className="relative w-full mt-1">
             {icon && (
               <div className="w-fit h-full absolute left-2 inset-y-0 flex items-center text-zinc-500 dark:text-zinc-500">
-                <IconDemandValue value={metadataSelect.icon} />
               </div>
             )}
 
@@ -218,7 +195,7 @@ const Select: React.FC<ISelectComponentProps> = ({
               {Array.isArray(selectedValue) ? (
                 selectedValue.length === 0 ? (
                   <div className="text-zinc-500 dark:text-zinc-400">
-                    {t(metadataSelect?.placeholder)}
+                    {metadataSelect?.placeholder}
                   </div>
                 ) : (
                   selectedValue.slice(-3).map((item) => (
@@ -231,13 +208,13 @@ const Select: React.FC<ISelectComponentProps> = ({
                           : "text-zinc-500 dark:text-zinc-400"
                       )}
                     >
-                      {item != "" ? t(item) : t(metadataSelect?.placeholder)}
+                      {item != "" ? item : metadataSelect?.placeholder}
                     </div>
                   ))
                 )
               ) : (
                 <div className={cn(selectedValue !== "" ? "" : "text-zinc-500")}>
-                  {selectedValue != "" ? t(selectedValue) : t(metadataSelect?.placeholder)}
+                  {selectedValue != "" ? selectedValue : metadataSelect?.placeholder}
                 </div>
               )}
               <IoIosArrowDown className="absolute flex items-center top-1/2 right-2 h-4 w-4 -translate-y-1/2" />
@@ -247,27 +224,12 @@ const Select: React.FC<ISelectComponentProps> = ({
 
         {errorNull && (
           <span className="absolute -bottom-5 text-red-500 text-xs">
-            {t(metadataSelect.label)} {tCommon("is_required")}
+            {metadataSelect.label}
           </span>
         )}
       </div>
     ),
-    [
-      desc,
-      error,
-      errorNull,
-      handleBlur,
-      icon,
-      required,
-      metadataSelect.desc,
-      metadataSelect.icon,
-      metadataSelect.label,
-      metadataSelect.name,
-      metadataSelect?.placeholder,
-      selectedValue,
-      t,
-      tCommon,
-    ]
+    [desc, error, errorNull, handleBlur, icon, required, metadataSelect.desc, metadataSelect.label, metadataSelect.name, metadataSelect?.placeholder, selectedValue]
   );
 
   const renderSelectTrigger8 = useMemo(
@@ -281,18 +243,17 @@ const Select: React.FC<ISelectComponentProps> = ({
       >
         <div className="w-full flex flex-col">
           <div className="flex flex-row gap-2">
-            <IconDemandValue value={metadataSelect?.icon} />
-            <span className="text-zinc-900 dark:text-zinc-100">{t(metadataSelect?.label)}</span>
+            <span className="text-zinc-900 dark:text-zinc-100">{metadataSelect?.label}</span>
           </div>
           <p className="text-sm text-zinc-600 dark:text-zinc-600">{metadataSelect?.desc}</p>
         </div>
         <div className="w-fit min-w-[12rem] flex flex-row gap-2 justify-end items-center">
-          {t(selectedValue)}
+          {selectedValue}
           <IoIosArrowDown className="size-3" />
         </div>
       </div>
     ),
-    [metadataSelect?.desc, metadataSelect?.icon, metadataSelect?.label, selectedValue, t]
+    [metadataSelect?.desc, metadataSelect?.label, selectedValue]
   );
 
   const RenderSelectTrigger = useCallback(
@@ -302,8 +263,6 @@ const Select: React.FC<ISelectComponentProps> = ({
           return renderSelectTrigger1;
         case 2:
           return renderSelectTrigger2;
-        case 3:
-          return renderSelectTrigger3;
         case 4:
           return renderSelectTrigger4;
         case 5:
@@ -321,7 +280,6 @@ const Select: React.FC<ISelectComponentProps> = ({
     [
       renderSelectTrigger1,
       renderSelectTrigger2,
-      renderSelectTrigger3,
       renderSelectTrigger4,
       renderSelectTrigger5,
       renderSelectTrigger6,
@@ -338,10 +296,10 @@ const Select: React.FC<ISelectComponentProps> = ({
       const { value } = event.target;
       setSearchText(value);
       setFilteredOptions(
-        metadataSelect.options.filter((option) => checkIncludeByAscii(t(option.value || ""), value))
+        metadataSelect.options.filter((option) => checkIncludeByAscii(option.value || "", value))
       );
     },
-    [metadataSelect.options, t]
+    [metadataSelect.options]
   );
 
   useEffect(() => {
@@ -397,10 +355,10 @@ const Select: React.FC<ISelectComponentProps> = ({
             )}
           />
         </div>
-        {noTranslateOptions ? item.value : t(item.value)}
+        {item.value}
       </div>
     ),
-    [noTranslateOptions, selectedValue, setSelectedValue, t]
+    [selectedValue, setSelectedValue]
   );
 
   const [tempSelectedValue, setTempSelectedValue] = useState(selectedValue);
@@ -440,11 +398,11 @@ const Select: React.FC<ISelectComponentProps> = ({
           >
             <div className="w-4 h-4 rounded-full text-pri-red-1">{isSelected && <FaCheck />}</div>
           </div>
-          {noTranslateOptions ? props.value : t(props.value)}
+          {props.value}
         </div>
       );
     },
-    [noTranslateOptions, t, tempSelectedValue]
+    [tempSelectedValue]
   );
 
   const handleOkClick = useCallback(() => {
@@ -484,9 +442,9 @@ const Select: React.FC<ISelectComponentProps> = ({
         </div>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="uppercase">{t(metadataSelect.label)}</DialogTitle>
+            <DialogTitle className="uppercase">{metadataSelect.label}</DialogTitle>
             <DialogDescription className="text-zinc-500 text-sm">
-              {t(metadataSelect.desc)}
+              {metadataSelect.desc}
               {search && <RenderSearch />}
             </DialogDescription>
           </DialogHeader>
@@ -509,9 +467,7 @@ const Select: React.FC<ISelectComponentProps> = ({
             <DialogFooter className="absolute bottom-0 right-0 p-2 md:pr-8 w-full justify-end">
               <div className="w-full md:w-fit flex justify-end right-0 gap-4">
                 <DialogClose onClick={handleOkClick} className="w-full">
-                  <Button color="priRed" variant="contained" className="w-full md:w-fit !px-16">
-                    OK
-                  </Button>
+                  OK
                 </DialogClose>
               </div>
             </DialogFooter>
@@ -531,11 +487,11 @@ const Select: React.FC<ISelectComponentProps> = ({
       </div>
       <SheetContent className="inset-0 flex flex-col px-2" side="bottom">
         <SheetHeader className="flex-initial h-fit z-50 relative w-full flex flex-row justify-between items-center">
-          <SheetTitle className="uppercase">{t(metadataSelect.label)}</SheetTitle>
+          <SheetTitle className="uppercase">{metadataSelect.label}</SheetTitle>
           <div className="w-8"></div>
         </SheetHeader>
         <SheetDescription className="text-zinc-500 text-sm">
-          {t(metadataSelect.desc)}
+          {metadataSelect.desc}
           {search && <RenderSearch />}
         </SheetDescription>
 
@@ -562,9 +518,7 @@ const Select: React.FC<ISelectComponentProps> = ({
           <SheetFooter className="absolute bottom-0 right-0 w-full p-2">
             <div className="w-full flex justify-end items-center gap-4">
               <SheetClose onClick={handleOkClick} className="w-full">
-                <Button color="priRed" variant="contained" className="!w-full md:w-fit">
-                  OK
-                </Button>
+                OK
               </SheetClose>
             </div>
           </SheetFooter>
@@ -573,28 +527,5 @@ const Select: React.FC<ISelectComponentProps> = ({
     </Sheet>
   );
 };
-
-// const SelectComponent: React.FC<SelectComponentProps> = ({
-//   translate,
-//   search,
-//   type,
-//   selectData,
-//   selectedValue,
-//   setSelectedValue,
-//   children,
-// }) => {
-//   return (
-//     <Select
-//       translate={translate}
-//       search={search}
-//       type={type}
-//       selectData={selectData}
-//       selectedValue={selectedValue}
-//       setSelectedValue={setSelectedValue}
-//     >
-//       {children}
-//     </Select>
-//   );
-// };
 
 export default Select;

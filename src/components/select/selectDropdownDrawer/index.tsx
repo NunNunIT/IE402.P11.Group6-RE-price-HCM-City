@@ -1,11 +1,8 @@
 "use client";
 
-// Import libraries
 import React, { useCallback, useEffect, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
-import { useTranslations } from "next-intl";
 
-// Import components
 import { IoIosArrowDown } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import { IoCheckmark } from "react-icons/io5";
@@ -25,41 +22,32 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  // DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
-import IconDemandValue from "@/components/icon-demand-value";
 import { CiSearch } from "react-icons/ci";
 
-// Import utilities
 import { cn } from "@/lib/utils";
-import { checkIncludeByAscii } from "@/utils/function";
+import { checkIncludeByAscii } from "@/utils";
 
 
-const renderSelectTrigger2 = (t: any, icon: any, iconSelectedValue: any, selectedValue: any) => (
+const renderSelectTrigger2 = (icon: any, iconSelectedValue: any, selectedValue: any) => (
   <Button
     variant="outline"
     role="combobox"
     aria-expanded={false}
     className="w-full flex justify-start gap-2"
-    startIcon={
-      icon && <IconDemandValue className="size-6" value={iconSelectedValue} />
-    }
     endIcon={<IoIosArrowDown className="size-6" />}
   >
     <span className="text-left w-full">
-      {selectedValue ? t(selectedValue) : "Select option..."}
+      {selectedValue || "Select option..."}
     </span>
   </Button>
 );
 
 const Select: React.FC<ISelectComponentProps> = ({
-  // error,
-  translate,
-  noTranslateOptions,
   search = false,
   type,
   metadataSelect,
@@ -69,32 +57,20 @@ const Select: React.FC<ISelectComponentProps> = ({
   triggerCustomize,
   onlyPopover,
   onlyDrawer,
-  // required = false,
   desc = false,
   icon = false,
   disabled = false,
   hideLabel = false,
 }) => {
-  const t = useTranslations(metadataSelect.translate || translate || "Profile");
   const isDesktop = useMediaQuery("(min-width: 860px)");
-  // const [errorNull, setErrorNull] = useState(false);
   const [iconSelectedValue, setIconSelectedValue] = useState<string>("");
   const renderSelectTrigger1 = useCallback(() => triggerCustomize, [triggerCustomize]);
-
-  // const handleBlur = () => {
-  //   if (required && !selectedValue) {
-  //     setErrorNull(true);
-  //   } else {
-  //     setErrorNull(false);
-  //   }
-  // };
-
-  const RenderSelectTrigger = useCallback(({ type, t, icon, iconSelectedValue, selectedValue }: { type: number, t: any, icon: any, iconSelectedValue: any, selectedValue: any }) => {
+  const RenderSelectTrigger = useCallback(({ type, icon, iconSelectedValue, selectedValue }: { type: number, icon: any, iconSelectedValue: any, selectedValue: any }) => {
     switch (type) {
       case 1:
         return renderSelectTrigger1();
       case 2:
-        return renderSelectTrigger2(t, icon, iconSelectedValue, selectedValue);
+        return renderSelectTrigger2(icon, iconSelectedValue, selectedValue);
       default:
         return renderSelectTrigger1();
     }
@@ -114,10 +90,10 @@ const Select: React.FC<ISelectComponentProps> = ({
     setSearchText(value);
     setFilteredOptions(
       metadataSelect.options.filter((option) =>
-        checkIncludeByAscii(t(option.value || ""), value)
+        checkIncludeByAscii(option.value || "", value)
       )
     );
-  }, [metadataSelect.options, t]);
+  }, [metadataSelect.options]);
 
   const RenderSearch = useCallback(() => (
     <div className="flex items-center justify-center pt-2">
@@ -154,18 +130,17 @@ const Select: React.FC<ISelectComponentProps> = ({
         setIsPopoverOpen(false);
       }}
     >
-      {icon && <IconDemandValue value={item?.icon} />}
       <div className="flex flex-col justify-start items-start">
-        {noTranslateOptions ? item?.value : t(item?.value)}
+        {item?.value}
         <span className="text-xs text-zinc-600 dark:text-zinc-300 text-wrap">
-          {desc && t(item?.desc)}
+          {desc && item?.desc}
         </span>
       </div>
       {selectedValue === item.value && (
         <IoCheckmark className="size-6 text-pri-red-1" />
       )}
     </div>
-  ), [desc, icon, noTranslateOptions, selectedValue, setSelectedValue, t]);
+  ), [desc, selectedValue, setSelectedValue]);
 
   const [, setTempSelectedValue] = useState(selectedValue);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -189,9 +164,9 @@ const Select: React.FC<ISelectComponentProps> = ({
     return (
       <Popover open={isPopoverOpen} onOpenChange={handlePopoverOpenChange}>
         <div className="relative mb-0.5">
-          {!hideLabel && t(metadataSelect.label)}
+          {!hideLabel && metadataSelect.label}
           <PopoverTrigger disabled={disabled} asChild>
-            {RenderSelectTrigger({ type, t, icon, iconSelectedValue, selectedValue })}
+            {RenderSelectTrigger({ type, icon, iconSelectedValue, selectedValue })}
           </PopoverTrigger>
           {disabled && (
             <div className="absolute inset-0 cursor-not-allowed bg-zinc-400/25" />
@@ -234,7 +209,7 @@ const Select: React.FC<ISelectComponentProps> = ({
     <Drawer open={isDrawerOpen} onOpenChange={handleDrawerOpenChange}>
       <div className="relative">
         <DrawerTrigger disabled={disabled} asChild>
-          {RenderSelectTrigger({ type, t, icon, iconSelectedValue, selectedValue })}
+          {RenderSelectTrigger({ type, icon, iconSelectedValue, selectedValue })}
         </DrawerTrigger>
         {disabled && (
           <div className="absolute inset-0 cursor-not-allowed bg-zinc-400/25" />
@@ -243,10 +218,10 @@ const Select: React.FC<ISelectComponentProps> = ({
       <DrawerContent className="p-4">
         <DrawerHeader className="flex-initial h-fit z-50 relative w-full flex flex-col justify-between items-center">
           <DrawerTitle className="uppercase">
-            {t(metadataSelect.label)}
+            {metadataSelect.label}
           </DrawerTitle>
           <DrawerDescription className="text-zinc-500 text-sm">
-            {t(metadataSelect.desc)}
+            {metadataSelect.desc}
             {search && <RenderSearch />}
           </DrawerDescription>
         </DrawerHeader>

@@ -1,47 +1,23 @@
 "use client";
 
-// import libs
-import React, { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
-// import { useMediaQuery } from "usehooks-ts";
-// import { isRowSelected } from "@tanstack/react-table";
-
-// import components
+import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoCheckmark } from "react-icons/io5";
-// import { Button } from "@mui/material";
-// import { ThemeMuiProvider } from "@/providers";
 import { Input } from "@/components/ui/input";
-import IconDemandValue from "@/components/icon-demand-value";
 import Image from "next/image";
-import { CurrencyText } from "@/components/customize-ui";
 
 const Select: React.FC<ISelectComponentProps> = ({
-  // label,
   error,
-  translate,
-  noTranslateOptions = false,
   search,
-  // type,
   metadataSelect,
   selectedValue,
   setSelectedValue,
-  // children,
-  // triggerCustomize,
-  // urlPart,
   hideLabel = false,
   desc,
   layoutOptionClassName,
   typeLayoutOption,
   disabled = false,
 }) => {
-  // console.log("selectDataselectData", selectData);
-  // console.log("selectedValueselectedValue", selectedValue);
-
-  const t = useTranslations(translate || "Profile");
-  const tCommon = useTranslations("common");
-  // const isDesktop = useMediaQuery("(min-width: 860px)");
-
   const [searchText, setSearchText] = useState("");
   const [filteredOptions, setFilteredOptions] = useState<SelectOption[]>(
     metadataSelect.options
@@ -57,8 +33,7 @@ const Select: React.FC<ISelectComponentProps> = ({
     if (typeLayoutOption != 3) {
       setFilteredOptions(
         metadataSelect.options.filter((option) =>
-          t(option.value || "")
-            .toLowerCase()
+          option.value.toLowerCase()
             .includes(value.toLowerCase())
         )
       );
@@ -101,42 +76,39 @@ const Select: React.FC<ISelectComponentProps> = ({
 
   const renderOptionsLayout1 = (item: any, isSelected: boolean) => (
     <div
-      className={`w-full h-full border-2 px-4 py-6 rounded-lg cursor-pointer flex flex-col items-center justify-center ${
-        isSelected
-          ? "border-pri-red-1 dark:bg-zinc-900 bg-zinc-100"
-          : "border-gray-300"
-      } `}
+      className={`w-full h-full border-2 px-4 py-6 rounded-lg cursor-pointer flex flex-col items-center justify-center ${isSelected
+        ? "border-pri-red-1 dark:bg-zinc-900 bg-zinc-100"
+        : "border-gray-300"
+        } `}
     >
-      <span className="mr-2">
+      {/* <span className="mr-2">
         <IconDemandValue value={item?.icon} />
       </span>
       <span className="text-wrap text-center">
         {noTranslateOptions ? item?.value : t(item?.value)}
-      </span>
+      </span> */}
     </div>
   );
 
   const renderOptionsLayout2 = (item: any, isSelected: boolean) => (
     <div
       key={item.value}
-      className={`group snap-center relative w-full min-w-[20rem] flex flex-col justify-between items-start rounded-lg cursor-pointer p-6 ${
-        isSelected
-          ? "bg-pri-red-1 text-white hover:bg-pri-red-1/90"
-          : "bg-zinc-100 hover:bg-zinc-200 text-zinc-900"
-      }`}
+      className={`group snap-center relative w-full min-w-[20rem] flex flex-col justify-between items-start rounded-lg cursor-pointer p-6 ${isSelected
+        ? "bg-pri-red-1 text-white hover:bg-pri-red-1/90"
+        : "bg-zinc-100 hover:bg-zinc-200 text-zinc-900"
+        }`}
     >
       <div className="absolute top-2 right-3 text-white">
         {isSelected && <IoCheckmark className="size-8" />}
       </div>
       <span
-        className={`w-fit rounded-full text-nowrap mb-2 ${
-          isSelected ? "bg-zinc-900 text-white px-3" : ""
-        }`}
+        className={`w-fit rounded-full text-nowrap mb-2 ${isSelected ? "bg-zinc-900 text-white px-3" : ""
+          }`}
       >
         {item.desc}
       </span>
       <span className="text-xl font-bold mb-3">
-        {noTranslateOptions ? item.value : t(item.value)}
+        {item.value}
       </span>
       <span className="text-2xl font-semibold">{item.price}</span>
     </div>
@@ -145,11 +117,10 @@ const Select: React.FC<ISelectComponentProps> = ({
   const renderOptionsLayout3 = (item: any, isSelected: boolean) => {
     return (
       <div
-        className={`grid grid-cols-[8rem_auto] max-h-[8rem] gap-2 border-2 rounded-lg cursor-pointer overflow-hidden ${
-          isSelected
-            ? "border-pri-red-1 dark:bg-zinc-900 bg-zinc-100"
-            : "border-gray-300"
-        } `}
+        className={`grid grid-cols-[8rem_auto] max-h-[8rem] gap-2 border-2 rounded-lg cursor-pointer overflow-hidden ${isSelected
+          ? "border-pri-red-1 dark:bg-zinc-900 bg-zinc-100"
+          : "border-gray-300"
+          } `}
       >
         <div className="w-28 h-28 aspect-square overflow-hidden">
           <Image
@@ -171,15 +142,13 @@ const Select: React.FC<ISelectComponentProps> = ({
 
   const renderOptionsLayout4 = (item: any, isSelected: boolean) => (
     <div
-      className={`border-2 px-3 py-3 rounded-lg cursor-pointer flex flex-row gap-2 items-center justify-center ${
-        isSelected
-          ? "border-pri-red-1 dark:bg-zinc-900 bg-zinc-100"
-          : "border-gray-300"
-      } `}
+      className={`border-2 px-3 py-3 rounded-lg cursor-pointer flex flex-row gap-2 items-center justify-center ${isSelected
+        ? "border-pri-red-1 dark:bg-zinc-900 bg-zinc-100"
+        : "border-gray-300"
+        } `}
     >
-      <IconDemandValue value={item?.icon} />
       <span className="text-wrap text-center">
-        {noTranslateOptions ? item?.value : t(item?.value)}
+        {item?.value}
       </span>
     </div>
   );
@@ -187,19 +156,16 @@ const Select: React.FC<ISelectComponentProps> = ({
   const renderOptionsLayout5 = (item: any, isSelected: boolean) => (
     <div
       key={item.value}
-      className={`group w-full flex flex-col gap-2 justify-between items-center rounded-lg ${
-        disabled ? "cursor-not-allowed" : "cursor-pointer"
-      } p-3 overflow-hidden ${
-        isSelected
+      className={`group w-full flex flex-col gap-2 justify-between items-center rounded-lg ${disabled ? "cursor-not-allowed" : "cursor-pointer"
+        } p-3 overflow-hidden ${isSelected
           ? "bg-pri-red-1 text-white hover:bg-pri-red-1/90"
           : "bg-zinc-100 hover:bg-zinc-200 text-zinc-900"
-      }`}
+        }`}
     >
       <div className="flex flex-row gap-3 items-center">
         <div
-          className={`flex justify-center items-center w-6 h-6 rounded-full border-2 ${
-            isSelected ? "bg-white" : "border-zinc-500"
-          }`}
+          className={`flex justify-center items-center w-6 h-6 rounded-full border-2 ${isSelected ? "bg-white" : "border-zinc-500"
+            }`}
         >
           <div
             className={`w-4 h-4 rounded-full text-pri-red-1 flex justify-between items-center`}
@@ -207,15 +173,10 @@ const Select: React.FC<ISelectComponentProps> = ({
             {isSelected && <IoCheckmark className="size-5" />}
           </div>
         </div>
-        <span>{noTranslateOptions ? item.value : t(item.value)}</span>
+        <span>{item.value}</span>
       </div>
       <span className="text-base font-semibold">
-        <CurrencyText price={item.price} />/
-        {item.value === "weekly"
-          ? tCommon("week")
-          : item.value === "monthly"
-          ? tCommon("month")
-          : tCommon("day")}
+
       </span>
     </div>
   );
@@ -245,10 +206,10 @@ const Select: React.FC<ISelectComponentProps> = ({
         onClick={
           !disabled
             ? () =>
-                setSelectedValue(
-                  typeLayoutOption == 3 ? item?.value?.id : item?.value
-                )
-            : () => {}
+              setSelectedValue(
+                typeLayoutOption == 3 ? item?.value?.id : item?.value
+              )
+            : () => { }
         }
       >
         {renderOptionLayouts(
@@ -288,19 +249,17 @@ const Select: React.FC<ISelectComponentProps> = ({
       {(metadataSelect.label != "" && !hideLabel) && (
         <label
           htmlFor=""
-          className={`px-4 font-bold ${
-            error ? "text-red-500" : "text-black dark:text-white"
-          }`}
+          className={`px-4 font-bold ${error ? "text-red-500" : "text-black dark:text-white"
+            }`}
         >
-          {t(metadataSelect.label)}
+          {metadataSelect.label}
         </label>
       )}
-      {desc && t(metadataSelect.desc)}
+      {desc && metadataSelect.desc}
       {search && <div>{renderSearch()}</div>}
       <div
-        className={`${
-          layoutOptionClassName ? layoutOptionClassName : "grid grid-cols-3"
-        } gap-4 mt-2`}
+        className={`${layoutOptionClassName ? layoutOptionClassName : "grid grid-cols-3"
+          } gap-4 mt-2`}
       >
         {filteredOptions.map((item: any) =>
           metadataSelect.multiChoice ? (
@@ -312,7 +271,7 @@ const Select: React.FC<ISelectComponentProps> = ({
       </div>
       {error && (
         <p className="absolute font-medium bottom-0 px-4 text-red-500">
-          {t(error)}
+          {error}
         </p>
       )}
     </div>
