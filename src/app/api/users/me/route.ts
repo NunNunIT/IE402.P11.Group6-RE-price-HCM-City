@@ -6,7 +6,7 @@ import { User } from "@/lib/model";
 import { auth } from "@/lib/auth";
 import { isValidObjectId } from "mongoose";
 import { uploadImgsOrUrls } from "@/lib/cloudinary/upload";
-import { getCldPublicIdFromUrl } from "@/lib/func/client-function";
+import { getCldPublicIdFromUrl } from "@/lib/cloudinary/utils";
 
 export const GET = auth(async (req: NextAuthRequest) => {
   const session = req.auth;
