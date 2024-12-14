@@ -18,8 +18,16 @@ export default function Home() {
         </div>
       </div>
       <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 my-6">
-        <SeeMoreType1 typeCard="realestate" title="Bất động sản" />
-        <SeeMoreType1 typeCard="news" title="Tin tức" />
+        <SeeMoreType1
+          typeCard="realEstate"
+          title="Bất động sản"
+          linkFetch="/api/real-estates?page=1"
+        />
+        <SeeMoreType1
+          typeCard="news"
+          title="Tin tức"
+          linkFetch="/api/news?page=1"
+        />
       </div>
     </div>
   );

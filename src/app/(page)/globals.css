@@ -6,6 +6,10 @@
   font-family: Arial, Helvetica, sans-serif;
 } */
 
+body.unremoved-classname[data-scroll-locked] {
+  overflow: clip !important;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

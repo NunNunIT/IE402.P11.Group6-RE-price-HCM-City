@@ -1,10 +1,12 @@
+import { AuthNavButton } from "@/components/customize-ui";
 import { AuthenticationDropdownMenu } from "@/components/customize-ui/authentication-dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { HiHomeModern } from "react-icons/hi2";
+import Link from "next/link";
 import { LoginButton } from "@/components/customize-ui/authentication-button";
+import { NAVIGATION_DESKTOP_DATA } from "@/data/navigation.data";
 import { PlusIcon } from "lucide-react";
 import { Sidebar } from "@/components/customize-ui/sidebar";
-import Link from "next/link";
 
 export default function NavBar() {
   return (
@@ -19,29 +21,26 @@ export default function NavBar() {
           </Link>
 
           <div className="md:flex ml-6 gap-3 hidden">
-            <Button
-              href="/real-estate"
-              variant="ghost"
-              className="font-semibold"
-            >
-              Bất động sản
-            </Button>
-            <Button href="/analysis" variant="ghost" className="font-semibold">
-              Biến động
-            </Button>
-            <Button href="/news" variant="ghost" className="font-semibold">
-              Tin tức
-            </Button>
+            {NAVIGATION_DESKTOP_DATA.map((data) => (
+              <Button key={data.link} href={data.link} variant="ghost" className="font-semibold">
+                {data.title}
+              </Button>
+            ))}
           </div>
         </div>
 
         <div className="gap-3 md:flex hidden">
-          <Button href="/create-new-re" startIcon={<PlusIcon className="size-6" />}>Đăng tin</Button>
+          <AuthNavButton
+            href="/create-new-re"
+            startIcon={<PlusIcon className="size-6" />}
+          >
+            Đăng tin
+          </AuthNavButton>
           <LoginButton>Đăng nhập</LoginButton>
           <AuthenticationDropdownMenu />
         </div>
 
-        <div className="md:hidden block">
+        <div className="md:hidden flex gap-2">
           <Sidebar />
         </div>
       </div>

@@ -1,12 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { FaLocationDot } from "react-icons/fa6";
-import { FaRegHeart } from "react-icons/fa";
-import { GISMap } from "@/components";
-import { ImageViewType1 } from "@/components/imageView";
-import { SearchTab } from "@/components/search";
-import { SeeMoreType1 } from "@/components/seeMore";
-import { NewsCard, SearchResultCard } from "@/components/card";
+import dynamic from "next/dynamic";
+const SearchCardWrapper = dynamic(
+  () => import("./components").then(mod => mod.SearchCardWrapper),
+  { ssr: false, loading: () => <>Loading...</> }
+);
 
+<<<<<<< HEAD
 export default function SearchResultPage() {
   const sampleImages = [
     "https://photo.rever.vn/v3/get/rvhe0PS+4VVS4Z8WZzoVBQToU5B4zzCZg5f9dc2EdjtJdprSpJtPtK0VShcsHCoQDDJ3cXBnMshiyvde_rN47nHA==/750x500/image.jpg",
@@ -39,6 +37,12 @@ export default function SearchResultPage() {
         </div>
       </div>
       <GISMap className="container" />
+=======
+export default async function SearchResultPage({ searchParams }: IDefaultPageProps) {
+  return (
+    <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full">
+      <SearchCardWrapper {...{ searchParams }} />
+>>>>>>> 462bb4aa70ec7e01949e115d511fb324eb05ec53
     </div>
   );
 }

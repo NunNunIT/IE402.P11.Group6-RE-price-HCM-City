@@ -1,108 +1,64 @@
-// components/RealEstateCard.tsx
-"use client";
-
-import React, { useState } from "react";
 import Image from "next/image";
-import { GoHeart } from "react-icons/go";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { FaLocationDot } from "react-icons/fa6";
 import { LucideDot } from "lucide-react";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { SaveBtn } from "@/components";
 
 interface RealEstateCardProps {
-  image?: string;
+  _id?: string;
   title?: string;
-  location?: string;
-  distance?: string;
-  price?: string;
+  imageUrl?: string;
+  locate?: locate;
+  price?: number;
   area?: number;
 }
 
-const RealEstateCard: React.FC<RealEstateCardProps> = ({
-  image,
-  title,
-  location,
-  distance,
-  price,
-  area,
-}) => {
-  const [like, setLike] = useState(false);
+interface Props {
+  data?: RealEstateCardProps;
+}
 
+const RealEstateCard: React.FC<Props> = ({ data }) => {
   return (
-    <div className="group max-w-sm transition-shadow aspect-[3/4]">
-      <Link href="#">
+    <div className="group max-w-sm transition-shadow shadow-lg hover:shadow-xl rounded-xl overflow-hidden flex flex-col justify-between">
+      <Link href={`/real-estate/${data?._id}`}>
         {/* Image */}
-        <div className="relative h-48 rounded-xl overflow-hidden">
+        <div className="relative h-48">
           <Image
+          unoptimized
             width={1000}
             height={500}
             src={
-              image ??
-              "https://photo.rever.vn/v3/get/rvhe0PS+4VVS4Z8WZzoVBQToU5B4zzCZg5f9dc2EdjtJdprSpJtPtK0VShcsHCoQDDJ3cXBnMshiyvde_rN47nHA==/750x500/image.jpg"
+              data?.imageUrl ||
+              "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0c/bb/a3/97/predator-ride-in-the.jpg?w=900&h=500&s=1"
             }
-            alt={title ?? "Name"}
-            className="object-cover w-full h-full aspect-[4/3] group-hover:scale-105 ease-in duration-300"
+            alt={data?.title}
+            className="object-cover w-full h-full group-hover:scale-105 ease-in duration-300"
           />
-          <span className="absolute p-2 bg-black/60 bottom-0 w-full text-sm text-green-300 dark:text-green-500">
-            Cách bạn {distance ?? "15m"}
+          <span className="absolute p-2 bg-black/60 bottom-0 w-full text-sm text-white truncate">
+            {/* {locate?.diachi} */}
           </span>
         </div>
         {/* Content */}
-        <div className="p-2 h-fit flex flex-col">
-          <div className="flex flex-col">
-            <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200 truncate line-clamp-2">
-              {title ?? "Name"}
-            </h3>
-            <p className="text-sm text-zinc-500 flex gap-2 flex-row">
-              <HiOutlineLocationMarker className="size-4 text-gray-800" />
-              {location ?? "Địa chỉ"}
-            </p>
+        <div className="p-2 flex flex-col gap-2">
+          <h3 className="text-base font-semibold text-zinc-800 dark:text-zinc-200 line-clamp-2">
+            {data?.title}
+          </h3>
+          <div className="text-sm text-zinc-500 flex gap-2 items-center">
+            {data?.locate?.diachi} {", "} {data?.locate?.xa} {", "}
+            {data?.locate?.huyen} {", "}
+            {data?.locate?.tinh}
           </div>
         </div>
       </Link>
-      <div className="w-full flex flex-row gap-1 justify-between items-center px-2">
-        {!like ? (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger onClick={() => setLike(!like)}>
-                <FaRegHeart className="size-6 text-gray-600 hover:text-rose-600" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Lưu bất động sản này</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        ) : (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger onClick={() => setLike(!like)}>
-                <FaHeart className="size-6 text-rose-600" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Bỏ lưu bất động sản này</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
-
-        <Link href="#" className="w-ful flex flex-row gap-1">
-          <p className="text-lg font-bold text-red-500 dark:text-red-500">
-            {area ?? "25"} m<sup>2</sup>
+      {/* Footer */}
+      <div className="w-full flex flex-row gap-2 justify-between items-center px-4 pb-4">
+        <SaveBtn component="real-estate" />
+        <div className="flex gap-2 items-center">
+          <p className="text-lg font-bold text-red-500">
+            {data?.area} m<sup>2</sup>
           </p>
-          <LucideDot className="text-red-500 dark:text-red-500" />
-          <p className="text-lg font-bold text-red-500 dark:text-red-500">
-            {price ?? "5000 VND"}
-          </p>
-        </Link>
+          <LucideDot className="text-red-500" />
+          <p className="text-lg font-bold text-red-500">{data?.price} tỷ</p>
+        </div>
       </div>
     </div>
   );
