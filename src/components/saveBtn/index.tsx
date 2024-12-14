@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/tooltip";
 import { useCallback, useState } from "react";
 
-import { toast } from "@/hooks/use-toast";
 import { useAuthWrapperFunction } from "@/hooks";
+import { toast } from "sonner";
 
 export default function SaveBtn({
   component = "location",
@@ -23,9 +23,7 @@ export default function SaveBtn({
 
   const onLike = useCallback(async () => {
     setLike((prev) => {
-      toast({
-        title: `Bạn đã ${prev ? "bỏ lưu" : "lưu"} ${type}`,
-      });
+      toast.info(`Bạn đã ${prev ? "bỏ lưu" : "lưu"} ${type}`);
       return !prev;
     });
   }, [type]);
