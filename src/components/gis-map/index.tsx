@@ -4,7 +4,7 @@ import { Button, buttonVariants } from '../ui/button';
 import { Point, Polygon, } from '@arcgis/core/geometry';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import { ENUM_MARKER_SYMBOL } from '@/utils';
+import { ENUM_MAP_MODE, ENUM_MARKER_SYMBOL } from '@/utils';
 import Graphic from '@arcgis/core/Graphic';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Map from '@arcgis/core/Map';
@@ -23,18 +23,28 @@ function loadCss() {
 }
 
 interface IMapProps {
+  mode?: ENUM_MAP_MODE;
   zoom?: number;
   center?: { lat: number, long: number };
   className?: string;
   points?: { lat: number, long: number, type?: ENUM_MARKER_SYMBOL, title: string, description: string }[];
   isShowDistrict?: boolean;
+  value?: [number, number];
+  onChange?: (__value: [number, number]) => void;
 }
 
 const DEFAULT_PROPS = {
+  mode: ENUM_MAP_MODE.View,
   zoom: 10,
   center: { lat: 10.851985339727143, long: 106.69508635065 },
   isShowDistrict: false
 }
+
+const editMarkerSymbol = new PictureMarkerSymbol({
+  url: `/symbols/${ENUM_MARKER_SYMBOL.REAL_ESTATE}.png`,
+  width: "48px",
+  height: "48px"
+});
 
 // TODO: don't trigger rerender when props change
 export default function MapComponent(props: IMapProps) {
@@ -45,7 +55,8 @@ export default function MapComponent(props: IMapProps) {
   const [isAreaVisible, setIsAreaVisible] = useState(mergedProps.isShowDistrict);
   const districtGraphicsLayerRef = useRef<GraphicsLayer | null>(null);
   const pointGraphicsLayerRef = useRef<GraphicsLayer | null>(null);
-  const [zoom, setZoom] = useState(mergedProps.zoom)
+  const editGraphicRef = useRef<GraphicsLayer | null>(null);
+  const [zoom, setZoom] = useState(mergedProps.zoom);
 
   useLayoutEffect(() => {
     loadCss();
@@ -55,6 +66,10 @@ export default function MapComponent(props: IMapProps) {
     districtGraphicsLayerRef.current = new GraphicsLayer();
     mapInstanceRef.current.add(pointGraphicsLayerRef.current);
     mapInstanceRef.current.add(districtGraphicsLayerRef.current);
+    if (mergedProps.mode === ENUM_MAP_MODE.Edit) {
+      editGraphicRef.current = new GraphicsLayer();
+      mapInstanceRef.current.add(editGraphicRef.current);
+    }
     viewRef.current = new MapView({
       container: mapRef.current,
       map: mapInstanceRef.current,
@@ -73,6 +88,37 @@ export default function MapComponent(props: IMapProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (!viewRef.current) return;
+    const handleCenterChange = () => {
+      const center = viewRef.current?.center;
+      if (!center || mergedProps.mode !== ENUM_MAP_MODE.Edit && !editGraphicRef.current) return;
+      mergedProps.onChange?.([center.latitude, center.longitude]);
+      editGraphicRef.current?.removeAll();
+      const centerPoint = new Point({
+        longitude: center.longitude,
+        latitude: center.latitude
+      });
+      const editPointGraphic = new Graphic({
+        geometry: centerPoint,
+        symbol: editMarkerSymbol,
+        attributes: {
+          title: "Edit Point",
+          description: "This is the center point for editing."
+        },
+        popupTemplate: new PopupTemplate({
+          title: "{title}",
+          content: "{description}"
+        })
+      });
+      editGraphicRef.current.add(editPointGraphic);
+    };
+    const centerHandle = viewRef.current.watch('center', handleCenterChange);
+    return () => {
+      centerHandle.remove();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     if (!mergedProps.isShowDistrict || !viewRef.current || !districtGraphicsLayerRef.current) return;
     districtGraphicsLayerRef.current?.removeAll();
@@ -164,9 +210,9 @@ export default function MapComponent(props: IMapProps) {
   }, []);
 
   return (
-    <div className='sticky top-[5.75rem] max-h-[calc(100dvh_-_6.5rem)]'>
+    <div className='sticky top-[5.75rem] max-h-[calc(100dvh_-_6.5rem)] w-full'>
       <div className={cn("relative h-full w-full", mergedProps.className)}>
-        <div ref={mapRef} className="h-full w-full" />
+        <div ref={mapRef} className="h-full min-h-[30rem] w-full" />
         <div className="absolute bottom-4 left-4 flex flex-col space-y-2">
           {/* <input
             className="px-2 py-1 border rounded"
@@ -177,7 +223,7 @@ export default function MapComponent(props: IMapProps) {
             {isPointsVisible ? "Ẩn địa điểm" : "👁️ Hiển địa điểm"}
           </Button> */}
           {mergedProps.isShowDistrict && (
-            <Button variant="outline" onClick={toggleArea}>
+            <Button type="button" variant="outline" onClick={toggleArea}>
               {isAreaVisible ? "Ẩn vùng" : "👁️ Hiện vùng"}
             </Button>
           )}

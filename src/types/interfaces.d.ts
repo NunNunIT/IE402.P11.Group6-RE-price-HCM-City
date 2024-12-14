@@ -73,3 +73,29 @@ interface IMetadataSelect {
   options?: SelectOption[];
 }
 
+interface ISelectComponentProps {
+  label?: any;
+  error?: any;
+  translate?: string;
+  noTranslateOptions?: boolean;
+  type?: number;
+  typeLayoutOption?: number;
+  search?: boolean;
+  metadataSelect: IMetadataSelect;
+  selectedValue: string | string[] | any;
+  setSelectedValue: (value: string | string[]) => void;
+  triggerCustomize?: any;
+  children?: any;
+  onlyDialog?: boolean;
+  onlySheet?: boolean;
+  onlyDrawer?: boolean;
+  onlyPopover?: boolean;
+  desc?: boolean;
+  layoutOptionClassName?: string;
+  disabled?: boolean;
+  required?: boolean;
+  icon?: boolean;
+  multiChoice?: boolean; // chỉ áp dụng locationSelectorDialogSheet
+  hideLabel?: boolean;
+  urlPart?: string;
+}

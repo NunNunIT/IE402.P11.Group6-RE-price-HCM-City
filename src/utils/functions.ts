@@ -81,3 +81,59 @@ export const isVisibleContext = (session: Session, data: { isNeedAuth?: boolean,
     && (!data.isNeedHighPermission
       || [ENUM_ROLE.Admin, ENUM_ROLE.Staff].includes(session?.user.role))
 }
+
+export const parseFormDataToObject = (formData: FormData): Record<string, any> => {
+  const obj: Record<string, any> = {};
+
+  formData.forEach((value, key) => {
+    let parsedValue;
+
+    // Try to parse the value as JSON if it's a string
+    if (typeof value === 'string') {
+      try {
+        parsedValue = JSON.parse(value);
+      } catch {
+        // If parsing fails, leave the value as a string
+        parsedValue = value;
+      }
+    } else {
+      parsedValue = value;
+    }
+
+    // Handle multiple values for the same key
+    if (obj[key]) {
+      if (!Array.isArray(obj[key])) {
+        obj[key] = [obj[key]]; // Convert to array if not already
+      }
+      obj[key].push(parsedValue);
+    } else {
+      obj[key] = parsedValue;
+    }
+  });
+
+  return obj;
+};
+
+export const parseObjectToFormData = (obj: Record<string, any>, parentKey?: string): FormData => {
+  const formData = new FormData();
+
+  const appendValue = (key: string, value: any) => {
+    if (Array.isArray(value)) {
+      value.forEach((item) => {
+        formData.append(key, item);
+      });
+    } else if (typeof value === 'object' && value !== null) {
+      formData.append(key, JSON.stringify(value));
+    } else {
+      formData.append(key, value);
+    }
+  };
+
+  if (parentKey) {
+    formData.append(parentKey, JSON.stringify(obj));
+  } else {
+    Object.keys(obj).forEach((key) => appendValue(key, obj[key]));
+  }
+
+  return formData;
+};

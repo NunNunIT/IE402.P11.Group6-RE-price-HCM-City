@@ -11,10 +11,16 @@ export enum ENUM_SOCIAL_TYPE {
 }
 
 export enum ENUM_GENDER {
-  Female = "Female",
   Male = "Male",
+  Female = "Female",
   Unknown = "Unknown",
 }
+
+export const MAPPING_GENDER = {
+  [ENUM_GENDER.Female]: "Nữ",
+  [ENUM_GENDER.Male]: "Nam",
+  [ENUM_GENDER.Unknown]: "Không biết",
+} as const;
 
 export enum ENUM_ROLE {
   Admin = "Admin",
@@ -26,6 +32,7 @@ export enum ENUM_LOCATION_TYPE {
   PROVINCE = 1,
   DISTRICT = 2,
   WARD = 3,
+  STREET = 4,
 }
 
 export enum ENUM_MARKER_SYMBOL {
@@ -46,4 +53,9 @@ export enum ENUM_MARKER_SYMBOL {
   SHOP = "shop",
   TEMPLE = "temple",
   THEATER = "theater",
+}
+
+export enum ENUM_MAP_MODE {
+  Edit = 'edit',
+  View = 'view',
 }
