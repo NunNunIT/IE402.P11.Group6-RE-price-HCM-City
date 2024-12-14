@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { authConfig } from "./lib/auth/config";
 
 const privatePages: string[] = [
+  '/user/*',
   '/create-new-re',
   '/admin/*',
 ];

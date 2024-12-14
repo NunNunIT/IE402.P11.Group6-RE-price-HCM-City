@@ -23,7 +23,7 @@ const locationSchema = new Schema({
   desc: { type: String, required: true },
   category: { type: [String], enum: ENUM_MARKER_SYMBOL, default: ENUM_MARKER_SYMBOL.DEFAULT },
   locate: LocationSchema,
-  imageUrl: { type: [String], default: [] },
+  imageUrls: { type: [String], default: [] },
   avgStarGGMap: { type: Number },
   exts: { type: [String], default: [] },
   owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },  // Reference to User model
