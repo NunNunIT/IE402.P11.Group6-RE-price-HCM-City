@@ -4,6 +4,7 @@ import { ImageViewType1 } from "@/components/imageView";
 import { SaveBtn } from "@/components";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
+import translateKey from "@/lib/func/transfer";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
@@ -15,13 +16,13 @@ export default async function RealEstateDetailPage({ params: { _id } }: IRealEst
   const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`, {
     cache: "reload",
   }).then(async (res) => {
-      const payload = await res.json();
-      return payload;
-    })
+    const payload = await res.json();
+    return payload;
+  })
     .then(async (payload) => {
       const data = payload.data;
       return data;
-    }).catch((error: unknown) => {
+    }).catch((error: unknown): null => {
       console.error(">> Error:", error instanceof Error ? error.message : "unknown error");
       return null;
     });
@@ -30,7 +31,7 @@ export default async function RealEstateDetailPage({ params: { _id } }: IRealEst
   return (
     <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full mx-auto p-3">
       <div className="w-full h-full bg-white dark:bg-zinc-900 space-y-6 pr-3">
-        <ImageViewType1 images={data.imageUrl} />
+        <ImageViewType1 images={data.imageUrls} />
         <div className="flex flex-col gap-3">
           <h1 className="font-bold text-3xl">
             {data.title}
@@ -61,33 +62,27 @@ export default async function RealEstateDetailPage({ params: { _id } }: IRealEst
         </div>
 
         <div className="flex flex-col gap-3">
-          <h2 className="font-bold text-xl">Thông tin mô tả</h2>
-          <div className="">
-            {data.desc}
+          <h2 className="font-bold text-xl">Đặc điểm bất động sản</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {Object.entries(data?.info ?? {})
+              .map(([key, value], index) => (
+                <div
+                  key={index}
+                  className="py-2 flex flex-row justify-between items-center border-y-2 border-y-zinc-200 dark:border-y-zinc-800"
+                >
+                  <span className="font-semibold">{translateKey(key)}</span>
+                  <span>
+                    {typeof value === "number" ? value : translateKey(value as string)}
+                  </span>
+                </div>
+              ))}
           </div>
         </div>
 
-        {/* <div className="flex flex-col gap-3">
-          <h2 className="font-bold text-xl">Đặc điểm bất động sản</h2>
-          <div className="grid grid-cols-2 gap-3">
-            {Object.entries({
-              legal: "sodo",
-              direction: "nam",
-              bedroom: 2,
-              bathroom: 1,
-            }).map(([key, value], index) => (
-              <div
-                key={index}
-                className="py-2 flex flex-row justify-between items-center border-y-2 border-y-zinc-200 dark:border-y-zinc-800"
-              >
-                <span className="font-semibold">{TranslateKey(key)}</span>
-                <span>
-                  {typeof value === "number" ? value : TranslateKey(value)}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div> */}
+        <div className="flex flex-col gap-3">
+          <h2 className="font-bold text-xl">Thông tin mô tả</h2>
+          <div dangerouslySetInnerHTML={{ __html: data.desc }} />
+        </div>
 
         {/* <div className="rounded-lg border-2 border-zinc-200 dark:border-zinc-800 p-3">
           <h2 className="font-bold text-xl mb-1">Liên hệ</h2>
