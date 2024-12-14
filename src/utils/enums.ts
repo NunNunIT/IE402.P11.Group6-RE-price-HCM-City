@@ -54,3 +54,8 @@ export enum ENUM_MARKER_SYMBOL {
   TEMPLE = "temple",
   THEATER = "theater",
 }
+
+export enum ENUM_MAP_MODE {
+  Edit = 'edit',
+  View = 'view',
+}
