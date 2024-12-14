@@ -22,8 +22,8 @@ export default function SaveBtn({
   const type = component == "location" ? "địa điểm" : "bất động sản";
 
   const onLike = useCallback(async () => {
-    setLike(prev => {
-      toast.info(`Bạn đã ${prev ? "bỏ lưu" : "lưu"} ${type}`)
+    setLike((prev) => {
+      toast.info(`Bạn đã ${prev ? "bỏ lưu" : "lưu"} ${type}`);
       return !prev;
     });
   }, [type]);

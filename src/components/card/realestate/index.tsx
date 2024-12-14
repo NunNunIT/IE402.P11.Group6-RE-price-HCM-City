@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LucideDot } from "lucide-react";
-import { SaveBtn } from "@/components";
+import { SaveRealBtn } from "@/components";
 
 interface RealEstateCardProps {
   _id?: string;
@@ -23,7 +23,7 @@ const RealEstateCard: React.FC<Props> = ({ data }) => {
         {/* Image */}
         <div className="relative h-48">
           <Image
-          unoptimized
+            unoptimized
             width={1000}
             height={500}
             src={
@@ -51,7 +51,7 @@ const RealEstateCard: React.FC<Props> = ({ data }) => {
       </Link>
       {/* Footer */}
       <div className="w-full flex flex-row gap-2 justify-between items-center px-4 pb-4">
-        <SaveBtn component="real-estate" />
+        <SaveRealBtn component="real-estate" realEstateId={data._id} />
         <div className="flex gap-2 items-center">
           <p className="text-lg font-bold text-red-500">
             {data?.area} m<sup>2</sup>
