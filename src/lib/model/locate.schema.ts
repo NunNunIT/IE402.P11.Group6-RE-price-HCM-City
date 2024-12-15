@@ -3,7 +3,7 @@ import { Schema } from "mongoose";
 export interface ILocation {
   lat: number;
   long: number;
-  ward: string;
+  ward: String;
 }
 
 export const LocationSchema = new Schema({

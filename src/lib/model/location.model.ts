@@ -1,7 +1,7 @@
-import { ILocation, LocationSchema } from './locate.schema';
-import { Schema, model, models } from 'mongoose';
+import { ILocation, LocationSchema } from "./locate.schema";
+import { Schema, model, models } from "mongoose";
 
-import { ENUM_MARKER_SYMBOL } from '@/utils';
+import { ENUM_MARKER_SYMBOL } from "@/utils";
 
 export interface ILocationModel {
   ggMapId?: string;
@@ -13,7 +13,9 @@ export interface ILocationModel {
   imageUrls: string[];
   avgStarGGMap: number;
   exts: string[];
-  owner: string;
+  owner: String;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const locationSchema = new Schema({
@@ -29,4 +31,4 @@ const locationSchema = new Schema({
   owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },  // Reference to User model
 }, { timestamps: true, strict: false });
 
-export const Location = models?.Location ?? model('Location', locationSchema);
+export const Location = models?.Location ?? model("Location", locationSchema);
