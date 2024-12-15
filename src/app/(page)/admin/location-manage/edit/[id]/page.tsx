@@ -401,14 +401,14 @@ import {
 } from "@/components/ui/select";
 import { ImageDropZone } from "@/components";
 import { ENUM_MARKER_SYMBOL } from "@/utils";
-import { dataService } from "@/data/select";
+import { DATA_SERVICES } from "@/data/select";
 import MultipleSelector from "@/components/ui/multiple-selector";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { ILocationModel } from "@/lib/model";
+import { notFound, useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { ENUM_MAP_MODE } from "@/utils";
 import { toast } from "sonner";
+import useSWR from "swr";
 const GisMap = dynamic(() => import("@/components/gis-map"), {
   ssr: false,
   loading: () => <>Loading...</>,
@@ -428,10 +428,22 @@ const FormSchema = z.object({
   avgStarGGMap: z.number().min(0).max(5),
   exts: z.array(z.string()),
 });
+
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch");
+  const payload = await res.json();
+  return payload.data;
+}
+
+const EXTENSION_OPTIONS = DATA_SERVICES.options.map((option) => {
+  return { label: option.value, value: option.value };
+});
+
 export default function EditLocation() {
   const { id } = useParams();
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { data, isLoading, error } = useSWR(`/api/location/${id}`, fetcher);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -448,29 +460,11 @@ export default function EditLocation() {
   });
 
   useEffect(() => {
-    const fetchCurrLocation = async () => {
-      setLoading(true);
-      if (!id) return;
-      const res = await fetch(`/api/location/${id}`);
-      const payload = await res.json();
-      const currLocation = payload.data as ILocationModel;
-      form.reset({
-        ...currLocation,
-        locate: [currLocation.locate.lat, currLocation.locate.long],
-      });
-      setLoading(false);
-    };
-    fetchCurrLocation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (!data) return;
+    form.reset({ ...data, locate: [data.locate.lat, data.locate.long] });
+  }, [data, form]);
 
-  // useEffect(() => {
-  //   console.log(form.formState.dirtyFields);
-  // }, [form.formState.dirtyFields]);
-
-  const extOption = dataService.options.map((option) => {
-    return { label: option.value, value: option.value };
-  });
+  if (error) return notFound();
 
   const handleImageUpload = async (newImages: (string | File)[]) => {
     return Promise.all(
@@ -557,7 +551,7 @@ export default function EditLocation() {
         <h1 className="md:text-4xl text-2xl font-bold my-3 text-center">
           Sửa Location
         </h1>
-        {loading ? (
+        {isLoading ? (
           <div className="text-center mt-10">Loading...</div>
         ) : (
           <Form {...form}>
@@ -665,7 +659,7 @@ export default function EditLocation() {
                       </FormLabel>
                       <FormControl>
                         <MultipleSelector
-                          defaultOptions={extOption}
+                          defaultOptions={EXTENSION_OPTIONS}
                           value={field.value.map((value) => ({
                             label: value,
                             value,

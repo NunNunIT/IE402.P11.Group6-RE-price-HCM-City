@@ -399,8 +399,8 @@ import {
 } from "@/components/ui/select";
 import { ImageDropZone } from "@/components";
 import { ENUM_MARKER_SYMBOL } from "@/utils";
-import { dataService } from "@/data/select";
-import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
+import { DATA_SERVICES } from "@/data/select";
+import MultipleSelector from "@/components/ui/multiple-selector";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ENUM_MAP_MODE } from "@/utils";
@@ -465,7 +465,7 @@ export default function AddLocation() {
 
   const router = useRouter();
 
-  const extOption = dataService.options.map((option) => {
+  const extOption = DATA_SERVICES.options.map((option) => {
     return { label: option.value, value: option.value };
   });
 
