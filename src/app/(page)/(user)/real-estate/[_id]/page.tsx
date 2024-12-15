@@ -95,22 +95,22 @@ export default async function RealEstateDetailPage({
           <h2 className="font-bold text-xl mb-1">Liên hệ</h2>
           <div className="flex flex-row">
             <Avatar>
-              <AvatarImage src="https://cdn.caohockinhte.edu.vn/wp-content/uploads/2024/10/avatar-vo-tri-cute-meo-1.jpg" />
-              <AvatarFallback>U</AvatarFallback>
+              <AvatarImage src={data.owner?.avt ?? "https://cdn.caohockinhte.edu.vn/wp-content/uploads/2024/10/avatar-vo-tri-cute-meo-1.jpg"} />
+              <AvatarFallback>{data.owner?.username?.[0] ?? "U"}</AvatarFallback>
             </Avatar>
             <div className="ml-4 flex flex-col justify-center">
-              <p className="font-semibold text-lg">Tên</p>
-              <p className="text-sky-500">0987296708</p>
+              <p className="font-semibold text-lg">{data.owner?.username ?? "Tên"}</p>
+              {data.owner?.phone ?? <p className="text-sky-500">{data.owner?.phone}</p>}
               <a
-                href="mailto:123@gmail.com"
+                href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}
                 className="text-zinc-500 hover:text-sky-500 no-underline"
               >
-                123@gmail.com
+                {data.owner?.email ?? "123@gmail.com"}
               </a>
             </div>
             <div className="flex flex-col">
-              <Button>Gọi điện</Button>
-              <Button variant="secondary" href="mailto:123@gmail.com">
+              {data.owner?.phone ?? <Button>Gọi điện</Button>}
+              <Button variant="secondary" href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}>
                 Gửi mail
               </Button>
             </div>
@@ -128,8 +128,13 @@ export default async function RealEstateDetailPage({
             title: data.title,
             type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
           },
+          ...data.locations.map((location: any) => ({
+            ...location.locate,
+            title: data.title,
+            type: data.category,
+          }))
         ]}
       />
-    </div>
+    </div >
   );
 }
