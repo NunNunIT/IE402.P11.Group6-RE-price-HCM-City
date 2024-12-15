@@ -1,6 +1,5 @@
 "use server";
 
-import { Toaster as Toaster2 } from "@/components/ui/toaster"
 import { auth } from "@/lib/auth";
 import dynamic from "next/dynamic";
 
