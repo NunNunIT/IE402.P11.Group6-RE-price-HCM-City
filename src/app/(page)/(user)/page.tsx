@@ -22,11 +22,13 @@ export default function Home() {
           typeCard="realEstate"
           title="Bất động sản"
           linkFetch="/api/real-estates?page=1"
+          seeMoreLink="/real-estate"
         />
         <SeeMoreType1
           typeCard="news"
           title="Tin tức"
           linkFetch="/api/news?page=1"
+          seeMoreLink="/news"
         />
       </div>
     </div>
