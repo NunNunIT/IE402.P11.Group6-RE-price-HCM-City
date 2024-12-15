@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -27,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import TranslateKey from "@/lib/func/transfer";
 import dynamic from 'next/dynamic';
 import { ENUM_MAP_MODE } from "@/utils";
+import { toast } from "sonner";
 const LocationSelect = dynamic(() => import("@/components/VNLocationSelector"), { ssr: false, loading: () => <p>Loading...</p> });
 const GisMap = dynamic(() => import("@/components/gis-map"), { ssr: false, loading: () => <p>Loading...</p> });
 
@@ -111,8 +111,7 @@ export default function InputForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    toast({
-      title: "You submitted the following values:",
+    toast("You submitted the following values:", {
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(values, null, 2)}</code>
