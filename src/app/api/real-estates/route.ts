@@ -10,7 +10,7 @@ export const GET = async (req: NextRequest) => {
   const limit = Number(searchParams.get('limit') ?? 12);
   const page = Number(searchParams.get('page') ?? 1);
   const sort = searchParams.getAll('sort');
-  const getAll = searchParams.get('getAll') === "true"; // Chuyển getAll thành boolean
+  const getAll = !!searchParams.get('getAll'); // Chuyển getAll thành boolean
 
   try {
     const { locateSort, mongooseSort } = sortHandler(sort);
@@ -20,7 +20,7 @@ export const GET = async (req: NextRequest) => {
       ...(district ? { "locate.huyen": district } : {}),
       ...(ward ? { "locate.xa": ward } : {}),
     })
-      // .populate("owner", "username avt")
+      .populate("owner", "username avt")
       .sort(mongooseSort)
       .lean();
 
@@ -33,7 +33,6 @@ export const GET = async (req: NextRequest) => {
       realEstates = temp.map(({ distance: __distance, ...realEstate }) => ({ ...realEstate }));
     }
 
-    // Bỏ qua phân trang nếu getAll = true
     if (!getAll) {
       realEstates = realEstates.slice((page - 1) * limit, page * limit);
     }

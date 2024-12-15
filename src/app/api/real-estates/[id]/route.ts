@@ -12,7 +12,12 @@ export const GET = async (req: NextRequest, { params: { id } }: { params: { id: 
         error: "ID_IS_INVALID"
       });
 
-    let realEstate = await RealEstate.findById(id).lean();
+    let realEstate = await RealEstate
+      .findById(id)
+      .populate("owner", "username avt")
+      .lean();
+
+    const { locate } = realEstate as any;
 
     if (!realEstate)
       return notFoundResponse({
@@ -20,7 +25,10 @@ export const GET = async (req: NextRequest, { params: { id } }: { params: { id: 
         error: "REAL_ESTATE_NOT_FOUND"
       });
 
-    return successResponse({ data: realEstate });
+    const locations = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/locate?sort:locate${locate.lat},${locate.long}&limit=24`)
+      .then(res => res.json())
+      .then(payload => payload.data);
+    return successResponse({ data: { ...realEstate, locations } });
   } catch (error) {
     return errorResponse({
       message: "Đã có lỗi xảy ra",
