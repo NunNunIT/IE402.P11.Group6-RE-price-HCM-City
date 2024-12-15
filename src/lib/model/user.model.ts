@@ -16,7 +16,7 @@ const NotificationSchema = new Schema({
   link: { type: String, required: true },
   date: { type: Date, default: Date.now },
   isSeen: { type: Boolean, default: false },
-});
+}, { strict: false });
 
 export interface IUser {
   _id: string;
@@ -64,6 +64,6 @@ const UserSchema = new Schema({
   realEstatesFav: { type: [{ type: Schema.Types.ObjectId, ref: ENUM_REF_TYPE.RealEstate }], default: [] },
   notifications: { type: [NotificationSchema], default: [] },
   role: { type: String, enum: ENUM_ROLE, default: ENUM_ROLE.User },
-})
+}, { strict: false })
 
 export const User = models?.User ?? model('User', UserSchema);

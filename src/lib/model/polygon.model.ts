@@ -12,7 +12,7 @@ export interface IPolygon {
 const PointSchema: Schema = new Schema({
   lat: { type: Number, required: true },
   long: { type: Number, required: true },
-}, { _id: false });
+}, { _id: false, strict: false });
 
 const PolygonSchema: Schema = new Schema({
   points: { type: [PointSchema], required: true },

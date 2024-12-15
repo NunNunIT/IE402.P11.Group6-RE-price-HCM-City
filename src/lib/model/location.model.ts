@@ -27,6 +27,6 @@ const locationSchema = new Schema({
   avgStarGGMap: { type: Number },
   exts: { type: [String], default: [] },
   owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },  // Reference to User model
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
 export const Location = models?.Location ?? model('Location', locationSchema);

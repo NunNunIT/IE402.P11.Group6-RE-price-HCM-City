@@ -17,4 +17,4 @@ export const analysisSchema = new Schema({
     }
   },
   default: {}
-}, { _id: false, timestamps: true });
+}, { _id: false, timestamps: true, strict: false });

@@ -65,6 +65,6 @@ const RealEstateSchema = new Schema({
   QA: [QASchema],
   isAuth: { type: Boolean, default: false },
   owner: { type: Schema.Types.ObjectId, ref: 'User', required: true } // Reference to User model
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
 export const RealEstate = models?.RealEstate ?? model('RealEstate', RealEstateSchema);

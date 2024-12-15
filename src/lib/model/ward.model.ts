@@ -17,6 +17,6 @@ export const WardSchema: Schema = new Schema({
   imageUrl: { type: [String], default: [] },
   polygon: { type: [{ type: Schema.Types.ObjectId, ref: "Polygon" }], default: [] },
   analysis: { type: analysisSchema, required: false },
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
 export const Ward = models?.Ward ?? model<IWard>('Ward', WardSchema);

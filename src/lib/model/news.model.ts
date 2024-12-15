@@ -17,7 +17,7 @@ const newsSchema = new Schema(
       default: [],
     },
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 export interface INewsArticle {
