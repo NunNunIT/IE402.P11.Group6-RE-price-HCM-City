@@ -1,16 +1,16 @@
 import { errorResponse, haversineDistance, sortHandler, successResponse } from "@/utils";
-
 import { NextRequest } from "next/server";
-import { RealEstate } from "@/lib/model"
+import { RealEstate } from "@/lib/model";
 
 export const GET = async (req: NextRequest) => {
-  const { searchParams } = new URL(req.url)
-  const province = searchParams.get('province')
-  const district = searchParams.get('district')
-  const ward = searchParams.get('ward')
-  const limit = Number(searchParams.get('limit') ?? 12)
-  const page = Number(searchParams.get('page') ?? 1)
-  const sort = searchParams.getAll('sort')
+  const { searchParams } = new URL(req.url);
+  const province = searchParams.get('province');
+  const district = searchParams.get('district');
+  const ward = searchParams.get('ward');
+  const limit = Number(searchParams.get('limit') ?? 12);
+  const page = Number(searchParams.get('page') ?? 1);
+  const sort = searchParams.getAll('sort');
+  const getAll = searchParams.get('getAll') === "true"; // Chuyển getAll thành boolean
 
   try {
     const { locateSort, mongooseSort } = sortHandler(sort);
@@ -33,7 +33,11 @@ export const GET = async (req: NextRequest) => {
       realEstates = temp.map(({ distance: __distance, ...realEstate }) => ({ ...realEstate }));
     }
 
-    realEstates = realEstates.slice((page - 1) * limit, page * limit);
+    // Bỏ qua phân trang nếu getAll = true
+    if (!getAll) {
+      realEstates = realEstates.slice((page - 1) * limit, page * limit);
+    }
+
     realEstates = realEstates.map(({ imageUrls, ...realEstate }) => ({
       ...realEstate,
       imageUrl: imageUrls[0],
@@ -47,4 +51,4 @@ export const GET = async (req: NextRequest) => {
       error: error.message,
     });
   }
-}
+};

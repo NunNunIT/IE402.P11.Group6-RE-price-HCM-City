@@ -60,7 +60,9 @@ export default function NewsForm() {
         title: "News created successfully",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(result.data, null, 2)}</code>
+            <code className="text-white">
+              {JSON.stringify(result.data, null, 2)}
+            </code>
           </pre>
         ),
       });
@@ -78,7 +80,9 @@ export default function NewsForm() {
 
   return (
     <div className="relative max-w-5xl w-full mx-auto mt-3">
-      <h1 className="md:text-4xl text-2xl font-bold my-3 text-left">Tạo tin tức mới</h1>
+      <h1 className="md:text-4xl text-2xl font-bold my-3 text-left">
+        Tạo tin tức mới
+      </h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg shadow-md">
@@ -102,7 +106,11 @@ export default function NewsForm() {
                 <FormItem>
                   <FormLabel className="font-semibold">Nội dung</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Nhập nội dung" {...field} className="min-h-[200px]" />
+                    <Textarea
+                      placeholder="Nhập nội dung"
+                      {...field}
+                      className="min-h-[200px]"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
