@@ -24,11 +24,18 @@ import { Input } from "@/components/ui/input";
 import { ImageDropZone } from "@/components";
 import { Textarea } from "@/components/ui/textarea";
 import TranslateKey from "@/lib/func/transfer";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import { ENUM_MAP_MODE } from "@/utils";
 import { toast } from "sonner";
-const LocationSelect = dynamic(() => import("@/components/VNLocationSelector"), { ssr: false, loading: () => <p>Loading...</p> });
-const GisMap = dynamic(() => import("@/components/gis-map"), { ssr: false, loading: () => <p>Loading...</p> });
+import { uploadFilesToCloudinary } from "@/lib/func/cloudinary";
+const LocationSelect = dynamic(
+  () => import("@/components/VNLocationSelector"),
+  { ssr: false, loading: () => <p>Loading...</p> }
+);
+const GisMap = dynamic(() => import("@/components/gis-map"), {
+  ssr: false,
+  loading: () => <p>Loading...</p>,
+});
 
 const FormSchema = z.object({
   title: z.string().min(1, "Tên không được bỏ trống."),
@@ -39,42 +46,44 @@ const FormSchema = z.object({
   price: z.number().min(1, "Giá bán không được bỏ trống."),
   legal: z.enum(["sodo", "hopdong", "dangchoso", "khac", ""]).optional(),
   coordinates: z.tuple([z.number(), z.number()]),
-  locate: z.object({
-    province: z.string().nullable().optional(),
-    district: z.string().nullable().optional(),
-    ward: z.string().nullable().optional(),
-    street: z.string().nullable().optional(),
-  }).superRefine((data, ctx) => {
-    if (!data.province) {
-      return ctx.addIssue({
-        path: [],
-        code: "custom",
-        message: "Tỉnh không được để trống",
-      });
-    }
+  locate: z
+    .object({
+      province: z.string().nullable().optional(),
+      district: z.string().nullable().optional(),
+      ward: z.string().nullable().optional(),
+      street: z.string().nullable().optional(),
+    })
+    .superRefine((data, ctx) => {
+      if (!data.province) {
+        return ctx.addIssue({
+          path: [],
+          code: "custom",
+          message: "Tỉnh không được để trống",
+        });
+      }
 
-    if (!data.district) {
-      ctx.addIssue({
-        path: [],
-        code: "custom",
-        message: "Huyện không được để trống",
-      });
-    }
-    if (!data.ward) {
-      ctx.addIssue({
-        path: [],
-        code: "custom",
-        message: "Xã không được để trống",
-      });
-    }
-    if (!data.street) {
-      ctx.addIssue({
-        path: [],
-        code: "custom",
-        message: "Đường không được để trống",
-      });
-    }
-  }),
+      if (!data.district) {
+        ctx.addIssue({
+          path: [],
+          code: "custom",
+          message: "Huyện không được để trống",
+        });
+      }
+      if (!data.ward) {
+        ctx.addIssue({
+          path: [],
+          code: "custom",
+          message: "Xã không được để trống",
+        });
+      }
+      if (!data.street) {
+        ctx.addIssue({
+          path: [],
+          code: "custom",
+          message: "Đường không được để trống",
+        });
+      }
+    }),
   interior: z.string().optional(),
   bedroom: z.number().optional(),
   bathroom: z.number().optional(),
@@ -111,13 +120,59 @@ export default function InputForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
-    });
+    const blobUrls = values.imgs; // Mảng blob URL
+    if (!blobUrls || blobUrls.length === 0) {
+      console.error("No images to process!");
+      return;
+    }
+  
+    try {
+      // Bước 1: Chuyển đổi blob URLs thành File
+      const files = await Promise.all(
+        blobUrls.map(async (blobUrl) => {
+          const res = await fetch(blobUrl);
+          const blob = await res.blob();
+          const fileName = `image-${Date.now()}.jpeg`;
+          return new File([blob], fileName, { type: blob.type });
+        })
+      );
+  
+      console.log("Files converted from blob URLs:", files);
+  
+      // Bước 2: Upload files lên Cloudinary
+      const uploadedUrls = await uploadFilesToCloudinary(files, "ie402/real-estates");
+      console.log("Uploaded URLs from Cloudinary:", uploadedUrls);
+  
+      // Bước 3: Thay thế imgs trong form
+      const updatedValues = {
+        ...values,
+        imgs: uploadedUrls,
+      };
+  
+      console.log("Updated form values:", updatedValues);
+  
+      // Bước 4: Gửi dữ liệu tới API `/api/real-estate/add`
+      const response = await fetch('/api/real-estates/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedValues), // Gửi dữ liệu dạng JSON
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        console.log("API Response:", result);
+        toast.success("Real estate added successfully!");
+      } else {
+        const error = await response.json();
+        console.error("API Error:", error);
+        toast.error(`Failed to add real estate: ${error.message}`);
+      }
+    } catch (error) {
+      console.error("Error processing images:", error);
+      toast.error("Failed to upload images or save data.");
+    }
   };
 
   return (

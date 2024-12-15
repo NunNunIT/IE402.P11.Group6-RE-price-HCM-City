@@ -36,7 +36,7 @@ const uploadFilesToCloudinary = async (files: File[], folderName?: string): Prom
     batch.forEach((file: File) => formData.append("file", file));
     if (folderName) formData.append("folder", folderName);
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/cloudinary/uploadImgs`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cloudinary/uploadImgs`, {
       method: "POST",
       body: formData,
     });
@@ -118,7 +118,7 @@ const removeImgsFromCloudinary = async (imgs: string[]): Promise<void> => {
 
   if (cldPublicIds.length) {
     // const deleteImgsRes =
-    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/admin/cloudinary/deleteImgs`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cloudinary/deleteImgs`, {
       method: "DELETE",
       body: JSON.stringify({ cldPublicIds }),
       headers: {

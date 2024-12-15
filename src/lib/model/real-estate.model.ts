@@ -47,7 +47,6 @@ export interface IRealEstate {
   imageUrls: string[];
   info: IInfo;
   polygon: string;
-  exts: string[];
   QA: IQA[];
   isAuth: boolean;
   owner: string;
@@ -63,10 +62,9 @@ const RealEstateSchema = new Schema({
   imageUrls: [{ type: String, required: true }],
   info: { type: InfoSchema },
   polygon: { type: Schema.Types.ObjectId, ref: 'Polygon' }, // Reference to Polygon model
-  exts: [{ type: String }],
   QA: [QASchema],
   isAuth: { type: Boolean, default: false },
-  owner: { type: Schema.Types.ObjectId, ref: 'User', required: true } // Reference to User model
+  owner: { type: Schema.Types.ObjectId, ref: 'User'} // Reference to User model
 }, { timestamps: true, strict: false });
 
 export const RealEstate = models?.RealEstate ?? model('RealEstate', RealEstateSchema);
