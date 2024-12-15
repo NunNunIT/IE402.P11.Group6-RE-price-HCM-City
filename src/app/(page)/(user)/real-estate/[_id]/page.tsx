@@ -130,11 +130,13 @@ export default async function RealEstateDetailPage({
             title: data.title,
             type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
           },
-          ...data.locations!.map((location: any) => ({
-            ...location.locate,
-            title: data.title,
-            type: data.category,
-          }))
+          ...data.locations!
+            .slice(0, 24)
+            .map((location: any) => ({
+              ...location.locate,
+              title: data.title,
+              type: data.category,
+            }))
         ]}
       />
 
