@@ -68,7 +68,7 @@ export default async function RealEstateDetailPage({
           <SaveRealBtn component="real-estate" realEstateId={data._id} />
         </div>
 
-        <div className="flex flex-col gap-3">
+        {/* <div className="flex flex-col gap-3">
           <h2 className="font-bold text-xl">Đặc điểm bất động sản</h2>
           <div className="grid grid-cols-2 gap-3">
             {Object.entries(data?.info ?? {})
@@ -115,7 +115,7 @@ export default async function RealEstateDetailPage({
               </Button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <GISMap
         zoom={20}
