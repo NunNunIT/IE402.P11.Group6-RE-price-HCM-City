@@ -2,11 +2,18 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 interface INewsDetailPageProps extends IDefaultPageProps {
-  params: { _id: string },
+  params: { _id: string };
 }
 
-export default async function NewsDetailPage({ params: { _id } }: INewsDetailPageProps) {
-  const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news/${_id}`)
+export default async function NewsDetailPage({
+  params: { _id },
+}: INewsDetailPageProps) {
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news/${_id}`,
+    {
+      cache: "reload",
+    }
+  )
     .then(async (res) => {
       const payload = await res.json();
       return payload;
@@ -14,8 +21,12 @@ export default async function NewsDetailPage({ params: { _id } }: INewsDetailPag
     .then(async (payload) => {
       const data = payload.data;
       return data;
-    }).catch((error) => {
-      console.error("🚀 ~ .catch ~ error", error.message)
+    })
+    .catch((error: unknown): null => {
+      console.error(
+        ">> Error:",
+        error instanceof Error ? error.message : "unknown error"
+      );
       return null;
     });
   if (!data) return notFound();
@@ -30,6 +41,8 @@ export default async function NewsDetailPage({ params: { _id } }: INewsDetailPag
               <Image
                 src="https://ui-avatars.com/api/?name=NVA&background=random"
                 alt="Avatar"
+                width={40}
+                height={40}
                 className="h-10 w-10 rounded-full border"
               />
               <div>

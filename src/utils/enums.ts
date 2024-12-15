@@ -54,3 +54,13 @@ export enum ENUM_MARKER_SYMBOL {
   TEMPLE = "temple",
   THEATER = "theater",
 }
+
+export enum ENUM_MAP_MODE {
+  Edit = 'edit',
+  View = 'view',
+}
+
+export enum ESortStatus {
+  DESC = -1,
+  ASC = 1,
+}

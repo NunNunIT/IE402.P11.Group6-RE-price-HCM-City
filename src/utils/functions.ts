@@ -1,4 +1,4 @@
-import { LOCATION_API_URL_UNFORMATTED, ROLES } from "./constants";
+import { LOCATION_API_URL_UNFORMATTED, ROLES, SORT_VALUE_MAPPING } from "./constants";
 
 import { ENUM_ROLE } from "./enums";
 import { IUser } from "@/lib/model";
@@ -150,3 +150,66 @@ export const parseObjectToFormData = (
 
   return formData;
 };
+
+export const sortHandler = <T>(sort: string | string[] | null) => {
+  const sortCriteria = Array.isArray(sort) ? sort : [sort];
+  let useHaversine = false;
+  let lat = 0, long = 0;
+  const mongooseSort = { createdAt: -1 } as Record<keyof T, 1 | -1>;
+
+  for (const sortParam of sortCriteria) {
+    if (sortParam) {
+      const [sortField, sortValue = "-1"] = sortParam.split(":");
+
+      if (sortField === "locate") {
+        const [latStr, lonStr] = sortValue.split(",");
+        lat = parseFloat(latStr);
+        long = parseFloat(lonStr);
+
+        if (isNaN(lat) || isNaN(long)) {
+          throw new Error(`Invalid latitude or longitude: ${latStr}, ${lonStr}`);
+        }
+
+        useHaversine = true;
+        continue;
+      }
+
+      if (!isValidSortValue(sortValue)) throw new Error(`Invalid sort value: ${sortValue}`);
+      mongooseSort[sortField as keyof T] = SORT_VALUE_MAPPING[sortValue];
+    }
+  }
+
+  return { locateSort: { useHaversine, lat, long }, mongooseSort };
+};
+
+export const isValidSortValue = (value: string): value is keyof typeof SORT_VALUE_MAPPING => {
+  return Object.keys(SORT_VALUE_MAPPING).includes(value);
+};
+
+export function haversineDistance(
+  loc1?: Partial<TPosition>,
+  loc2?: Partial<TPosition>
+): number | undefined {
+  if (
+    !isNotNullAndUndefined(loc1?.lat) ||
+    !isNotNullAndUndefined(loc1?.long) ||
+    !isNotNullAndUndefined(loc2?.lat) ||
+    !isNotNullAndUndefined(loc2?.long)
+  ) return undefined;
+
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = ((loc1.lat - loc2.lat) * Math.PI) / 180;
+  const dLon = ((loc1.long - loc2.long) * Math.PI) / 180;
+  const a =
+    Math.cos((loc1.lat * Math.PI) / 180) *
+    Math.cos((loc2.lat * Math.PI) / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2) +
+    Math.sin(dLat / 2) * Math.sin(dLat / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+export function isNotNullAndUndefined<T>(value: T | null | undefined): value is T {
+  return typeof value !== "undefined" && value !== null;
+}

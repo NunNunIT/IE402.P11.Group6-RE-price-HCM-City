@@ -1,75 +1,9 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+"use client";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
-import { MockData } from "@/types/item";
 import Wrapper from "./components/wrapper";
 import { SearchBar } from "@/components/search";
-
-const mockDataAll: MockData[] = [
-  {
-    type: "realEstate",
-    value: {
-      image: "/decorate/searchTab.jpg",
-      title: "Real Estate Title",
-      location: "New York",
-      distance: "5km",
-      price: "$500,000",
-    },
-  },
-  {
-    type: "location",
-    value: {
-      image: "/decorate/searchTab.jpg",
-      title: "Workshop Location",
-      location: "California",
-      duration: "3 days",
-      workshopType: "Technology",
-      rating: 4.5,
-    },
-  },
-  {
-    type: "location",
-    value: {
-      image: "/decorate/searchTab.jpg",
-      title: "Workshop Location 2",
-      location: "Texas",
-      duration: "2 days",
-      workshopType: "Art",
-      rating: 4.0,
-    },
-  },
-  {
-    type: "realEstate",
-    value: {
-      image: "/decorate/searchTab.jpg",
-      title: "Luxury Apartment",
-      location: "California",
-      distance: "2km",
-      price: "$1,000,000",
-    },
-  },
-  {
-    type: "location",
-    value: {
-      image: "/decorate/searchTab.jpg",
-      title: "Workshop Location 3",
-      location: "Chicago",
-      duration: "1 day",
-      workshopType: "Health",
-      rating: 5.0,
-    },
-  },
-  {
-    type: "realEstate",
-    value: {
-      image: "/decorate/searchTab.jpg",
-      title: "Modern House",
-      location: "Florida",
-      distance: "10km",
-      price: "$350,000",
-    },
-  },
-];
 
 export default function SavedPage() {
   return (
@@ -88,8 +22,8 @@ export default function SavedPage() {
       </div>
 
       <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 my-6">
-        <Tabs defaultValue="all" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+        <Tabs defaultValue="realEstate" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="realEstate">Bất động sản</TabsTrigger>
             <TabsTrigger value="location">Địa điểm</TabsTrigger>
           </TabsList>
