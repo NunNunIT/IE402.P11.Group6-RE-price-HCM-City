@@ -25,7 +25,7 @@ const LocationCard: React.FC<LocationCardProps> = ({
 }) => {
 
   return (
-    <div className="group max-w-sm overflow-hidden transition-shadow aspect-[3/3.3] h-fit">
+    <div className="group max-w-sm overflow-hidden transition-shadow h-fit">
       <Link href="#">
         {/* Image */}
         <div className="relative">

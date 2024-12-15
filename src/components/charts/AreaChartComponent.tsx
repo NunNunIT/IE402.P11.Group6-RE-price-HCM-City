@@ -13,19 +13,31 @@ import {
 } from "recharts";
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 type YearData = {
   [year: string]: {
@@ -83,6 +95,83 @@ const yearData: YearData = {
   },
 };
 
+const invoices = [
+  {
+    invoice: "INV001",
+    paymentStatus: "Paid",
+    totalAmount: "$250.00",
+    paymentMethod: "Credit Card",
+  },
+  {
+    invoice: "INV002",
+    paymentStatus: "Pending",
+    totalAmount: "$150.00",
+    paymentMethod: "PayPal",
+  },
+  {
+    invoice: "INV003",
+    paymentStatus: "Unpaid",
+    totalAmount: "$350.00",
+    paymentMethod: "Bank Transfer",
+  },
+  {
+    invoice: "INV004",
+    paymentStatus: "Paid",
+    totalAmount: "$450.00",
+    paymentMethod: "Credit Card",
+  },
+  {
+    invoice: "INV005",
+    paymentStatus: "Paid",
+    totalAmount: "$550.00",
+    paymentMethod: "PayPal",
+  },
+  {
+    invoice: "INV006",
+    paymentStatus: "Pending",
+    totalAmount: "$200.00",
+    paymentMethod: "Bank Transfer",
+  },
+  {
+    invoice: "INV007",
+    paymentStatus: "Unpaid",
+    totalAmount: "$300.00",
+    paymentMethod: "Credit Card",
+  },
+];
+
+function TableDemo() {
+  return (
+    <Table>
+      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">Invoice</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Method</TableHead>
+          <TableHead className="text-right">Amount</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {invoices.map((invoice) => (
+          <TableRow key={invoice.invoice}>
+            <TableCell className="font-medium">{invoice.invoice}</TableCell>
+            <TableCell>{invoice.paymentStatus}</TableCell>
+            <TableCell>{invoice.paymentMethod}</TableCell>
+            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={3}>Total</TableCell>
+          <TableCell className="text-right">$2,500.00</TableCell>
+        </TableRow>
+      </TableFooter>
+    </Table>
+  );
+}
+
 // Transform year data to fit the chart
 const transformYearData = (data: Record<string, number>) => {
   return Object.entries(data)
@@ -119,31 +208,31 @@ export function AreaChartComponent() {
   ];
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Biểu Đồ Giá Cả</CardTitle>
-        <CardDescription>
+    <div className="w-full">
+      <div>
+        <h1>Biểu Đồ Giá Cả</h1>
+        <p>
           Hiển thị giá trị theo từng tháng. Chọn năm để xem dữ liệu tương ứng.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+        </p>
         <div className="flex items-center mb-4">
-          <label htmlFor="year-selector" className="font-medium w-auto mr-2">
-            Chọn năm:
-          </label>
-          <select
-            id="year-selector"
-            className="rounded-md border-gray-300 shadow-sm focus:ring focus:ring-opacity-50 w-auto p-1"
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-          >
-            {Object.keys(yearData).map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
+        <Select>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Select a fruit" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Fruits</SelectLabel>
+          <SelectItem value="apple">Apple</SelectItem>
+          <SelectItem value="banana">Banana</SelectItem>
+          <SelectItem value="blueberry">Blueberry</SelectItem>
+          <SelectItem value="grapes">Grapes</SelectItem>
+          <SelectItem value="pineapple">Pineapple</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
         </div>
+      </div>
+      <div>
         <ChartContainer config={chartConfig}>
           <LineChart
             data={chartData}
@@ -188,20 +277,21 @@ export function AreaChartComponent() {
             />
           </LineChart>
         </ChartContainer>
-      </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Giá trị tăng 5.2% so với tháng trước{" "}
-              <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              Năm {selectedYear}
-            </div>
+      </div>
+
+      <div className="flex w-full items-start gap-2 text-sm">
+        <div className="grid gap-2">
+          <div className="flex items-center gap-2 font-medium leading-none">
+            Giá trị tăng 5.2% so với tháng trước{" "}
+            <TrendingUp className="h-4 w-4" />
+          </div>
+          <div className="flex items-center gap-2 leading-none text-muted-foreground">
+            Năm {selectedYear}
           </div>
         </div>
-      </CardFooter>
-    </Card>
+      </div>
+
+      <TableDemo />
+    </div>
   );
 }
