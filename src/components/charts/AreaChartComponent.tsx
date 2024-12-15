@@ -1,7 +1,15 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import {
+  Line,
+  LineChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Legend,
+  ReferenceLine,
+} from "recharts";
 
 import {
   Card,
@@ -17,23 +25,33 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  { month: "January", price: 186 },
+  { month: "February", price: 305 },
+  { month: "March", price: 237 },
+  { month: "April", price: 73 },
+  { month: "May", price: 209 },
+  { month: "June", price: 214 },
+  { month: "July", price: 250 },
+  { month: "August", price: 190 },
+  { month: "September", price: 220 },
+  { month: "October", price: 300 },
+  { month: "November", price: 185 },
+  { month: "December", price: 260 },
 ];
 
+const averagePrice =
+  chartData.reduce((sum, { price }) => sum + price, 0) / chartData.length;
+
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+  price: {
+    label: "Giá",
+    color: "hsl(var(--chart-1))", // Add your desired color configuration here
   },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
+  average: {
+    label: "Trung Bình Năm",
+    color: "hsl(var(--chart-2))", // Add your desired color configuration here
   },
 } satisfies ChartConfig;
 
@@ -41,22 +59,23 @@ export function AreaChartComponent() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Area Chart - Stacked</CardTitle>
+        <CardTitle>Biểu Đồ Giá Cả - Năm 2024</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Hiển thị giá trị theo từng tháng trong năm 2024.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <AreaChart
-            accessibilityLayer
+          <LineChart
             data={chartData}
             margin={{
               left: 12,
               right: 12,
             }}
+            width={600}
+            height={300}
           >
-            <CartesianGrid vertical={false} />
+            <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis
               dataKey="month"
               tickLine={false}
@@ -64,37 +83,42 @@ export function AreaChartComponent() {
               tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
             />
+            <YAxis />
+            <Legend verticalAlign="top" height={36} />
             <ChartTooltip
-              cursor={false}
+              cursor={{ strokeDasharray: "3 3" }}
               content={<ChartTooltipContent indicator="dot" />}
             />
-            <Area
-              dataKey="mobile"
-              type="natural"
-              fill="var(--color-mobile)"
-              fillOpacity={0.4}
-              stroke="var(--color-mobile)"
-              stackId="a"
+            <Line
+              type="monotone"
+              dataKey="price"
+              stroke={chartConfig.price.color}
+              strokeWidth={2}
+              dot={{ stroke: chartConfig.price.color, strokeWidth: 2 }}
+              name={chartConfig.price.label}
             />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="var(--color-desktop)"
-              fillOpacity={0.4}
-              stroke="var(--color-desktop)"
-              stackId="a"
+            <ReferenceLine
+              y={averagePrice}
+              stroke={chartConfig.average.color}
+              strokeDasharray="3 3"
+              label={{
+                position: "top",
+                value: chartConfig.average.label,
+                fill: chartConfig.average.color,
+              }}
             />
-          </AreaChart>
+          </LineChart>
         </ChartContainer>
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+              Giá trị tăng 5.2% so với tháng trước{" "}
+              <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
+              Năm 2024
             </div>
           </div>
         </div>

@@ -1,473 +1,1020 @@
 [
   {
-    "Id": "79",
+    "Id": "a00000000000000000000000",
     "Name": "Hồ Chí Minh",
     "Img": "https://gomet-file.vercel.app/place/hochiminh.jpeg",
     "Districts": [
       {
-        "Id": "760",
-        "Name": "Quận 1",
-        "Wards": [
-          { "Id": "26734", "Name": "Tân Định", "Level": "Phường" },
-          { "Id": "26737", "Name": "Đa Kao", "Level": "Phường" },
-          { "Id": "26740", "Name": "Bến Nghé", "Level": "Phường" },
-          { "Id": "26743", "Name": "Bến Thành", "Level": "Phường" },
-          { "Id": "26746", "Name": "Nguyễn Thái Bình", "Level": "Phường" },
-          { "Id": "26749", "Name": "Phạm Ngũ Lão", "Level": "Phường" },
-          { "Id": "26752", "Name": "Cầu Ông Lãnh", "Level": "Phường" },
-          { "Id": "26755", "Name": "Cô Giang", "Level": "Phường" },
-          { "Id": "26758", "Name": "Nguyễn Cư Trinh", "Level": "Phường" },
-          { "Id": "26761", "Name": "Cầu Kho", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "761",
-        "Name": "Quận 12",
-        "Wards": [
-          { "Id": "26764", "Name": "Thạnh Xuân", "Level": "Phường" },
-          { "Id": "26767", "Name": "Thạnh Lộc", "Level": "Phường" },
-          { "Id": "26770", "Name": "Hiệp Thành", "Level": "Phường" },
-          { "Id": "26773", "Name": "Thới An", "Level": "Phường" },
-          { "Id": "26776", "Name": "Tân Chánh Hiệp", "Level": "Phường" },
-          { "Id": "26779", "Name": "An Phú Đông", "Level": "Phường" },
-          { "Id": "26782", "Name": "Tân Thới Hiệp", "Level": "Phường" },
-          { "Id": "26785", "Name": "Trung Mỹ Tây", "Level": "Phường" },
-          { "Id": "26787", "Name": "Tân Hưng Thuận", "Level": "Phường" },
-          { "Id": "26788", "Name": "Đông Hưng Thuận", "Level": "Phường" },
-          { "Id": "26791", "Name": "Tân Thới Nhất", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "762",
-        "Name": "Thành phố Thủ Đức",
-        "Wards": [
-          { "Id": "26794", "Name": "Linh Xuân", "Level": "Phường" },
-          { "Id": "26797", "Name": "Bình Chiểu", "Level": "Phường" },
-          { "Id": "26800", "Name": "Linh Trung", "Level": "Phường" },
-          { "Id": "26803", "Name": "Tam Bình", "Level": "Phường" },
-          { "Id": "26806", "Name": "Tam Phú", "Level": "Phường" },
-          { "Id": "26809", "Name": "Hiệp Bình Phước", "Level": "Phường" },
-          { "Id": "26812", "Name": "Hiệp Bình Chánh", "Level": "Phường" },
-          { "Id": "26815", "Name": "Linh Chiểu", "Level": "Phường" },
-          { "Id": "26818", "Name": "Linh Tây", "Level": "Phường" },
-          { "Id": "26821", "Name": "Linh Đông", "Level": "Phường" },
-          { "Id": "26824", "Name": "Bình Thọ", "Level": "Phường" },
-          { "Id": "26827", "Name": "Trường Thọ", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "763",
-        "Name": "Quận 9",
-        "Wards": [
-          { "Id": "26830", "Name": "Long Bình", "Level": "Phường" },
-          { "Id": "26833", "Name": "Long Thạnh Mỹ", "Level": "Phường" },
-          { "Id": "26836", "Name": "Tân Phú", "Level": "Phường" },
-          { "Id": "26839", "Name": "Hiệp Phú", "Level": "Phường" },
-          { "Id": "26842", "Name": "Tăng Nhơn Phú A", "Level": "Phường" },
-          { "Id": "26845", "Name": "Tăng Nhơn Phú B", "Level": "Phường" },
-          { "Id": "26848", "Name": "Phước Long B", "Level": "Phường" },
-          { "Id": "26851", "Name": "Phước Long A", "Level": "Phường" },
-          { "Id": "26854", "Name": "Trường Thạnh", "Level": "Phường" },
-          { "Id": "26857", "Name": "Long Phước", "Level": "Phường" },
-          { "Id": "26860", "Name": "Long Trường", "Level": "Phường" },
-          { "Id": "26863", "Name": "Phước Bình", "Level": "Phường" },
-          { "Id": "26866", "Name": "Phú Hữu", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "764",
-        "Name": "Quận Gò Vấp",
-        "Wards": [
-          { "Id": "26869", "Name": "15", "Level": "Phường" },
-          { "Id": "26872", "Name": "13", "Level": "Phường" },
-          { "Id": "26875", "Name": "17", "Level": "Phường" },
-          { "Id": "26876", "Name": "6", "Level": "Phường" },
-          { "Id": "26878", "Name": "16", "Level": "Phường" },
-          { "Id": "26881", "Name": "12", "Level": "Phường" },
-          { "Id": "26882", "Name": "14", "Level": "Phường" },
-          { "Id": "26884", "Name": "10", "Level": "Phường" },
-          { "Id": "26887", "Name": "05", "Level": "Phường" },
-          { "Id": "26890", "Name": "07", "Level": "Phường" },
-          { "Id": "26893", "Name": "04", "Level": "Phường" },
-          { "Id": "26896", "Name": "01", "Level": "Phường" },
-          { "Id": "26897", "Name": "9", "Level": "Phường" },
-          { "Id": "26898", "Name": "8", "Level": "Phường" },
-          { "Id": "26899", "Name": "11", "Level": "Phường" },
-          { "Id": "26902", "Name": "03", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "765",
-        "Name": "Quận Bình Thạnh",
-        "Wards": [
-          { "Id": "26905", "Name": "13", "Level": "Phường" },
-          { "Id": "26908", "Name": "11", "Level": "Phường" },
-          { "Id": "26911", "Name": "27", "Level": "Phường" },
-          { "Id": "26914", "Name": "26", "Level": "Phường" },
-          { "Id": "26917", "Name": "12", "Level": "Phường" },
-          { "Id": "26920", "Name": "25", "Level": "Phường" },
-          { "Id": "26923", "Name": "05", "Level": "Phường" },
-          { "Id": "26926", "Name": "07", "Level": "Phường" },
-          { "Id": "26929", "Name": "24", "Level": "Phường" },
-          { "Id": "26932", "Name": "06", "Level": "Phường" },
-          { "Id": "26935", "Name": "14", "Level": "Phường" },
-          { "Id": "26938", "Name": "15", "Level": "Phường" },
-          { "Id": "26941", "Name": "02", "Level": "Phường" },
-          { "Id": "26944", "Name": "01", "Level": "Phường" },
-          { "Id": "26947", "Name": "03", "Level": "Phường" },
-          { "Id": "26950", "Name": "17", "Level": "Phường" },
-          { "Id": "26953", "Name": "21", "Level": "Phường" },
-          { "Id": "26956", "Name": "22", "Level": "Phường" },
-          { "Id": "26959", "Name": "19", "Level": "Phường" },
-          { "Id": "26962", "Name": "28", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "766",
-        "Name": "Quận Tân Bình",
-        "Wards": [
-          { "Id": "26965", "Name": "02", "Level": "Phường" },
-          { "Id": "26968", "Name": "04", "Level": "Phường" },
-          { "Id": "26971", "Name": "12", "Level": "Phường" },
-          { "Id": "26974", "Name": "13", "Level": "Phường" },
-          { "Id": "26977", "Name": "01", "Level": "Phường" },
-          { "Id": "26980", "Name": "03", "Level": "Phường" },
-          { "Id": "26983", "Name": "11", "Level": "Phường" },
-          { "Id": "26986", "Name": "07", "Level": "Phường" },
-          { "Id": "26989", "Name": "05", "Level": "Phường" },
-          { "Id": "26992", "Name": "10", "Level": "Phường" },
-          { "Id": "26995", "Name": "06", "Level": "Phường" },
-          { "Id": "26998", "Name": "08", "Level": "Phường" },
-          { "Id": "27001", "Name": "09", "Level": "Phường" },
-          { "Id": "27004", "Name": "14", "Level": "Phường" },
-          { "Id": "27007", "Name": "15", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "767",
+        "Id": "b00000000000000000000000",
         "Name": "Quận Tân Phú",
         "Wards": [
-          { "Id": "27010", "Name": "Tân Sơn Nhì", "Level": "Phường" },
-          { "Id": "27013", "Name": "Tây Thạnh", "Level": "Phường" },
-          { "Id": "27016", "Name": "Sơn Kỳ", "Level": "Phường" },
-          { "Id": "27019", "Name": "Tân Quý", "Level": "Phường" },
-          { "Id": "27022", "Name": "Tân Thành", "Level": "Phường" },
-          { "Id": "27025", "Name": "Phú Thọ Hòa", "Level": "Phường" },
-          { "Id": "27028", "Name": "Phú Thạnh", "Level": "Phường" },
-          { "Id": "27031", "Name": "Phú Trung", "Level": "Phường" },
-          { "Id": "27034", "Name": "Hòa Thạnh", "Level": "Phường" },
-          { "Id": "27037", "Name": "Hiệp Tân", "Level": "Phường" },
-          { "Id": "27040", "Name": "Tân Thới Hòa", "Level": "Phường" }
+          {
+            "Id": "c00000000000000000000194",
+            "Name": "Tân Sơn Nhì",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000195",
+            "Name": "Tân Quý",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000196",
+            "Name": "Phú Thọ Hoà",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000197",
+            "Name": "Tân Thới Hoà",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000198",
+            "Name": "Tây Thạnh",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000199",
+            "Name": "Sơn Kỳ",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000200",
+            "Name": "Hiệp Tân",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000201",
+            "Name": "Hoà Thạnh",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000202",
+            "Name": "Phú Trung",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000203",
+            "Name": "Phú Thạnh",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000204",
+            "Name": "Tân Thành",
+            "Level": "Phường"
+          }
         ]
       },
       {
-        "Id": "768",
-        "Name": "Quận Phú Nhuận",
-        "Wards": [
-          { "Id": "27043", "Name": "4", "Level": "Phường" },
-          { "Id": "27046", "Name": "05", "Level": "Phường" },
-          { "Id": "27049", "Name": "9", "Level": "Phường" },
-          { "Id": "27052", "Name": "7", "Level": "Phường" },
-          { "Id": "27055", "Name": "3", "Level": "Phường" },
-          { "Id": "27058", "Name": "1", "Level": "Phường" },
-          { "Id": "27061", "Name": "2", "Level": "Phường" },
-          { "Id": "27064", "Name": "8", "Level": "Phường" },
-          { "Id": "27067", "Name": "15", "Level": "Phường" },
-          { "Id": "27070", "Name": "10", "Level": "Phường" },
-          { "Id": "27073", "Name": "11", "Level": "Phường" },
-          { "Id": "27076", "Name": "17", "Level": "Phường" },
-          { "Id": "27079", "Name": "14", "Level": "Phường" },
-          { "Id": "27082", "Name": "12", "Level": "Phường" },
-          { "Id": "27085", "Name": "13", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "769",
-        "Name": "Quận 2",
-        "Wards": [
-          { "Id": "27088", "Name": "Thảo Điền", "Level": "Phường" },
-          { "Id": "27091", "Name": "An Phú", "Level": "Phường" },
-          { "Id": "27094", "Name": "Bình An", "Level": "Phường" },
-          { "Id": "27097", "Name": "Bình Trưng Đông", "Level": "Phường" },
-          { "Id": "27100", "Name": "Bình Trưng Tây", "Level": "Phường" },
-          { "Id": "27103", "Name": "Bình Khánh", "Level": "Phường" },
-          { "Id": "27106", "Name": "An Khánh", "Level": "Phường" },
-          { "Id": "27109", "Name": "Cát Lái", "Level": "Phường" },
-          { "Id": "27112", "Name": "Thạnh Mỹ Lợi", "Level": "Phường" },
-          { "Id": "27115", "Name": "An Lợi Đông", "Level": "Phường" },
-          { "Id": "27118", "Name": "Thủ Thiêm", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "770",
-        "Name": "Quận 3",
-        "Wards": [
-          { "Id": "27121", "Name": "8", "Level": "Phường" },
-          { "Id": "27124", "Name": "7", "Level": "Phường" },
-          { "Id": "27127", "Name": "14", "Level": "Phường" },
-          { "Id": "27130", "Name": "12", "Level": "Phường" },
-          { "Id": "27133", "Name": "11", "Level": "Phường" },
-          { "Id": "27136", "Name": "13", "Level": "Phường" },
-          { "Id": "27139", "Name": "6", "Level": "Phường" },
-          { "Id": "27142", "Name": "9", "Level": "Phường" },
-          { "Id": "27145", "Name": "10", "Level": "Phường" },
-          { "Id": "27148", "Name": "4", "Level": "Phường" },
-          { "Id": "27151", "Name": "5", "Level": "Phường" },
-          { "Id": "27154", "Name": "3", "Level": "Phường" },
-          { "Id": "27157", "Name": "2", "Level": "Phường" },
-          { "Id": "27160", "Name": "1", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "771",
-        "Name": "Quận 10",
-        "Wards": [
-          { "Id": "27163", "Name": "15", "Level": "Phường" },
-          { "Id": "27166", "Name": "13", "Level": "Phường" },
-          { "Id": "27169", "Name": "14", "Level": "Phường" },
-          { "Id": "27172", "Name": "12", "Level": "Phường" },
-          { "Id": "27175", "Name": "11", "Level": "Phường" },
-          { "Id": "27178", "Name": "10", "Level": "Phường" },
-          { "Id": "27181", "Name": "09", "Level": "Phường" },
-          { "Id": "27184", "Name": "01", "Level": "Phường" },
-          { "Id": "27187", "Name": "08", "Level": "Phường" },
-          { "Id": "27190", "Name": "02", "Level": "Phường" },
-          { "Id": "27193", "Name": "04", "Level": "Phường" },
-          { "Id": "27196", "Name": "07", "Level": "Phường" },
-          { "Id": "27199", "Name": "05", "Level": "Phường" },
-          { "Id": "27202", "Name": "06", "Level": "Phường" },
-          { "Id": "27205", "Name": "03", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "772",
-        "Name": "Quận 11",
-        "Wards": [
-          { "Id": "27208", "Name": "15", "Level": "Phường" },
-          { "Id": "27211", "Name": "05", "Level": "Phường" },
-          { "Id": "27214", "Name": "14", "Level": "Phường" },
-          { "Id": "27217", "Name": "11", "Level": "Phường" },
-          { "Id": "27220", "Name": "03", "Level": "Phường" },
-          { "Id": "27223", "Name": "10", "Level": "Phường" },
-          { "Id": "27226", "Name": "13", "Level": "Phường" },
-          { "Id": "27229", "Name": "08", "Level": "Phường" },
-          { "Id": "27232", "Name": "09", "Level": "Phường" },
-          { "Id": "27235", "Name": "12", "Level": "Phường" },
-          { "Id": "27238", "Name": "07", "Level": "Phường" },
-          { "Id": "27241", "Name": "06", "Level": "Phường" },
-          { "Id": "27244", "Name": "04", "Level": "Phường" },
-          { "Id": "27247", "Name": "01", "Level": "Phường" },
-          { "Id": "27250", "Name": "02", "Level": "Phường" },
-          { "Id": "27253", "Name": "16", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "773",
-        "Name": "Quận 4",
-        "Wards": [
-          { "Id": "27256", "Name": "12", "Level": "Phường" },
-          { "Id": "27259", "Name": "13", "Level": "Phường" },
-          { "Id": "27262", "Name": "09", "Level": "Phường" },
-          { "Id": "27265", "Name": "06", "Level": "Phường" },
-          { "Id": "27268", "Name": "08", "Level": "Phường" },
-          { "Id": "27271", "Name": "10", "Level": "Phường" },
-          { "Id": "27274", "Name": "05", "Level": "Phường" },
-          { "Id": "27277", "Name": "18", "Level": "Phường" },
-          { "Id": "27280", "Name": "14", "Level": "Phường" },
-          { "Id": "27283", "Name": "04", "Level": "Phường" },
-          { "Id": "27286", "Name": "03", "Level": "Phường" },
-          { "Id": "27289", "Name": "16", "Level": "Phường" },
-          { "Id": "27292", "Name": "02", "Level": "Phường" },
-          { "Id": "27295", "Name": "15", "Level": "Phường" },
-          { "Id": "27298", "Name": "01", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "774",
-        "Name": "Quận 5",
-        "Wards": [
-          { "Id": "27301", "Name": "04", "Level": "Phường" },
-          { "Id": "27304", "Name": "09", "Level": "Phường" },
-          { "Id": "27307", "Name": "03", "Level": "Phường" },
-          { "Id": "27310", "Name": "12", "Level": "Phường" },
-          { "Id": "27313", "Name": "02", "Level": "Phường" },
-          { "Id": "27316", "Name": "08", "Level": "Phường" },
-          { "Id": "27319", "Name": "15", "Level": "Phường" },
-          { "Id": "27322", "Name": "07", "Level": "Phường" },
-          { "Id": "27325", "Name": "01", "Level": "Phường" },
-          { "Id": "27328", "Name": "11", "Level": "Phường" },
-          { "Id": "27331", "Name": "14", "Level": "Phường" },
-          { "Id": "27334", "Name": "05", "Level": "Phường" },
-          { "Id": "27337", "Name": "06", "Level": "Phường" },
-          { "Id": "27340", "Name": "10", "Level": "Phường" },
-          { "Id": "27343", "Name": "13", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "775",
-        "Name": "Quận 6",
-        "Wards": [
-          { "Id": "27346", "Name": "14", "Level": "Phường" },
-          { "Id": "27349", "Name": "13", "Level": "Phường" },
-          { "Id": "27352", "Name": "09", "Level": "Phường" },
-          { "Id": "27355", "Name": "06", "Level": "Phường" },
-          { "Id": "27358", "Name": "12", "Level": "Phường" },
-          { "Id": "27361", "Name": "05", "Level": "Phường" },
-          { "Id": "27364", "Name": "11", "Level": "Phường" },
-          { "Id": "27367", "Name": "02", "Level": "Phường" },
-          { "Id": "27370", "Name": "01", "Level": "Phường" },
-          { "Id": "27373", "Name": "04", "Level": "Phường" },
-          { "Id": "27376", "Name": "08", "Level": "Phường" },
-          { "Id": "27379", "Name": "03", "Level": "Phường" },
-          { "Id": "27382", "Name": "07", "Level": "Phường" },
-          { "Id": "27385", "Name": "10", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "776",
-        "Name": "Quận 8",
-        "Wards": [
-          { "Id": "27388", "Name": "08", "Level": "Phường" },
-          { "Id": "27391", "Name": "02", "Level": "Phường" },
-          { "Id": "27394", "Name": "01", "Level": "Phường" },
-          { "Id": "27397", "Name": "03", "Level": "Phường" },
-          { "Id": "27400", "Name": "11", "Level": "Phường" },
-          { "Id": "27403", "Name": "09", "Level": "Phường" },
-          { "Id": "27406", "Name": "10", "Level": "Phường" },
-          { "Id": "27409", "Name": "04", "Level": "Phường" },
-          { "Id": "27412", "Name": "13", "Level": "Phường" },
-          { "Id": "27415", "Name": "12", "Level": "Phường" },
-          { "Id": "27418", "Name": "05", "Level": "Phường" },
-          { "Id": "27421", "Name": "14", "Level": "Phường" },
-          { "Id": "27424", "Name": "06", "Level": "Phường" },
-          { "Id": "27427", "Name": "15", "Level": "Phường" },
-          { "Id": "27430", "Name": "16", "Level": "Phường" },
-          { "Id": "27433", "Name": "07", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "777",
-        "Name": "Quận Bình Tân",
-        "Wards": [
-          { "Id": "27436", "Name": "Bình Hưng Hòa", "Level": "Phường" },
-          { "Id": "27439", "Name": "Bình Hưng Hoà A", "Level": "Phường" },
-          { "Id": "27442", "Name": "Bình Hưng Hoà B", "Level": "Phường" },
-          { "Id": "27445", "Name": "Bình Trị Đông", "Level": "Phường" },
-          { "Id": "27448", "Name": "Bình Trị Đông A", "Level": "Phường" },
-          { "Id": "27451", "Name": "Bình Trị Đông B", "Level": "Phường" },
-          { "Id": "27454", "Name": "Tân Tạo", "Level": "Phường" },
-          { "Id": "27457", "Name": "Tân Tạo A", "Level": "Phường" },
-          { "Id": "27460", "Name": " An Lạc", "Level": "Phường" },
-          { "Id": "27463", "Name": "An Lạc A", "Level": "Phường" }
-        ]
-      },
-      {
-        "Id": "778",
+        "Id": "b00000000000000000000001",
         "Name": "Quận 7",
         "Wards": [
-          { "Id": "27466", "Name": "Tân Thuận Đông", "Level": "Phường" },
-          { "Id": "27469", "Name": "Tân Thuận Tây", "Level": "Phường" },
-          { "Id": "27472", "Name": "Tân Kiểng", "Level": "Phường" },
-          { "Id": "27475", "Name": "Tân Hưng", "Level": "Phường" },
-          { "Id": "27478", "Name": "Bình Thuận", "Level": "Phường" },
-          { "Id": "27481", "Name": "Tân Quy", "Level": "Phường" },
-          { "Id": "27484", "Name": "Phú Thuận", "Level": "Phường" },
-          { "Id": "27487", "Name": "Tân Phú", "Level": "Phường" },
-          { "Id": "27490", "Name": "Tân Phong", "Level": "Phường" },
-          { "Id": "27493", "Name": "Phú Mỹ", "Level": "Phường" }
+          {
+            "Id": "c00000000000000000000052",
+            "Name": "Tân Thuận Đông",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000053",
+            "Name": "Tân Thuận Tây",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000054",
+            "Name": "Tân Hưng",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000055",
+            "Name": "Tân Quy",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000056",
+            "Name": "Tân Phong",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000057",
+            "Name": "Tân Kiểng",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000058",
+            "Name": "Tân Phú",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000059",
+            "Name": "Phú Thuận",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000060",
+            "Name": "Bình Thuận",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000061",
+            "Name": "Phú Mỹ",
+            "Level": "Phường"
+          }
         ]
       },
       {
-        "Id": "783",
-        "Name": "Củ Chi",
+        "Id": "b00000000000000000000002",
+        "Name": "Quận Gò Vấp",
         "Wards": [
-          { "Id": "27496", "Name": "Củ Chi", "Level": "Thị trấn" },
-          { "Id": "27499", "Name": "Phú Mỹ Hưng", "Level": "Xã" },
-          { "Id": "27502", "Name": "An Phú", "Level": "Xã" },
-          { "Id": "27505", "Name": "Trung Lập Thượng", "Level": "Xã" },
-          { "Id": "27508", "Name": "An Nhơn Tây", "Level": "Xã" },
-          { "Id": "27511", "Name": "Nhuận Đức", "Level": "Xã" },
-          { "Id": "27514", "Name": "Phạm Văn Cội", "Level": "Xã" },
-          { "Id": "27517", "Name": "Phú Hòa Đông", "Level": "Xã" },
-          { "Id": "27520", "Name": "Trung Lập Hạ", "Level": "Xã" },
-          { "Id": "27523", "Name": "Trung An", "Level": "Xã" },
-          { "Id": "27526", "Name": "Phước Thạnh", "Level": "Xã" },
-          { "Id": "27529", "Name": "Phước Hiệp", "Level": "Xã" },
-          { "Id": "27532", "Name": "Tân An Hội", "Level": "Xã" },
-          { "Id": "27535", "Name": "Phước Vĩnh An", "Level": "Xã" },
-          { "Id": "27538", "Name": "Thái Mỹ", "Level": "Xã" },
-          { "Id": "27541", "Name": "Tân Thạnh Tây", "Level": "Xã" },
-          { "Id": "27544", "Name": "Hòa Phú", "Level": "Xã" },
-          { "Id": "27547", "Name": "Tân Thạnh Đông", "Level": "Xã" },
-          { "Id": "27550", "Name": "Bình Mỹ", "Level": "Xã" },
-          { "Id": "27553", "Name": "Tân Phú Trung", "Level": "Xã" },
-          { "Id": "27556", "Name": "Tân Thông Hội", "Level": "Xã" }
+          { "Id": "c00000000000000000000156", "Name": "1", "Level": "Phường" },
+          { "Id": "c00000000000000000000157", "Name": "3", "Level": "Phường" },
+          { "Id": "c00000000000000000000158", "Name": "5", "Level": "Phường" },
+          { "Id": "c00000000000000000000159", "Name": "6", "Level": "Phường" },
+          { "Id": "c00000000000000000000160", "Name": "8", "Level": "Phường" },
+          { "Id": "c00000000000000000000161", "Name": "10", "Level": "Phường" },
+          { "Id": "c00000000000000000000162", "Name": "11", "Level": "Phường" },
+          { "Id": "c00000000000000000000163", "Name": "12", "Level": "Phường" },
+          { "Id": "c00000000000000000000164", "Name": "14", "Level": "Phường" },
+          { "Id": "c00000000000000000000165", "Name": "15", "Level": "Phường" },
+          { "Id": "c00000000000000000000166", "Name": "16", "Level": "Phường" },
+          { "Id": "c00000000000000000000167", "Name": "17", "Level": "Phường" }
         ]
       },
       {
-        "Id": "784",
-        "Name": "Hóc Môn",
+        "Id": "b00000000000000000000003",
+        "Name": "Huyện Nhà Bè",
         "Wards": [
-          { "Id": "27559", "Name": "Hóc Môn", "Level": "Thị trấn" },
-          { "Id": "27562", "Name": "Tân Hiệp", "Level": "Xã" },
-          { "Id": "27565", "Name": "Nhị Bình", "Level": "Xã" },
-          { "Id": "27568", "Name": "Đông Thạnh", "Level": "Xã" },
-          { "Id": "27571", "Name": "Tân Thới Nhì", "Level": "Xã" },
-          { "Id": "27574", "Name": "Thới Tam Thôn", "Level": "Xã" },
-          { "Id": "27577", "Name": "Xuân Thới Sơn", "Level": "Xã" },
-          { "Id": "27580", "Name": "Tân Xuân", "Level": "Xã" },
-          { "Id": "27583", "Name": "Xuân Thới Đông", "Level": "Xã" },
-          { "Id": "27586", "Name": "Trung Chánh", "Level": "Xã" },
-          { "Id": "27589", "Name": "Xuân Thới Thượng", "Level": "Xã" },
-          { "Id": "27592", "Name": "Bà Điểm", "Level": "Xã" }
+          {
+            "Id": "c00000000000000000000215",
+            "Name": "Nhơn Đức",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000216",
+            "Name": "Phước Kiển",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000217",
+            "Name": "Phú Xuân",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000218",
+            "Name": "Long Thới",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000219",
+            "Name": "Hiệp Phước",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000220",
+            "Name": "Phước Lộc",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000221",
+            "Name": "Nhà Bè",
+            "Level": "Thị trấn"
+          }
         ]
       },
       {
-        "Id": "785",
-        "Name": "Bình Chánh",
+        "Id": "b00000000000000000000004",
+        "Name": "Thành phố Thủ Đức",
         "Wards": [
-          { "Id": "27595", "Name": "Tân Túc", "Level": "Thị trấn" },
-          { "Id": "27598", "Name": "Phạm Văn Hai", "Level": "Xã" },
-          { "Id": "27601", "Name": "Vĩnh Lộc A", "Level": "Xã" },
-          { "Id": "27604", "Name": "Vĩnh Lộc B", "Level": "Xã" },
-          { "Id": "27607", "Name": "Bình Lợi", "Level": "Xã" },
-          { "Id": "27610", "Name": "Lê Minh Xuân", "Level": "Xã" },
-          { "Id": "27613", "Name": "Tân Nhựt", "Level": "Xã" },
-          { "Id": "27616", "Name": "Tân Kiên", "Level": "Xã" },
-          { "Id": "27619", "Name": "Bình Hưng", "Level": "Xã" },
-          { "Id": "27622", "Name": "Phong Phú", "Level": "Xã" },
-          { "Id": "27625", "Name": "An Phú Tây", "Level": "Xã" },
-          { "Id": "27628", "Name": "Hưng Long", "Level": "Xã" },
-          { "Id": "27631", "Name": "Đa Phước", "Level": "Xã" },
-          { "Id": "27634", "Name": "Tân Quý Tây", "Level": "Xã" },
-          { "Id": "27637", "Name": "Bình Chánh", "Level": "Xã" },
-          { "Id": "27640", "Name": "Quy Đức", "Level": "Xã" }
+          {
+            "Id": "c00000000000000000000107",
+            "Name": "An Khánh",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000108",
+            "Name": "An Lợi Đông",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000109",
+            "Name": "An Phú",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000110",
+            "Name": "Bình Chiểu",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000111",
+            "Name": "Bình Thọ",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000112",
+            "Name": "Bình Trưng Đông",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000113",
+            "Name": "Bình Trưng Tây",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000114",
+            "Name": "Cát Lái",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000115",
+            "Name": "Hiệp Bình Chánh",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000116",
+            "Name": "Hiệp Bình Phước",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000117",
+            "Name": "Hiệp Phú",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000118",
+            "Name": "Linh Chiểu",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000119",
+            "Name": "Linh Đông",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000120",
+            "Name": "Linh Tây",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000121",
+            "Name": "Linh Trung",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000122",
+            "Name": "Linh Xuân",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000123",
+            "Name": "Long Bình",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000124",
+            "Name": "Long Phước",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000125",
+            "Name": "Long Thạnh Mỹ",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000126",
+            "Name": "Long Trường",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000127",
+            "Name": "Phú Hữu",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000128",
+            "Name": "Phước Bình",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000129",
+            "Name": "Phước Long A",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000130",
+            "Name": "Phước Long B",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000131",
+            "Name": "Tam Bình",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000132",
+            "Name": "Tam Phú",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000133",
+            "Name": "Tân Phú",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000134",
+            "Name": "Tăng Nhơn Phú A",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000135",
+            "Name": "Tăng Nhơn Phú B",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000136",
+            "Name": "Thạnh Mỹ Lợi",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000137",
+            "Name": "Thảo Điền",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000138",
+            "Name": "Thủ Thiêm",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000139",
+            "Name": "Trường Thạnh",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000140",
+            "Name": "Trường Thọ",
+            "Level": "Phường"
+          }
         ]
       },
       {
-        "Id": "786",
-        "Name": "Nhà Bè",
+        "Id": "b00000000000000000000005",
+        "Name": "Huyện Củ Chi",
         "Wards": [
-          { "Id": "27643", "Name": "Nhà Bè", "Level": "Thị trấn" },
-          { "Id": "27646", "Name": "Phước Kiển", "Level": "Xã" },
-          { "Id": "27649", "Name": "Phước Lộc", "Level": "Xã" },
-          { "Id": "27652", "Name": "Nhơn Đức", "Level": "Xã" },
-          { "Id": "27655", "Name": "Phú Xuân", "Level": "Xã" },
-          { "Id": "27658", "Name": "Long Thới", "Level": "Xã" },
-          { "Id": "27661", "Name": "Hiệp Phước", "Level": "Xã" }
+          {
+            "Id": "c00000000000000000000234",
+            "Name": "An Nhơn Tây",
+            "Level": "Xã"
+          },
+          { "Id": "c00000000000000000000235", "Name": "An Phú", "Level": "Xã" },
+          {
+            "Id": "c00000000000000000000236",
+            "Name": "Bình Mỹ",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000237",
+            "Name": "Hoà Phú",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000238",
+            "Name": "Nhuận Đức",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000239",
+            "Name": "Phạm Văn Cội",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000240",
+            "Name": "Phú Hoà Đông",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000241",
+            "Name": "Phú Mỹ Hưng",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000242",
+            "Name": "Phước Hiệp",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000243",
+            "Name": "Phước Thạnh",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000244",
+            "Name": "Phước Vĩnh An",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000245",
+            "Name": "Tân An Hội",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000246",
+            "Name": "Tân Phú Trung",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000247",
+            "Name": "Tân Thạnh Đông",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000248",
+            "Name": "Tân Thạnh Tây",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000249",
+            "Name": "Tân Thông Hội",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000250",
+            "Name": "Thái Mỹ",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000251",
+            "Name": "Trung An",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000252",
+            "Name": "Trung Lập Hạ",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000253",
+            "Name": "Trung Lập Thượng",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000254",
+            "Name": "Củ Chi",
+            "Level": "Thị trấn"
+          }
         ]
       },
       {
-        "Id": "787",
-        "Name": "Cần Giờ",
+        "Id": "b00000000000000000000006",
+        "Name": "Quận 4",
         "Wards": [
-          { "Id": "27664", "Name": "Cần Thạnh", "Level": "Thị trấn" },
-          { "Id": "27667", "Name": "Bình Khánh", "Level": "Xã" },
-          { "Id": "27670", "Name": "Tam Thôn Hiệp", "Level": "Xã" },
-          { "Id": "27673", "Name": "An Thới Đông", "Level": "Xã" },
-          { "Id": "27676", "Name": "Thạnh An", "Level": "Xã" },
-          { "Id": "27679", "Name": "Long Hòa", "Level": "Xã" },
-          { "Id": "27682", "Name": "Lý Nhơn", "Level": "Xã" }
+          { "Id": "c00000000000000000000022", "Name": "1", "Level": "Phường" },
+          { "Id": "c00000000000000000000023", "Name": "2", "Level": "Phường" },
+          { "Id": "c00000000000000000000024", "Name": "3", "Level": "Phường" },
+          { "Id": "c00000000000000000000025", "Name": "4", "Level": "Phường" },
+          { "Id": "c00000000000000000000026", "Name": "8", "Level": "Phường" },
+          { "Id": "c00000000000000000000027", "Name": "9", "Level": "Phường" },
+          { "Id": "c00000000000000000000028", "Name": "13", "Level": "Phường" },
+          { "Id": "c00000000000000000000029", "Name": "15", "Level": "Phường" },
+          { "Id": "c00000000000000000000030", "Name": "16", "Level": "Phường" },
+          { "Id": "c00000000000000000000031", "Name": "18", "Level": "Phường" }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000007",
+        "Name": "Quận 5",
+        "Wards": [
+          { "Id": "c00000000000000000000032", "Name": "1", "Level": "Phường" },
+          { "Id": "c00000000000000000000033", "Name": "2", "Level": "Phường" },
+          { "Id": "c00000000000000000000034", "Name": "4", "Level": "Phường" },
+          { "Id": "c00000000000000000000035", "Name": "5", "Level": "Phường" },
+          { "Id": "c00000000000000000000036", "Name": "7", "Level": "Phường" },
+          { "Id": "c00000000000000000000037", "Name": "9", "Level": "Phường" },
+          { "Id": "c00000000000000000000038", "Name": "11", "Level": "Phường" },
+          { "Id": "c00000000000000000000039", "Name": "12", "Level": "Phường" },
+          { "Id": "c00000000000000000000040", "Name": "13", "Level": "Phường" },
+          { "Id": "c00000000000000000000041", "Name": "14", "Level": "Phường" }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000008",
+        "Name": "Quận Bình Tân",
+        "Wards": [
+          {
+            "Id": "c00000000000000000000205",
+            "Name": "An Lạc",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000206",
+            "Name": "An Lạc A",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000207",
+            "Name": "Bình Trị Đông",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000208",
+            "Name": "Bình Trị Đông A",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000209",
+            "Name": "Bình Trị Đông B",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000210",
+            "Name": "Tân Tạo",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000211",
+            "Name": "Tân Tạo A",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000212",
+            "Name": "Bình Hưng Hoà",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000213",
+            "Name": "Bình Hưng Hoà A",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000214",
+            "Name": "Bình Hưng Hoà B",
+            "Level": "Phường"
+          }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000009",
+        "Name": "Quận 6",
+        "Wards": [
+          { "Id": "c00000000000000000000042", "Name": "1", "Level": "Phường" },
+          { "Id": "c00000000000000000000043", "Name": "2", "Level": "Phường" },
+          { "Id": "c00000000000000000000044", "Name": "7", "Level": "Phường" },
+          { "Id": "c00000000000000000000045", "Name": "8", "Level": "Phường" },
+          { "Id": "c00000000000000000000046", "Name": "9", "Level": "Phường" },
+          { "Id": "c00000000000000000000047", "Name": "10", "Level": "Phường" },
+          { "Id": "c00000000000000000000048", "Name": "11", "Level": "Phường" },
+          { "Id": "c00000000000000000000049", "Name": "12", "Level": "Phường" },
+          { "Id": "c00000000000000000000050", "Name": "13", "Level": "Phường" },
+          { "Id": "c00000000000000000000051", "Name": "14", "Level": "Phường" }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000010",
+        "Name": "Huyện Cần Giờ",
+        "Wards": [
+          {
+            "Id": "c00000000000000000000271",
+            "Name": "Cần Thạnh",
+            "Level": "Thị trấn"
+          },
+          {
+            "Id": "c00000000000000000000272",
+            "Name": "Long Hoà",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000273",
+            "Name": "Lý Nhơn",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000274",
+            "Name": "Tam Thôn Hiệp",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000275",
+            "Name": "Thạnh An",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000276",
+            "Name": "An Thới Đông",
+            "Level": "Xã"
+          }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000011",
+        "Name": "Huyện Bình Chánh",
+        "Wards": [
+          {
+            "Id": "c00000000000000000000255",
+            "Name": "An Phú Tây",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000256",
+            "Name": "Bình Chánh",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000257",
+            "Name": "Bình Hưng",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000258",
+            "Name": "Bình Lợi",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000259",
+            "Name": "Đa Phước",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000260",
+            "Name": "Hưng Long",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000261",
+            "Name": "Lê Minh Xuân",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000262",
+            "Name": "Phạm Văn Hai",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000263",
+            "Name": "Phong Phú",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000264",
+            "Name": "Quy Đức",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000265",
+            "Name": "Tân Kiên",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000266",
+            "Name": "Tân Nhựt",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000267",
+            "Name": "Tân Quý Tây",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000268",
+            "Name": "Vĩnh Lộc A",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000269",
+            "Name": "Vĩnh Lộc B",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000270",
+            "Name": "Tân Túc",
+            "Level": "Thị trấn"
+          }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000012",
+        "Name": "Quận Phú Nhuận",
+        "Wards": [
+          { "Id": "c00000000000000000000168", "Name": "1", "Level": "Phường" },
+          { "Id": "c00000000000000000000169", "Name": "2", "Level": "Phường" },
+          { "Id": "c00000000000000000000170", "Name": "4", "Level": "Phường" },
+          { "Id": "c00000000000000000000171", "Name": "5", "Level": "Phường" },
+          { "Id": "c00000000000000000000172", "Name": "7", "Level": "Phường" },
+          { "Id": "c00000000000000000000173", "Name": "8", "Level": "Phường" },
+          { "Id": "c00000000000000000000174", "Name": "9", "Level": "Phường" },
+          { "Id": "c00000000000000000000175", "Name": "10", "Level": "Phường" },
+          { "Id": "c00000000000000000000176", "Name": "11", "Level": "Phường" },
+          { "Id": "c00000000000000000000177", "Name": "13", "Level": "Phường" },
+          { "Id": "c00000000000000000000178", "Name": "15", "Level": "Phường" }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000013",
+        "Name": "Quận 3",
+        "Wards": [
+          { "Id": "c00000000000000000000010", "Name": "1", "Level": "Phường" },
+          { "Id": "c00000000000000000000011", "Name": "2", "Level": "Phường" },
+          { "Id": "c00000000000000000000012", "Name": "3", "Level": "Phường" },
+          { "Id": "c00000000000000000000013", "Name": "4", "Level": "Phường" },
+          { "Id": "c00000000000000000000014", "Name": "5", "Level": "Phường" },
+          { "Id": "c00000000000000000000015", "Name": "9", "Level": "Phường" },
+          { "Id": "c00000000000000000000016", "Name": "10", "Level": "Phường" },
+          { "Id": "c00000000000000000000017", "Name": "11", "Level": "Phường" },
+          { "Id": "c00000000000000000000018", "Name": "12", "Level": "Phường" },
+          { "Id": "c00000000000000000000019", "Name": "13", "Level": "Phường" },
+          { "Id": "c00000000000000000000020", "Name": "14", "Level": "Phường" },
+          {
+            "Id": "c00000000000000000000021",
+            "Name": "Võ Thị Sáu",
+            "Level": "Phường"
+          }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000014",
+        "Name": "Quận Tân Bình",
+        "Wards": [
+          { "Id": "c00000000000000000000179", "Name": "1", "Level": "Phường" },
+          { "Id": "c00000000000000000000180", "Name": "2", "Level": "Phường" },
+          { "Id": "c00000000000000000000181", "Name": "3", "Level": "Phường" },
+          { "Id": "c00000000000000000000182", "Name": "4", "Level": "Phường" },
+          { "Id": "c00000000000000000000183", "Name": "5", "Level": "Phường" },
+          { "Id": "c00000000000000000000184", "Name": "6", "Level": "Phường" },
+          { "Id": "c00000000000000000000185", "Name": "7", "Level": "Phường" },
+          { "Id": "c00000000000000000000186", "Name": "8", "Level": "Phường" },
+          { "Id": "c00000000000000000000187", "Name": "9", "Level": "Phường" },
+          { "Id": "c00000000000000000000188", "Name": "10", "Level": "Phường" },
+          { "Id": "c00000000000000000000189", "Name": "11", "Level": "Phường" },
+          { "Id": "c00000000000000000000190", "Name": "12", "Level": "Phường" },
+          { "Id": "c00000000000000000000191", "Name": "13", "Level": "Phường" },
+          { "Id": "c00000000000000000000192", "Name": "14", "Level": "Phường" },
+          { "Id": "c00000000000000000000193", "Name": "15", "Level": "Phường" }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000015",
+        "Name": "Quận Bình Thạnh",
+        "Wards": [
+          { "Id": "c00000000000000000000141", "Name": "1", "Level": "Phường" },
+          { "Id": "c00000000000000000000142", "Name": "2", "Level": "Phường" },
+          { "Id": "c00000000000000000000143", "Name": "5", "Level": "Phường" },
+          { "Id": "c00000000000000000000144", "Name": "7", "Level": "Phường" },
+          { "Id": "c00000000000000000000145", "Name": "11", "Level": "Phường" },
+          { "Id": "c00000000000000000000146", "Name": "12", "Level": "Phường" },
+          { "Id": "c00000000000000000000147", "Name": "13", "Level": "Phường" },
+          { "Id": "c00000000000000000000148", "Name": "14", "Level": "Phường" },
+          { "Id": "c00000000000000000000149", "Name": "17", "Level": "Phường" },
+          { "Id": "c00000000000000000000150", "Name": "19", "Level": "Phường" },
+          { "Id": "c00000000000000000000151", "Name": "22", "Level": "Phường" },
+          { "Id": "c00000000000000000000152", "Name": "25", "Level": "Phường" },
+          { "Id": "c00000000000000000000153", "Name": "26", "Level": "Phường" },
+          { "Id": "c00000000000000000000154", "Name": "27", "Level": "Phường" },
+          { "Id": "c00000000000000000000155", "Name": "28", "Level": "Phường" }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000016",
+        "Name": "Quận 1",
+        "Wards": [
+          {
+            "Id": "c00000000000000000000000",
+            "Name": "Bến Nghé",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000001",
+            "Name": "Bến Thành",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000002",
+            "Name": "Cô Giang",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000003",
+            "Name": "Cầu Kho",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000004",
+            "Name": "Cầu Ông Lãnh",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000005",
+            "Name": "Đa Kao",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000006",
+            "Name": "Nguyễn Cư Trinh",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000007",
+            "Name": "Nguyễn Thái Bình",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000008",
+            "Name": "Phạm Ngũ Lão",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000009",
+            "Name": "Tân Định",
+            "Level": "Phường"
+          }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000017",
+        "Name": "Quận 8",
+        "Wards": [
+          { "Id": "c00000000000000000000062", "Name": "4", "Level": "Phường" },
+          { "Id": "c00000000000000000000063", "Name": "5", "Level": "Phường" },
+          { "Id": "c00000000000000000000064", "Name": "6", "Level": "Phường" },
+          { "Id": "c00000000000000000000065", "Name": "7", "Level": "Phường" },
+          { "Id": "c00000000000000000000066", "Name": "14", "Level": "Phường" },
+          { "Id": "c00000000000000000000067", "Name": "15", "Level": "Phường" },
+          { "Id": "c00000000000000000000068", "Name": "16", "Level": "Phường" },
+          {
+            "Id": "c00000000000000000000069",
+            "Name": "Hưng Phú",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000070",
+            "Name": "Rạch Ông",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000071",
+            "Name": "Xóm Củi",
+            "Level": "Phường"
+          }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000018",
+        "Name": "Quận 11",
+        "Wards": [
+          { "Id": "c00000000000000000000086", "Name": "1", "Level": "Phường" },
+          { "Id": "c00000000000000000000087", "Name": "3", "Level": "Phường" },
+          { "Id": "c00000000000000000000088", "Name": "5", "Level": "Phường" },
+          { "Id": "c00000000000000000000089", "Name": "7", "Level": "Phường" },
+          { "Id": "c00000000000000000000090", "Name": "8", "Level": "Phường" },
+          { "Id": "c00000000000000000000091", "Name": "10", "Level": "Phường" },
+          { "Id": "c00000000000000000000092", "Name": "11", "Level": "Phường" },
+          { "Id": "c00000000000000000000093", "Name": "14", "Level": "Phường" },
+          { "Id": "c00000000000000000000094", "Name": "15", "Level": "Phường" },
+          { "Id": "c00000000000000000000095", "Name": "16", "Level": "Phường" }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000019",
+        "Name": "Huyện Hóc Môn",
+        "Wards": [
+          {
+            "Id": "c00000000000000000000222",
+            "Name": "Bà Điểm",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000223",
+            "Name": "Đông Thạnh",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000224",
+            "Name": "Nhị Bình",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000225",
+            "Name": "Tân Hiệp",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000226",
+            "Name": "Tân Thới Nhì",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000227",
+            "Name": "Tân Xuân",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000228",
+            "Name": "Thới Tam Thôn",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000229",
+            "Name": "Xuân Thới Sơn",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000230",
+            "Name": "Xuân Thới Thượng",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000231",
+            "Name": "Trung Chánh",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000232",
+            "Name": "Xuân Thới Đông",
+            "Level": "Xã"
+          },
+          {
+            "Id": "c00000000000000000000233",
+            "Name": "Hóc Môn",
+            "Level": "Thị trấn"
+          }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000020",
+        "Name": "Quận 10",
+        "Wards": [
+          { "Id": "c00000000000000000000072", "Name": "1", "Level": "Phường" },
+          { "Id": "c00000000000000000000073", "Name": "2", "Level": "Phường" },
+          { "Id": "c00000000000000000000074", "Name": "4", "Level": "Phường" },
+          { "Id": "c00000000000000000000075", "Name": "5", "Level": "Phường" },
+          { "Id": "c00000000000000000000076", "Name": "6", "Level": "Phường" },
+          { "Id": "c00000000000000000000077", "Name": "7", "Level": "Phường" },
+          { "Id": "c00000000000000000000078", "Name": "8", "Level": "Phường" },
+          { "Id": "c00000000000000000000079", "Name": "9", "Level": "Phường" },
+          { "Id": "c00000000000000000000080", "Name": "10", "Level": "Phường" },
+          { "Id": "c00000000000000000000081", "Name": "11", "Level": "Phường" },
+          { "Id": "c00000000000000000000082", "Name": "12", "Level": "Phường" },
+          { "Id": "c00000000000000000000083", "Name": "13", "Level": "Phường" },
+          { "Id": "c00000000000000000000084", "Name": "14", "Level": "Phường" },
+          { "Id": "c00000000000000000000085", "Name": "15", "Level": "Phường" }
+        ]
+      },
+      {
+        "Id": "b00000000000000000000021",
+        "Name": "Quận 12",
+        "Wards": [
+          {
+            "Id": "c00000000000000000000096",
+            "Name": "Thạnh Lộc",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000097",
+            "Name": "Thạnh Xuân",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000098",
+            "Name": "Hiệp Thành",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000099",
+            "Name": "Tân Thới Hiệp",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000100",
+            "Name": "Tân Chánh Hiệp",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000101",
+            "Name": "Trung Mỹ Tây",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000102",
+            "Name": "Tân Thới Nhất",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000103",
+            "Name": "Đông Hưng Thuận",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000104",
+            "Name": "An Phú Đông",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000105",
+            "Name": "Tân Hưng Thuận",
+            "Level": "Phường"
+          },
+          {
+            "Id": "c00000000000000000000106",
+            "Name": "Thới An",
+            "Level": "Phường"
+          }
         ]
       }
     ]
