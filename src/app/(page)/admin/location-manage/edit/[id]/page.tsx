@@ -377,10 +377,9 @@
 
 "use client";
 
-import { symbol, z } from "zod";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "@/hooks/use-toast";
 import {
   Form,
   FormControl,
@@ -403,12 +402,13 @@ import {
 import { ImageDropZone } from "@/components";
 import { ENUM_MARKER_SYMBOL } from "@/utils";
 import { dataService } from "@/data/select";
-import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
+import MultipleSelector from "@/components/ui/multiple-selector";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ILocationModel } from "@/lib/model";
 import dynamic from "next/dynamic";
 import { ENUM_MAP_MODE } from "@/utils";
+import { toast } from "sonner";
 const GisMap = dynamic(() => import("@/components/gis-map"), {
   ssr: false,
   loading: () => <>Loading...</>,
@@ -440,7 +440,7 @@ export default function EditLocation() {
       ggMapUrl: "",
       title: "",
       desc: "",
-      category: cateEnum.find((cate) => cate === ENUM_MARKER_SYMBOL.DEFAULT),
+      category: ENUM_MARKER_SYMBOL.DEFAULT,
       imageUrls: [],
       exts: [],
       avgStarGGMap: 0,
@@ -452,33 +452,26 @@ export default function EditLocation() {
       setLoading(true);
       if (!id) return;
       const res = await fetch(`/api/location/${id}`);
-      const data = await res.json();
-      const currLocation = data.data as ILocationModel;
-      // form.reset(currLocation);
-
+      const payload = await res.json();
+      const currLocation = payload.data as ILocationModel;
       form.reset({
-        ggMapId: currLocation.ggMapId,
-        ggMapUrl: currLocation.ggMapUrl,
-        title: currLocation.title,
-        desc: currLocation.desc,
-        category: currLocation.category,
-        imageUrls: currLocation.imageUrls,
-        locate: [currLocation.locate.lat, currLocation.locate.long], // Cập nhật trường locate
-        avgStarGGMap: currLocation.avgStarGGMap,
-        exts: currLocation.exts,
+        ...currLocation,
+        locate: [currLocation.locate.lat, currLocation.locate.long],
       });
       setLoading(false);
     };
     fetchCurrLocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const abc = form.formState.dirtyFields;
-  useEffect(() => {
-    console.log(abc);
-  }, [abc]);
+
+  // useEffect(() => {
+  //   console.log(form.formState.dirtyFields);
+  // }, [form.formState.dirtyFields]);
 
   const extOption = dataService.options.map((option) => {
     return { label: option.value, value: option.value };
   });
+
   const handleImageUpload = async (newImages: (string | File)[]) => {
     return Promise.all(
       newImages.map(async (image) => {
@@ -529,9 +522,7 @@ export default function EditLocation() {
         {
           method: "PUT",
           body: JSON.stringify(updateValues),
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
         }
       );
@@ -542,9 +533,8 @@ export default function EditLocation() {
       }
 
       // Xử lý kết quả thành công
-      const responseData = await result.json();
-      toast({
-        title: "Cập nhật địa điểm thành công",
+      await result.json();
+      toast.info("Cập nhật địa điểm thành công", {
         description: "Địa điểm đã đưuọc cập nhật",
       });
 
@@ -552,8 +542,7 @@ export default function EditLocation() {
     } catch (error) {
       // Xử lý lỗi khi upload hoặc gửi yêu cầu
       console.error("Error during form submission:", error);
-      toast({
-        title: "Error submitting form",
+      toast("Error submitting form", {
         description:
           error instanceof Error
             ? error.message
@@ -644,11 +633,9 @@ export default function EditLocation() {
                       </FormLabel>
                       <FormControl>
                         <Select
-                          onValueChange={(value) => {
-                            field.onChange(value);
-                          }}
-                          value={field.value}
                           defaultValue={field.value}
+                          value={field.value}
+                          onValueChange={field.onChange}
                         >
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Chọn loại địa điểm" />
@@ -715,6 +702,7 @@ export default function EditLocation() {
                           className="min-h-[30rem] flex items-stretch"
                           zoom={15}
                           mode={ENUM_MAP_MODE.Edit}
+                          center={!!field.value && { lat: field.value[0], long: field.value[1] }}
                           value={field.value?.slice(0, 2) as [number, number]}
                           onChange={field.onChange}
                         />
