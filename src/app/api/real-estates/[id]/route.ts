@@ -32,7 +32,7 @@ export const GET = async (req: NextRequest, { params: { id } }: { params: { id: 
     });
     temp.sort((a, b) => a.distance - b.distance);
     locations = temp.map(({ distance: __distance, ...location }) => ({ ...location }))
-      .slice(24);
+      .slice(0, 24);
 
     return successResponse({ data: { ...realEstate, locations } });
   } catch (error) {
