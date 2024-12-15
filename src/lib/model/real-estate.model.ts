@@ -43,7 +43,7 @@ export interface IRealEstate {
   area: number;
   locate: ILocation;
   ward: string;
-  imageUrl: string[];
+  imageUrls: string[];
   info: IInfo;
   polygon: string;
   exts: string[];
@@ -58,7 +58,7 @@ const RealEstateSchema = new Schema({
   price: { type: Number, required: true },
   area: { type: Number, required: true },
   locate: { type: LocationSchema, required: true },
-  imageUrl: [{ type: String, required: true }],
+  imageUrls: [{ type: String, required: true }],
   info: { type: InfoSchema, required: true },
   polygon: { type: Schema.Types.ObjectId, ref: 'Polygon', required: true }, // Reference to Polygon model
   exts: [{ type: String }],
