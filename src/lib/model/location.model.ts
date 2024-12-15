@@ -17,10 +17,10 @@ export interface ILocationModel {
 }
 
 const locationSchema = new Schema({
-  ggMapId: { type: String, required: true },
-  ggMapUrl: { type: String, required: true },
+  ggMapId: { type: String },
+  ggMapUrl: { type: String },
   title: { type: String, required: true },
-  desc: { type: String, required: true },
+  desc: { type: String },
   category: { type: [String], enum: ENUM_MARKER_SYMBOL, default: ENUM_MARKER_SYMBOL.DEFAULT },
   locate: LocationSchema,
   imageUrls: { type: [String], default: [] },

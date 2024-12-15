@@ -10,7 +10,7 @@ export interface IAnalysis {
 export const analysisSchema = new Schema({
   type: Map,
   of: {
-    priceAVG: { type: Number, required: true },
+    priceAVG: { type: Number },
     additionalData: {
       type: Map,
       of: Number

@@ -16,6 +16,6 @@ const PointSchema: Schema = new Schema({
 
 const PolygonSchema: Schema = new Schema({
   points: { type: [PointSchema], required: true },
-});
+}, { strict: false });
 
 export const Polygon = models?.Polygon ?? model('Polygon', PolygonSchema);

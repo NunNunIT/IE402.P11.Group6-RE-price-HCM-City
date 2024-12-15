@@ -11,9 +11,9 @@ interface INotification {
 }
 
 const NotificationSchema = new Schema({
-  title: { type: String, required: true },
-  content: { type: String, required: true },
-  link: { type: String, required: true },
+  title: { type: String },
+  content: { type: String },
+  link: { type: String },
   date: { type: Date, default: Date.now },
   isSeen: { type: Boolean, default: false },
 }, { strict: false });
