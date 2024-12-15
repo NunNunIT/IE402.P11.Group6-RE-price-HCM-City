@@ -12,6 +12,6 @@ export const ProvinceSchema: Schema = new Schema({
   name: { type: String, required: true },
   imageUrl: { type: [String], default: [] },
   analysis: analysisSchema,
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
 export const Province = models?.Province ?? model<IProvince>('Province', ProvinceSchema);

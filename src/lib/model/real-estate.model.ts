@@ -25,7 +25,7 @@ const QASchema = new Schema({
 
 export interface IInfo {
   bedroom: number;
-  bathroom: number;
+  bath: number;
   // Add other fields as needed (e.g. parking spaces, floors)
 }
 
@@ -33,7 +33,7 @@ const InfoSchema = new Schema({
   bedroom: { type: Number },
   bathroom: { type: Number },
   // Add other fields as needed (e.g. parking spaces, floors)
-}, { _id: false, strict: false });
+}, { _id: false });
 
 export interface IRealEstate {
   _id: string;
@@ -42,8 +42,8 @@ export interface IRealEstate {
   price: number;
   area: number;
   locate: ILocation;
-  imageUrl: string[];
-  type: string;
+  ward: string;
+  imageUrls: string[];
   info: IInfo;
   polygon: string;
   QA: IQA[];
@@ -58,15 +58,11 @@ const RealEstateSchema = new Schema({
   area: { type: Number, required: true },
   locate: { type: LocationSchema, required: true },
   imageUrls: [{ type: String, required: true }],
-  type: { type: String, required: true },
   info: { type: InfoSchema },
   polygon: { type: Schema.Types.ObjectId, ref: 'Polygon' }, // Reference to Polygon model
   QA: [QASchema],
   isAuth: { type: Boolean, default: false },
-  owner: { type: Schema.Types.ObjectId, ref: 'User' } // Reference to User model
-}, { 
-    timestamps: true,
-    strict: false // Cho phép thêm các trường ngoài schema
- });
+  owner: { type: Schema.Types.ObjectId, ref: 'User'} // Reference to User model
+}, { timestamps: true, strict: false });
 
 export const RealEstate = models?.RealEstate ?? model('RealEstate', RealEstateSchema);
