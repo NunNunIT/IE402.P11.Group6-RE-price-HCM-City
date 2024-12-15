@@ -10,8 +10,8 @@ interface NewsCardProps {
 const NewsCard = ({ data }: { data?: NewsCardProps }) => {
   return (
     <Link href={data?._id ? `/news/${data._id}` : "#"}>
-      <div className="group max-w-sm rounded-xl bg-white dark:bg-zinc-900 shadow-md transition-shadow aspect-[3/3.5]">
-        <div className="relative">
+      <div className="group max-w-sm rounded-xl bg-white dark:bg-zinc-900 shadow-md transition-shadow overflow-hidden">
+        <div className="relative w-full h-48 aspect-[4/3] overflow-hidden">
           <Image
             width={1000}
             height={500}
@@ -24,7 +24,7 @@ const NewsCard = ({ data }: { data?: NewsCardProps }) => {
           />
         </div>
         <div className="p-2">
-          <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200 truncate line-clamp-3">
+          <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200 line-clamp-3">
             {data?.title ?? "Name"}
           </h3>
         </div>

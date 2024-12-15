@@ -1,5 +1,6 @@
 "use server";
 
+import { Toaster as Toaster2 } from "@/components/ui/toaster"
 import { auth } from "@/lib/auth";
 import dynamic from "next/dynamic";
 
@@ -17,6 +18,7 @@ export async function GlobalProvider({ children }: { children: React.ReactNode }
         <AlertProvider>
           {children}
           <Toaster />
+          <Toaster2 />
         </AlertProvider>
       </AuthDialogProvider>
     </SessionProvider>

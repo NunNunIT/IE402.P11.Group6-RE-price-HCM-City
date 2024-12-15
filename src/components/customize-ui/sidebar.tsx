@@ -12,6 +12,7 @@ import { NAVIGATION_MOBILE_DATA } from "@/data/navigation.data";
 import { Separator } from "../ui/separator";
 import { isVisibleContext } from "@/utils";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export function Sidebar() {
   const { data: session, status } = useSession();
@@ -33,13 +34,13 @@ export function Sidebar() {
               Đăng nhập
             </LoginButton>
             {status === "authenticated" && session?.user && (
-              <div className="flex flex-row items-center gap-3 p-2">
+              <Link href="/user" className="flex flex-row items-center gap-3 p-2">
                 <Avatar>
                   <AvatarImage src={session.user.image} alt={session.user.name} />
                   <AvatarFallback>{(session.user.name ?? "U")[0]}</AvatarFallback>
                 </Avatar>
                 <span className="font-semibold">{session.user.name}</span>
-              </div>
+              </Link>
             )}
             <Separator />
             {NAVIGATION_MOBILE_DATA.map((data, index) => (

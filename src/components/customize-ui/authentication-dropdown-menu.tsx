@@ -17,6 +17,7 @@ import { LogoutButton } from "./authentication-button";
 import { NAVIGATION_OPTIONS_DATA } from "@/data/navigation.data";
 import { isVisibleContext } from "@/utils";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export const AuthenticationDropdownMenu = () => {
   const { data: session, status } = useSession();
@@ -35,13 +36,13 @@ export const AuthenticationDropdownMenu = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end">
-            <div className="flex flex-row items-center gap-3 p-2">
+            <Link href="/user" className="flex flex-row items-center gap-3 p-2">
               <Avatar>
                 <AvatarImage src={session.user.image} alt={session.user.name} />
                 <AvatarFallback>{(session.user.name ?? "U")[0]}</AvatarFallback>
               </Avatar>
               <span>{session.user.name}</span>
-            </div>
+            </Link>
             <DropdownMenuSeparator />
             {NAVIGATION_OPTIONS_DATA.map((data) => (
               isVisibleContext(session, data) && (

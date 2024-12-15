@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 
 export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
-  const searchKey = searchParams.get("searchKey");
+  const searchKey = searchParams.get("keyword");
   const limit = Number(searchParams.get("limit") ?? 12);
   const page = Number(searchParams.get("page") ?? 1);
 

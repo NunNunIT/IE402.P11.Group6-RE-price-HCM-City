@@ -3,9 +3,10 @@ import { NextAuthRequest } from "node_modules/next-auth/lib";
 import { RealEstate } from '@/lib/model';
 import { auth } from "@/lib/auth";
 
+
 export const POST = auth(async (req: NextAuthRequest) => {
   const session = req.auth;
-  const userId = session?.user?._id;
+  const userId = session?.user?.id;
   console.log("userId:", userId)
 
   try {

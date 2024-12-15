@@ -39,16 +39,17 @@ export default async function NewsDetailPage({
             <h2 className="mb-5 font-bold">{data.title}</h2>
             <div className="text-gray-600 flex gap-2 mb-5 text-sm">
               <Image
-                src="https://ui-avatars.com/api/?name=NVA&background=random"
-                alt="Avatar"
+                src={data?.owner?.avt}
+                alt={data?.owner?.username}
                 width={40}
                 height={40}
                 className="h-10 w-10 rounded-full border"
+                unoptimized
               />
               <div>
                 <p>
                   <span className="mr-1">Được đăng bởi</span>
-                  {/* <strong>{data.owner}</strong> */}
+                  <strong>{data?.owner?.username}</strong>
                 </p>
                 <div>
                   <span className="mr-2">

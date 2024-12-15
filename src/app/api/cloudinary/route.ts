@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 
     // Upload to Cloudinary
     const uploadResponse = await cloudinary.uploader.upload(fileBase64, {
-      folder: "uploads",
+      folder: "ie402/locations",
     });
 
     return NextResponse.json({
