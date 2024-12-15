@@ -24,16 +24,16 @@ const QASchema = new Schema({
 });
 
 export interface IInfo {
-  bed: number;
-  bath: number;
+  bedroom: number;
+  bathroom: number;
   // Add other fields as needed (e.g. parking spaces, floors)
 }
 
 const InfoSchema = new Schema({
-  bed: { type: Number, required: true },
-  bath: { type: Number, required: true },
+  bedroom: { type: Number },
+  bathroom: { type: Number },
   // Add other fields as needed (e.g. parking spaces, floors)
-}, { _id: false });
+}, { _id: false, strict: false });
 
 export interface IRealEstate {
   _id: string;
@@ -42,11 +42,10 @@ export interface IRealEstate {
   price: number;
   area: number;
   locate: ILocation;
-  ward: string;
   imageUrl: string[];
+  type: string;
   info: IInfo;
   polygon: string;
-  exts: string[];
   QA: IQA[];
   isAuth: boolean;
   owner: string;
@@ -58,13 +57,16 @@ const RealEstateSchema = new Schema({
   price: { type: Number, required: true },
   area: { type: Number, required: true },
   locate: { type: LocationSchema, required: true },
-  imageUrl: [{ type: String, required: true }],
-  info: { type: InfoSchema, required: true },
-  polygon: { type: Schema.Types.ObjectId, ref: 'Polygon', required: true }, // Reference to Polygon model
-  exts: [{ type: String }],
+  imageUrls: [{ type: String, required: true }],
+  type: { type: String, required: true },
+  info: { type: InfoSchema },
+  polygon: { type: Schema.Types.ObjectId, ref: 'Polygon' }, // Reference to Polygon model
   QA: [QASchema],
   isAuth: { type: Boolean, default: false },
-  owner: { type: Schema.Types.ObjectId, ref: 'User', required: true } // Reference to User model
-}, { timestamps: true });
+  owner: { type: Schema.Types.ObjectId, ref: 'User' } // Reference to User model
+}, { 
+    timestamps: true,
+    strict: false // Cho phép thêm các trường ngoài schema
+ });
 
 export const RealEstate = models?.RealEstate ?? model('RealEstate', RealEstateSchema);

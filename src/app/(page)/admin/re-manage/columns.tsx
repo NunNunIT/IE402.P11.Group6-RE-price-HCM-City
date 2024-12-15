@@ -86,6 +86,7 @@ export const columns: ColumnDef<DataColumns>[] = [
             <DropdownMenuLabel>Hành động</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Xem</DropdownMenuItem>
+            <DropdownMenuItem>Xóa</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

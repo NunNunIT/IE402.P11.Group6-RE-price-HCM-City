@@ -2,49 +2,33 @@ import { DataColumns, columns } from "./columns";
 import { DataTable } from "./data-table";
 
 async function getData(): Promise<DataColumns[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      _id: "728ed52f",
-      title: "Tên bất động sản",
-      price: 100,
-      area: 25,
-      fullAddress: "Địa chỉ đầy đủ đã qua chỉnh sửa ở API 6",
-      isAuth: false,
-    },
-    {
-      _id: "728ed52f",
-      title: "Tên bất động sản",
-      price: 100,
-      area: 25,
-      fullAddress: "Địa chỉ đầy đủ đã qua chỉnh sửa ở API 5",
-      isAuth: false,
-    },
-    {
-      _id: "728ed52f",
-      title: "Tên bất động sản",
-      price: 100,
-      area: 25,
-      fullAddress: "Địa chỉ đầy đủ đã qua chỉnh sửa ở API 4",
-      isAuth: false,
-    },
-    {
-      _id: "728ed52f",
-      title: "Tên bất động sản",
-      price: 100,
-      area: 25,
-      fullAddress: "Địa chỉ đầy đủ đã qua chỉnh sửa ở API 3",
-      isAuth: false,
-    },
-    {
-      _id: "728ed52f",
-      title: "Tên bất động sản",
-      price: 100,
-      area: 25,
-      fullAddress: "Địa chỉ đầy đủ đã qua chỉnh sửa ở API 2",
-      isAuth: false,
-    },
-  ];
+  try {
+    const response = await fetch("/api/real-estates?page=1", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data from API");
+    }
+
+    const result = await response.json();
+
+    // Assuming your API response contains a "data" field with the array of items
+    return result.data.map((item: any) => ({
+      _id: item._id,
+      title: item.title,
+      price: item.price,
+      area: item.area,
+      fullAddress: item.fullAddress,
+      isAuth: item.isAuth,
+    }));
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return []; // Return an empty array if there's an error
+  }
 }
 
 export default async function DemoPage() {
