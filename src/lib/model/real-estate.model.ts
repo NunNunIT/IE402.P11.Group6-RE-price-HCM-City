@@ -2,13 +2,13 @@ import { ILocation, LocationSchema } from "./locate.schema";
 import { Schema, model, models } from "mongoose";
 
 export interface IReply {
-  date: Date;
-  content: string;
+  date?: Date;
+  content?: string;
 }
 
 const ReplySchema = new Schema({
-  date: { type: Date, required: true },
-  content: { type: String, required: true }
+  date: { type: Date },
+  content: { type: String }
 });
 
 export interface IQA {
@@ -18,20 +18,20 @@ export interface IQA {
 }
 
 const QASchema = new Schema({
-  userId: { type: Schema.Types.ObjectId, ref: 'User' }, // Assuming 'User' model exists
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // Assuming 'User' model exists
   content: { type: String, required: true },
   replies: [ReplySchema],
 });
 
 export interface IInfo {
-  bedroom: number;
-  bathroom: number;
+  bed?: number;
+  bath?: number;
   // Add other fields as needed (e.g. parking spaces, floors)
 }
 
 const InfoSchema = new Schema({
-  bedroom: { type: Number },
-  bathroom: { type: Number },
+  bed: { type: Number },
+  bath: { type: Number },
   // Add other fields as needed (e.g. parking spaces, floors)
 }, { _id: false, strict: false });
 
@@ -41,6 +41,7 @@ export interface IRealEstate {
   desc: string;
   price: number;
   area: number;
+  type: string;
   locate: ILocation;
   ward: string;
   imageUrls: string[];
@@ -56,6 +57,7 @@ const RealEstateSchema = new Schema({
   desc: { type: String, required: true },
   price: { type: Number, required: true },
   area: { type: Number, required: true },
+  type: { type: String, required: true },
   locate: { type: LocationSchema, required: true },
   imageUrls: [{ type: String, required: true }],
   info: { type: InfoSchema },

@@ -2,6 +2,7 @@ import { Schema, model, models } from "mongoose";
 
 export interface INews {
   title: string;
+  img: string;
   content: string;
   owner: string; // Reference to User model
   reviews: string[]; // Array of references to Review model
@@ -10,6 +11,7 @@ export interface INews {
 const newsSchema = new Schema(
   {
     title: { type: String, required: true },
+    img: { type: String, required: true },
     content: { type: String, required: true },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     reviews: {

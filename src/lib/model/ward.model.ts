@@ -6,17 +6,17 @@ import { IPolygon } from './polygon.model';
 export interface IWard extends Document {
   name: string;
   district: string;
-  imageUrl: string[];
+  imageUrls: string[];
   polygon: IPolygon[];
   analysis?: IAnalysis;
 }
 
 export const WardSchema: Schema = new Schema({
   name: { type: String, required: true },
-  district: { type: Schema.Types.ObjectId, ref: "District", required: true },
-  imageUrl: { type: [String], default: [] },
   polygon: { type: [{ type: Schema.Types.ObjectId, ref: "Polygon" }], default: [] },
-  analysis: { type: analysisSchema, required: false },
+  district: { type: Schema.Types.ObjectId, ref: "District", required: true },
+  imageUrls: { type: [String], default: [] },
+  analysis: { type: analysisSchema },
 }, { timestamps: true, strict: false });
 
 export const Ward = models?.Ward ?? model<IWard>('Ward', WardSchema);
