@@ -5,6 +5,8 @@ import { SaveRealBtn } from "@/components";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import translateKey from "@/lib/func/transfer";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
@@ -26,7 +28,7 @@ export default async function RealEstateDetailPage({
       const data = payload.data;
       return data;
     })
-    .catch((error) => {
+    .catch((error): null => {
       console.error("🚀 ~ .catch ~ error", error.message);
       return null;
     });
@@ -71,7 +73,7 @@ export default async function RealEstateDetailPage({
           <div className="">{data.desc}</div>
         </div>
 
-        {/* <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3">
           <h2 className="font-bold text-xl">Đặc điểm bất động sản</h2>
           <div className="grid grid-cols-2 gap-3">
             {Object.entries(data?.info ?? {})
@@ -94,16 +96,13 @@ export default async function RealEstateDetailPage({
           <div dangerouslySetInnerHTML={{ __html: data.desc }} />
         </div>
 
-        {/* <div className="rounded-lg border-2 border-zinc-200 dark:border-zinc-800 p-3">
+        <div className="rounded-lg border-2 border-zinc-200 dark:border-zinc-800 p-3">
           <h2 className="font-bold text-xl mb-1">Liên hệ</h2>
           <div className="flex flex-row">
-            <Image
-              src="https://cdn.caohockinhte.edu.vn/wp-content/uploads/2024/10/avatar-vo-tri-cute-meo-1.jpg"
-              width={100}
-              height={100}
-              className="object-cover w-20 h-20 rounded-full overflow-hidden"
-              alt="User Avatar"
-            />
+            <Avatar>
+              <AvatarImage src="https://cdn.caohockinhte.edu.vn/wp-content/uploads/2024/10/avatar-vo-tri-cute-meo-1.jpg" />
+              <AvatarFallback>U</AvatarFallback>
+            </Avatar>
             <div className="ml-4 flex flex-col justify-center">
               <p className="font-semibold text-lg">Tên</p>
               <p className="text-sky-500">0987296708</p>
@@ -121,11 +120,12 @@ export default async function RealEstateDetailPage({
               </Button>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
       <GISMap
         zoom={20}
         className="container"
+        isShowDistrict
         center={data.locate}
         points={[
           {

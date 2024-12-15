@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { NextAuthRequest } from "next-auth/lib";
+import { NextResponse } from 'next/server';
+import { NextAuthRequest } from "node_modules/next-auth/lib";
 import { RealEstate } from '@/lib/model';
 import { auth } from "@/lib/auth";
 
