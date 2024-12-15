@@ -85,8 +85,8 @@ const FormSchema = z.object({
       }
     }),
   interior: z.string().optional(),
-  bedroom: z.number().optional(),
-  bathroom: z.number().optional(),
+  bed: z.number().optional(),
+  bath: z.number().optional(),
   direction: z
     .enum([
       "nam",
@@ -112,8 +112,8 @@ export default function InputForm() {
       price: undefined,
       legal: undefined,
       interior: "",
-      bedroom: undefined,
-      bathroom: undefined,
+      bed: undefined,
+      bath: undefined,
       direction: undefined,
       imgs: [],
     },
@@ -341,7 +341,7 @@ export default function InputForm() {
 
             <FormField
               control={form.control}
-              name="bedroom"
+              name="bed"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-semibold">Số phòng ngủ</FormLabel>
@@ -360,7 +360,7 @@ export default function InputForm() {
 
             <FormField
               control={form.control}
-              name="bathroom"
+              name="bath"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-semibold">Số phòng tắm</FormLabel>

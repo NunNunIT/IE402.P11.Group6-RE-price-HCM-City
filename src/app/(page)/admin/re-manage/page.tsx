@@ -1,14 +1,19 @@
+import { Button } from "@/components/ui/button";
 import { DataColumns, columns } from "./columns";
 import { DataTable } from "./data-table";
+import { PlusIcon } from "lucide-react";
 
 async function getData(): Promise<DataColumns[]> {
   try {
-    const response = await fetch("/api/real-estates?page=1", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates?getAll=true`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch data from API");
@@ -22,8 +27,8 @@ async function getData(): Promise<DataColumns[]> {
       title: item.title,
       price: item.price,
       area: item.area,
-      fullAddress: item.fullAddress,
-      isAuth: item.isAuth,
+      locate: item.locate,
+      imageUrl: item.imageUrl,
     }));
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -36,6 +41,10 @@ export default async function DemoPage() {
 
   return (
     <div className="container mx-auto py-10 px-2">
+      <div className="flex flex-row justify-between items-center">
+        <h1>Quản lý bất động sản</h1>
+        <Button href="/create-new-re" startIcon={<PlusIcon className="size-6" />}>Tạo mới</Button>
+      </div>
       <DataTable columns={columns} data={data} />
     </div>
   );

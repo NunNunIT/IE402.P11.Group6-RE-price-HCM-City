@@ -25,7 +25,7 @@ const QASchema = new Schema({
 
 export interface IInfo {
   bedroom: number;
-  bath: number;
+  bathroom: number;
   // Add other fields as needed (e.g. parking spaces, floors)
 }
 
@@ -33,7 +33,7 @@ const InfoSchema = new Schema({
   bedroom: { type: Number },
   bathroom: { type: Number },
   // Add other fields as needed (e.g. parking spaces, floors)
-}, { _id: false });
+}, { _id: false, strict: false });
 
 export interface IRealEstate {
   _id: string;

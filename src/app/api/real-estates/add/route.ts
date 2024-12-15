@@ -23,20 +23,6 @@ export const POST = auth(async (req: NextAuthRequest) => {
       ...rest
     } = await req.json(); // Sử dụng req.json() để parse body
 
-    // In thông tin chi tiết từng trường
-    console.log("Parsed Request Data:", {
-      title,
-      desc,
-      price,
-      area,
-      locate,
-      coordinates,
-      imgs,
-      type,
-      polygon,
-      rest,
-    });
-
     // Kiểm tra các trường bắt buộc
     if (!title || !desc || !price || !area || !locate || !coordinates || !imgs || !type ) {
       return NextResponse.json(
