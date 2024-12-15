@@ -40,8 +40,10 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { useAlertDialogWrapperFunction } from "@/hooks/use-alert-dialog";
 import { useRouter } from "next/navigation";
+import useSWR, { useSWRConfig } from "swr";
 
 const CellActions = ({ location }: { location: any }) => {
+  const { mutate } = useSWRConfig();
   const router = useRouter();
 
   // Hàm xóa địa điểm
@@ -51,10 +53,9 @@ const CellActions = ({ location }: { location: any }) => {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/location/${location._id}`,
         {
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           credentials: "include",
+          cache: "reload",
         }
       );
       const data = await res.json();
@@ -62,9 +63,9 @@ const CellActions = ({ location }: { location: any }) => {
         console.error("Error during delete location! ", data?.error);
         return;
       }
-      // Điều hướng sau khi xóa thành công
-      console.log("Xóa địa điểm thành công");
-      router.refresh();
+
+      await mutate((prev?: { _id: string }[]) =>
+        !!prev && prev.filter(_id => _id != location._id))
     } catch (error) {
       console.error("Lỗi khi xóa địa điểm! ", error);
     }
@@ -121,8 +122,8 @@ const Columns: ColumnDef<ILocationModel & { _id: any }>[] = [
           table.getIsAllPageRowsSelected()
             ? true
             : table.getIsSomePageRowsSelected()
-            ? "indeterminate"
-            : false
+              ? "indeterminate"
+              : false
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
@@ -195,9 +196,7 @@ const Columns: ColumnDef<ILocationModel & { _id: any }>[] = [
 
 const DataTable = ({ data }: { data: any }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -280,9 +279,9 @@ const DataTable = ({ data }: { data: any }) => {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -347,36 +346,24 @@ const DataTable = ({ data }: { data: any }) => {
   );
 };
 
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch");
+
+  const payload = await res.json();
+  return payload.data;
+}
+
 const LocationManage = () => {
-  const [locations, setLocations] = React.useState<
-    (ILocationModel & { _id: any })[]
-  >([]);
-  const [loading, setLoading] = React.useState<boolean>(true);
-
-  React.useEffect(() => {
-    const fetchLocations = async () => {
-      setLoading(true);
-      console.log("Fetching locations");
-      const res = await fetch("/api/location");
-      if (!res.ok) {
-        console.log("Failed to fetch locations");
-        return;
-      }
-      const data = await res.json();
-      setLocations(data.data);
-      setLoading(false);
-    };
-    fetchLocations();
-  }, []);
-
+  const { data, isLoading, error } = useSWR("/api/location", fetcher);
   return (
     <>
       <div className="flex flex-col items-center p-5 min-h-[100dvh]">
         <h1 className="text-4xl font-bold">Quản lý địa điểm</h1>
-        {loading ? (
+        {isLoading ? (
           <div className="mt-10">Loading...</div>
         ) : (
-          <DataTable data={locations} />
+          <DataTable data={data} />
         )}
       </div>
     </>
