@@ -5,7 +5,10 @@ import { IUser } from "@/lib/model";
 import { Session } from "next-auth";
 import { TPermission } from "@/types/types-import";
 
-export function checkIncludeByAscii(str: string | null, searchStr: string | null): boolean {
+export function checkIncludeByAscii(
+  str: string | null,
+  searchStr: string | null
+): boolean {
   if (typeof str !== "string" || typeof searchStr !== "string") {
     return false;
   }
@@ -16,12 +19,13 @@ export function checkIncludeByAscii(str: string | null, searchStr: string | null
 }
 
 export function unicodeToAscii(str?: string | null): string {
-  if (typeof str !== "string")
-    return "";
+  if (typeof str !== "string") return "";
 
   // Define mappings of special characters to ASCII
-  const a = "àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;";
-  const b = "aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------";
+  const a =
+    "àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;";
+  const b =
+    "aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------";
 
   // Create a regular expression for special characters
   const p = new RegExp(a.split("").join("|"), "g");
@@ -40,19 +44,17 @@ export function unicodeToAscii(str?: string | null): string {
 
 export function checkByAscii(str: string, searchStr: string): boolean {
   return (
-    unicodeToAscii(str.trim().toLowerCase()) === unicodeToAscii(searchStr.trim().toLowerCase())
+    unicodeToAscii(str.trim().toLowerCase()) ===
+    unicodeToAscii(searchStr.trim().toLowerCase())
   );
 }
 
-export async function getRelativeLocation(
-  location: TPosition,
-): Promise<any> {
+export async function getRelativeLocation(location: TPosition): Promise<any> {
   const LOCATION_API_URL: string =
     LOCATION_API_URL_UNFORMATTED.replace("{}", location.lat.toString()).replace(
       "{}",
       location.long.toString()
-    ) +
-    "&zoom=13";
+    ) + "&zoom=13";
 
   try {
     const payload = await fetch(LOCATION_API_URL).then((res) => res.json());
@@ -66,30 +68,38 @@ export async function getRelativeLocation(
 
 export const hasPermission = (
   user: Pick<Partial<IUser>, "role">,
-  permission: TPermission,
+  permission: TPermission
 ) => {
-  return ((ROLES[user.role] ?? []) as readonly TPermission[]).includes(permission);
-}
+  return ((ROLES[user.role] ?? []) as readonly TPermission[]).includes(
+    permission
+  );
+};
 
 export const parseObjectToSearchParams = (obj: Record<string, any>): string => {
   return new URLSearchParams(obj).toString();
-}
+};
 
-export const isVisibleContext = (session: Session, data: { isNeedAuth?: boolean, isNeedHighPermission?: boolean }) => {
-  return (!data.isNeedAuth
-    || session?.user)
-    && (!data.isNeedHighPermission
-      || [ENUM_ROLE.Admin, ENUM_ROLE.Staff].includes(session?.user.role))
-}
+export const isVisibleContext = (
+  session: Session,
+  data: { isNeedAuth?: boolean; isNeedHighPermission?: boolean }
+) => {
+  return (
+    (!data.isNeedAuth || session?.user) &&
+    (!data.isNeedHighPermission ||
+      [ENUM_ROLE.Admin, ENUM_ROLE.Staff].includes(session?.user.role))
+  );
+};
 
-export const parseFormDataToObject = (formData: FormData): Record<string, any> => {
+export const parseFormDataToObject = (
+  formData: FormData
+): Record<string, any> => {
   const obj: Record<string, any> = {};
 
   formData.forEach((value, key) => {
     let parsedValue;
 
     // Try to parse the value as JSON if it's a string
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       try {
         parsedValue = JSON.parse(value);
       } catch {
@@ -114,7 +124,10 @@ export const parseFormDataToObject = (formData: FormData): Record<string, any> =
   return obj;
 };
 
-export const parseObjectToFormData = (obj: Record<string, any>, parentKey?: string): FormData => {
+export const parseObjectToFormData = (
+  obj: Record<string, any>,
+  parentKey?: string
+): FormData => {
   const formData = new FormData();
 
   const appendValue = (key: string, value: any) => {
@@ -122,7 +135,7 @@ export const parseObjectToFormData = (obj: Record<string, any>, parentKey?: stri
       value.forEach((item) => {
         formData.append(key, item);
       });
-    } else if (typeof value === 'object' && value !== null) {
+    } else if (typeof value === "object" && value !== null) {
       formData.append(key, JSON.stringify(value));
     } else {
       formData.append(key, value);

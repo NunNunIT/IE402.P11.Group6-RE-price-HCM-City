@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { ChevronDown, MoreHorizontal } from "lucide-react"
+import { ChevronDown, MoreHorizontal } from "lucide-react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,7 +14,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -23,7 +23,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -31,106 +31,50 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { ENUM_MARKER_SYMBOL } from "@/utils"
-import { ILocationModel } from "@/lib/model"
-import Image from "next/image"
-import { Input } from "@/components/ui/input"
-import { useAlertDialogWrapperFunction } from "@/hooks/use-alert-dialog"
-import { useRouter } from "next/navigation"
-
-const data: (ILocationModel & { _id: any })[] = [
-  {
-    _id: 1,
-    ggMapId: "abcdef1234567890",
-    ggMapUrl: "https://maps.google.com/?q=abcdef1234567890",
-    title: "Location One",
-    desc: "Description for location one.",
-    category: ENUM_MARKER_SYMBOL.PARK,
-    locate: {
-      lat: 34.0522,
-      long: -118.2437,
-      ward: "1"
-    },
-    imageUrls: [
-      "https://congchungnguyenhue.com/Uploaded/Images/Original/2023/12/04/image3_0412152838.jpg",
-      "https://congchungnguyenhue.com/Uploaded/Images/Original/2023/12/04/image3_0412152838.jpg"
-    ],
-    avgStarGGMap: 4.2,
-    exts: ["wifi", "parking"],
-    owner: "Owner One"
-  },
-  {
-    _id: 2,
-    ggMapId: "1234567890abcdef",
-    ggMapUrl: "https://maps.google.com/?q=1234567890abcdef",
-    title: "Location Two",
-    desc: "Description for location two.",
-    category: ENUM_MARKER_SYMBOL.MARKET,
-    locate: {
-      lat: 40.7128,
-      long: -74.0060,
-      ward: "1"
-    },
-    imageUrls: [
-      "https://congchungnguyenhue.com/Uploaded/Images/Original/2023/12/04/image3_0412152838.jpg",
-      "https://congchungnguyenhue.com/Uploaded/Images/Original/2023/12/04/image3_0412152838.jpg"
-    ],
-    avgStarGGMap: 4.8,
-    exts: ["guided tours", "gift shop"],
-    owner: "Owner Two"
-  },
-  {
-    _id: 3,
-    ggMapId: "fedcba0987654321",
-    ggMapUrl: "https://maps.google.com/?q=fedcba0987654321",
-    title: "Location Three",
-    desc: "Description for location three.",
-    category: ENUM_MARKER_SYMBOL.APARTMENT,
-    locate: {
-      lat: 51.5074,
-      long: -0.1278,
-      ward: "1"
-    },
-    imageUrls: [
-      "https://congchungnguyenhue.com/Uploaded/Images/Original/2023/12/04/image3_0412152838.jpg",
-      "https://congchungnguyenhue.com/Uploaded/Images/Original/2023/12/04/image3_0412152838.jpg"
-    ],
-    avgStarGGMap: 3.9,
-    exts: ["outdoor seating", "live music"],
-    owner: "Owner Three"
-  },
-  {
-    _id: 4,
-    ggMapId: "0987654321fedcba",
-    ggMapUrl: "https://maps.google.com/?q=0987654321fedcba",
-    title: "Location Four",
-    desc: "Description for location four.",
-    category: ENUM_MARKER_SYMBOL.SHOP,
-    locate: {
-      lat: 48.8566,
-      long: 2.3522,
-      ward: "1"
-    },
-    imageUrls: [
-      "https://congchungnguyenhue.com/Uploaded/Images/Original/2023/12/04/image3_0412152838.jpg",
-      "https://congchungnguyenhue.com/Uploaded/Images/Original/2023/12/04/image3_0412152838.jpg"
-    ],
-    avgStarGGMap: 4.6,
-    exts: ["food court", "parking"],
-    owner: "Owner Four"
-  }
-];
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ILocationModel } from "@/lib/model";
+import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { useAlertDialogWrapperFunction } from "@/hooks/use-alert-dialog";
+import { useRouter } from "next/navigation";
 
 const CellActions = ({ location }: { location: any }) => {
   const router = useRouter();
+
+  // Hàm xóa địa điểm
   const deleteLocation = async () => {
-    console.log("Delete location");
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/location/${location._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        console.error("Error during delete location! ", data?.error);
+        return;
+      }
+      // Điều hướng sau khi xóa thành công
+      console.log("Xóa địa điểm thành công");
+      router.refresh();
+    } catch (error) {
+      console.error("Lỗi khi xóa địa điểm! ", error);
+    }
   };
-  const deleteDialog = useAlertDialogWrapperFunction(deleteLocation, { title: "Delete location", description: "Are you sure you want to delete this location?" });
+
+  // Sử dụng hook `useAlertDialogWrapperFunction` để hiển thị dialog xác nhận xóa
+  const deleteDialog = useAlertDialogWrapperFunction(deleteLocation, {
+    title: "Xóa địa điểm",
+    description: "Bạn có chắc chắn muốn xóa địa điểm này?",
+  });
 
   return (
     <DropdownMenu>
@@ -145,7 +89,7 @@ const CellActions = ({ location }: { location: any }) => {
         <DropdownMenuItem
           onClick={() => navigator.clipboard.writeText(location.ggMapUrl)}
         >
-          Copy google map URL
+          Sao chép URL Google map
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -154,19 +98,21 @@ const CellActions = ({ location }: { location: any }) => {
             router.push(`/admin/location-manage/edit/${location._id}`);
           }}
         >
-          Edit location
+          Sửa địa điểm
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => { deleteDialog() }}
+          onClick={() => {
+            deleteDialog();
+          }}
         >
-          Delete location
+          Xóa địa điểm
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 };
 
-const Columns: ColumnDef<(ILocationModel & { _id: any })>[] = [
+const Columns: ColumnDef<ILocationModel & { _id: any }>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -175,8 +121,8 @@ const Columns: ColumnDef<(ILocationModel & { _id: any })>[] = [
           table.getIsAllPageRowsSelected()
             ? true
             : table.getIsSomePageRowsSelected()
-              ? "indeterminate"
-              : false
+            ? "indeterminate"
+            : false
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
@@ -194,11 +140,11 @@ const Columns: ColumnDef<(ILocationModel & { _id: any })>[] = [
   },
   {
     accessorKey: "imageUrls",
-    header: "imageUrls",
+    header: "Hình ảnh",
     cell: ({ row }) => (
       <div className="capitalize">
         <Image
-          src={(row.getValue("imageUrls") as string[])[0]}
+          src={((row.getValue("imageUrls") as string[]) || [])[0]}
           alt="imageUrls"
           width="1000"
           height="1000"
@@ -209,30 +155,32 @@ const Columns: ColumnDef<(ILocationModel & { _id: any })>[] = [
   },
   {
     accessorKey: "ggMapId",
-    header: "ggMapId",
+    header: "ID Google Map",
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("ggMapId")}</div>
     ),
   },
   {
     accessorKey: "title",
-    header: "title",
+    header: "Tiêu đề",
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("title")}</div>
     ),
   },
   {
-    accessorKey: "categories",
-    header: "categories",
+    accessorKey: "category",
+    header: "Danh mục",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("categories")}</div>
+      <div className="capitalize">{row.getValue("category")}</div>
     ),
   },
   {
     accessorKey: "exts",
-    header: "extensions",
+    header: "Thành phần mở rộng",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("exts")}</div>
+      <div className="capitalize">
+        {(row.getValue("exts") as string[]).join(", ")}
+      </div>
     ),
   },
   {
@@ -243,18 +191,17 @@ const Columns: ColumnDef<(ILocationModel & { _id: any })>[] = [
       return <CellActions location={location} />;
     },
   },
-]
+];
 
-const DataTableDemo = () => {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+const DataTable = ({ data }: { data: any }) => {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
   const router = useRouter();
-
 
   const table = useReactTable({
     data,
@@ -273,13 +220,13 @@ const DataTableDemo = () => {
       columnVisibility,
       rowSelection,
     },
-  })
+  });
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter title..."
+          placeholder="Lọc theo tiêu đề..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
@@ -298,7 +245,7 @@ const DataTableDemo = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
+              Cột <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -315,9 +262,9 @@ const DataTableDemo = () => {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {flexRender(column.columnDef.header, undefined)}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -333,11 +280,11 @@ const DataTableDemo = () => {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -374,8 +321,8 @@ const DataTableDemo = () => {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel().rows.length} trong{" "}
+          {table.getFilteredRowModel().rows.length} hàng được chọn.
         </div>
         <div className="space-x-2">
           <Button
@@ -384,7 +331,7 @@ const DataTableDemo = () => {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            Trước
           </Button>
           <Button
             variant="outline"
@@ -392,24 +339,48 @@ const DataTableDemo = () => {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            Sau
           </Button>
         </div>
       </div>
-    </div >
-  )
-}
+    </div>
+  );
+};
 
 const LocationManage = () => {
+  const [locations, setLocations] = React.useState<
+    (ILocationModel & { _id: any })[]
+  >([]);
+  const [loading, setLoading] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    const fetchLocations = async () => {
+      setLoading(true);
+      console.log("Fetching locations");
+      const res = await fetch("/api/location");
+      if (!res.ok) {
+        console.log("Failed to fetch locations");
+        return;
+      }
+      const data = await res.json();
+      setLocations(data.data);
+      setLoading(false);
+    };
+    fetchLocations();
+  }, []);
 
   return (
     <>
       <div className="flex flex-col items-center p-5 min-h-[100dvh]">
-        <h1 className="text-4xl font-bold">Quản lý bất động sản</h1>
-        <DataTableDemo />
+        <h1 className="text-4xl font-bold">Quản lý địa điểm</h1>
+        {loading ? (
+          <div className="mt-10">Loading...</div>
+        ) : (
+          <DataTable data={locations} />
+        )}
       </div>
     </>
   );
-}
+};
 
 export default LocationManage;

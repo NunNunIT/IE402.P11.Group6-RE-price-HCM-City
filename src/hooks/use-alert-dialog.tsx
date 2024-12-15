@@ -9,8 +9,16 @@ export function useAlertDialogWrapperFunction(callback: () => Promise<void>, opt
   const openAlertDialog = useCallback(() => {
     if (options?.title) setTitle(options.title);
     if (options?.description) setDescription(options.description);
-    setAction(callback);
-    onOpenChange(true);
+
+    setAction(() => async () => {
+      try {
+        await callback();
+      } catch (error) {
+        console.error("Error in callback", error);
+      }
+    });
+
+    onOpenChange(true); // Mở dialog
   }, [onOpenChange, setTitle, setDescription, setAction, options, callback]);
 
   return openAlertDialog;
