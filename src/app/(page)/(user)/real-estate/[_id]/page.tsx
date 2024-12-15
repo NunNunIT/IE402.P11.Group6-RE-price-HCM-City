@@ -129,7 +129,7 @@ export default async function RealEstateDetailPage({
             title: data.title,
             type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
           },
-          ...data.locations.map((location: any) => ({
+          ...data.locations!.map((location: any) => ({
             ...location.locate,
             title: data.title,
             type: data.category,
