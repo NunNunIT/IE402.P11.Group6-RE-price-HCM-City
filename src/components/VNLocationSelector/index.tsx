@@ -22,10 +22,11 @@ import { ComboboxDrawer } from "../customize-ui";
 import VNLocationData from "../VNLocationSelector/data.json";
 
 // import utils
-import { ELocationType, checkIncludeByAscii } from "@/utils";
+import { ENUM_LOCATION_TYPE, checkIncludeByAscii } from "@/utils";
 import { cn } from "@/lib/utils";
+import { Input } from "../ui/input";
 
-interface ILocation {
+export interface ILocation {
   province?: string | null;
   district?: string | null;
   ward?: string | null;
@@ -40,7 +41,7 @@ type TLocationSelectProps = Omit<
 > & {
   value: ILocation;
   onChange: Dispatch<SetStateAction<ILocation>>;
-  depthLevel?: ELocationType;
+  depthLevel?: ENUM_LOCATION_TYPE;
   placeholders?: {
     province?: string;
     district?: string;
@@ -52,7 +53,7 @@ type TLocationSelectProps = Omit<
 
 export default function LocationSelect(
   { value: location, onChange: setLocation, className,
-    depthLevel = ELocationType.WARD,
+    depthLevel = ENUM_LOCATION_TYPE.STREET,
     placeholders, modal,
     disabled,
     ...props
@@ -68,17 +69,17 @@ export default function LocationSelect(
       : undefined;
 
     return {
-      ...(depthLevel >= ELocationType.PROVINCE
+      ...(depthLevel >= ENUM_LOCATION_TYPE.PROVINCE
         && {
         provinces: VNLocationData.map((province) => province.Name),
       }),
-      ...(depthLevel >= ELocationType.DISTRICT
+      ...(depthLevel >= ENUM_LOCATION_TYPE.DISTRICT
         && {
         districts: selectedProvince
           ? selectedProvince.Districts.map(district => district.Name)
           : [],
       }),
-      ...(depthLevel >= ELocationType.WARD
+      ...(depthLevel >= ENUM_LOCATION_TYPE.WARD
         && {
         wards: selectedDistrict
           ? selectedDistrict.Wards.map((ward: any) => ward.Name || ward.Level)
@@ -97,15 +98,15 @@ export default function LocationSelect(
 
     if (
       key === 'province'
-      && depthLevel >= ELocationType.DISTRICT
+      && depthLevel >= ENUM_LOCATION_TYPE.DISTRICT
     ) {
       newLocation.district = undefined;
-      if (depthLevel >= ELocationType.WARD) {
+      if (depthLevel >= ENUM_LOCATION_TYPE.WARD) {
         newLocation.ward = undefined;
       }
     } else if (
       key === 'district'
-      && depthLevel >= ELocationType.WARD
+      && depthLevel >= ENUM_LOCATION_TYPE.WARD
     ) {
       newLocation.ward = undefined;
     }
@@ -116,7 +117,7 @@ export default function LocationSelect(
 
   return (
     <div className={cn(className ?? "flex flex-col gap-2")}>
-      {depthLevel >= ELocationType.PROVINCE && (
+      {depthLevel >= ENUM_LOCATION_TYPE.PROVINCE && (
         !isMobile ? (
           <Combobox
             defaultValue={location?.province}
@@ -131,7 +132,7 @@ export default function LocationSelect(
               })}
           >
             <ComboboxInput
-              placeholder={placeholders?.province ?? "Select a province"}
+              placeholder={placeholders?.province ?? "Chọn tỉnh/thành phố"}
               disabled={disabled}
               {...props}
             />
@@ -148,12 +149,12 @@ export default function LocationSelect(
             selectData={selectDatas.provinces}
             value={location?.province ?? ''}
             onChange={(value: string) => handleLocationChange('province', value)}
-            placeholder={placeholders?.province ?? "Select a province"}
+            placeholder={placeholders?.province ?? "Chọn tỉnh/thành phố"}
           />
         )
       )}
 
-      {depthLevel >= ELocationType.DISTRICT && (
+      {depthLevel >= ENUM_LOCATION_TYPE.DISTRICT && (
         !isMobile ? (
           <Combobox
             defaultValue={location?.district}
@@ -168,7 +169,7 @@ export default function LocationSelect(
               })}
           >
             <ComboboxInput
-              placeholder={placeholders?.district ?? "Select a district"}
+              placeholder={placeholders?.district ?? "Chọn quận/huyện"}
               disabled={!location?.province}
               {...props}
             />
@@ -185,12 +186,12 @@ export default function LocationSelect(
             selectData={selectDatas.districts}
             value={location?.district ?? ''}
             onChange={(value: string) => handleLocationChange('district', value)}
-            placeholder={placeholders?.district ?? "Select a district"}
+            placeholder={placeholders?.district ?? "Chọn quận/huyện"}
           />
         )
       )}
 
-      {depthLevel >= ELocationType.WARD && (
+      {depthLevel >= ENUM_LOCATION_TYPE.WARD && (
         !isMobile ? (
           <Combobox
             defaultValue={location?.ward}
@@ -205,7 +206,7 @@ export default function LocationSelect(
               })}
           >
             <ComboboxInput
-              placeholder={placeholders?.ward ?? "Select a ward"}
+              placeholder={placeholders?.ward ?? "Chọn phường/xã"}
               disabled={!location?.district}
               {...props}
             />
@@ -222,9 +223,19 @@ export default function LocationSelect(
             selectData={selectDatas.wards}
             value={location?.ward ?? ''}
             onChange={(value: string) => handleLocationChange('ward', value)}
-            placeholder={placeholders?.ward ?? "Select a ward"}
+            placeholder={placeholders?.ward ?? "Chọn phường/xã"}
           />
         )
+      )}
+
+      {depthLevel >= ENUM_LOCATION_TYPE.STREET && (
+        <Input
+          value={location?.street}
+          onChange={(e) => handleLocationChange('street', e.currentTarget.value)}
+          maxLength={50}
+          placeholder={placeholders?.street ?? "Nhập địa chỉ chi tiết"}
+          {...props}
+        />
       )}
     </div >
   );

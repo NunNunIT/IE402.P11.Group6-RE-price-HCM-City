@@ -1,4 +1,4 @@
-import { ENUM_ROLE } from "./enums";
+import { ENUM_ROLE, ESortStatus } from "./enums";
 
 export const CONFIG_MAP = {
   // map initialization options
@@ -36,3 +36,10 @@ export const ROLES = {
   ],
   [ENUM_ROLE.User]: [],
 } as const
+
+export const SORT_VALUE_MAPPING = {
+  "-1": ESortStatus.DESC,
+  "desc": ESortStatus.DESC,
+  "1": ESortStatus.ASC,
+  "asc": ESortStatus.ASC,
+} as const;

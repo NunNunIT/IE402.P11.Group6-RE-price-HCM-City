@@ -3,17 +3,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -27,6 +24,11 @@ import { Input } from "@/components/ui/input";
 import { ImageDropZone } from "@/components";
 import { Textarea } from "@/components/ui/textarea";
 import TranslateKey from "@/lib/func/transfer";
+import dynamic from 'next/dynamic';
+import { ENUM_MAP_MODE } from "@/utils";
+import { toast } from "sonner";
+const LocationSelect = dynamic(() => import("@/components/VNLocationSelector"), { ssr: false, loading: () => <p>Loading...</p> });
+const GisMap = dynamic(() => import("@/components/gis-map"), { ssr: false, loading: () => <p>Loading...</p> });
 
 const FormSchema = z.object({
   title: z.string().min(1, "Tên không được bỏ trống."),
@@ -36,6 +38,43 @@ const FormSchema = z.object({
   area: z.string().min(1, "Diện tích không được bỏ trống."),
   price: z.number().min(1, "Giá bán không được bỏ trống."),
   legal: z.enum(["sodo", "hopdong", "dangchoso", "khac", ""]).optional(),
+  coordinates: z.tuple([z.number(), z.number()]),
+  locate: z.object({
+    province: z.string().nullable().optional(),
+    district: z.string().nullable().optional(),
+    ward: z.string().nullable().optional(),
+    street: z.string().nullable().optional(),
+  }).superRefine((data, ctx) => {
+    if (!data.province) {
+      return ctx.addIssue({
+        path: [],
+        code: "custom",
+        message: "Tỉnh không được để trống",
+      });
+    }
+
+    if (!data.district) {
+      ctx.addIssue({
+        path: [],
+        code: "custom",
+        message: "Huyện không được để trống",
+      });
+    }
+    if (!data.ward) {
+      ctx.addIssue({
+        path: [],
+        code: "custom",
+        message: "Xã không được để trống",
+      });
+    }
+    if (!data.street) {
+      ctx.addIssue({
+        path: [],
+        code: "custom",
+        message: "Đường không được để trống",
+      });
+    }
+  }),
   interior: z.string().optional(),
   bedroom: z.number().optional(),
   bathroom: z.number().optional(),
@@ -72,8 +111,7 @@ export default function InputForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    toast({
-      title: "You submitted the following values:",
+    toast("You submitted the following values:", {
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(values, null, 2)}</code>
@@ -89,7 +127,7 @@ export default function InputForm() {
       </h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg">
+          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
             <FormField
               control={form.control}
               name="title"
@@ -119,7 +157,7 @@ export default function InputForm() {
             />
           </div>
 
-          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg">
+          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
             <FormField
               control={form.control}
               name="imgs"
@@ -138,7 +176,7 @@ export default function InputForm() {
             />
           </div>
 
-          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg">
+          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
             <FormField
               control={form.control}
               name="type"
@@ -231,7 +269,7 @@ export default function InputForm() {
             />
           </div>
 
-          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg">
+          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
             <FormField
               control={form.control}
               name="interior"
@@ -317,6 +355,42 @@ export default function InputForm() {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
+            <FormField
+              control={form.control}
+              name="locate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Địa điểm</FormLabel>
+                  <FormControl>
+                    <LocationSelect {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="coordinates"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Vị trí</FormLabel>
+                  <FormControl>
+                    <GisMap
+                      isShowDistrict
+                      className="min-h-[30rem] flex items-stretch"
+                      zoom={15}
+                      mode={ENUM_MAP_MODE.Edit}
+                      value={field.value?.slice(0, 2) as [number, number]}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

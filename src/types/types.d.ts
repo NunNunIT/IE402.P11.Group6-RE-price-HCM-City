@@ -1,4 +1,9 @@
 /* eslint-disable no-unused-vars */
+type TPosition = {
+  lat: number;
+  long: number;
+};
+
 type TResponseData = Record<string, unknown>;
 
 type TOkResponseProps = {

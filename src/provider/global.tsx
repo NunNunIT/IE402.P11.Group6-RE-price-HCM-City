@@ -1,9 +1,12 @@
 "use server";
 
-import { AuthDialogProvider } from ".";
-import { SessionProvider } from "next-auth/react"
-import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/lib/auth";
+import dynamic from "next/dynamic";
+
+const AlertProvider = dynamic(() => import("./alert-dialog").then(mod => mod.AlertProvider), { ssr: false });
+const Toaster = dynamic(() => import("@/components/ui/sonner").then(mod => mod.Toaster), { ssr: false });
+const AuthDialogProvider = dynamic(() => import("./auth-dialog").then(mod => mod.AuthDialogProvider), { ssr: false });
+const SessionProvider = dynamic(() => import("next-auth/react").then(mod => mod.SessionProvider), { ssr: false });
 
 export async function GlobalProvider({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -11,8 +14,10 @@ export async function GlobalProvider({ children }: { children: React.ReactNode }
   return (
     <SessionProvider session={session}>
       <AuthDialogProvider>
-        {children}
-        <Toaster />
+        <AlertProvider>
+          {children}
+          <Toaster />
+        </AlertProvider>
       </AuthDialogProvider>
     </SessionProvider>
   )

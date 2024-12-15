@@ -1,22 +1,33 @@
 "use client";
 
-import { LocationCard, NewsCard, RealEstateCard } from "@/components/card";
-
 import { Button } from "@/components/ui/button";
+import dynamic from "next/dynamic";
+import useSWR from "swr";
+
+const RealEstateCard = dynamic(() => import("@/components/card/realestate"));
+const NewsCard = dynamic(() => import("@/components/card/news"));
+const LocationCard = dynamic(() => import("@/components/card/location"));
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json()).then((payload) => payload.data);
 
 export default function SeeMore({
   typeCard,
   seeMoreLink,
   title,
+  linkFetch,
 }: {
   typeCard?: string;
   fetchLink?: string;
   seeMoreLink?: string;
   title?: string;
+  linkFetch?: string;
 }) {
-  // Mock data for rendering cards, replace with your fetched data
-  const mockData = [1, 2, 3, 4, 5, 6, 7, 8];
-  
+  const { data, error, isLoading } = useSWR(linkFetch, fetcher);
+
+  if (error) return <div>Error loading data: {error.message}</div>;
+  if (isLoading) return <div>Loading...</div>;
+
+  console.log("Fetched Data:", data);
 
   const RenderCard = () => {
     switch (typeCard) {
@@ -33,7 +44,7 @@ export default function SeeMore({
 
   const RenderLocation = () => (
     <>
-      {mockData.map((item, index) => (
+      {data?.map((item: any, index: any) => (
         <LocationCard key={index} />
       ))}
     </>
@@ -41,16 +52,16 @@ export default function SeeMore({
 
   const RenderRealEstate = () => (
     <>
-      {mockData.map((item, index) => (
-        <RealEstateCard key={index} data={undefined} />
+      {data?.map((item: any, index: any) => (
+        <RealEstateCard key={index} data={item} />
       ))}
     </>
   );
 
   const RenderNews = () => (
     <>
-      {mockData.map((item, index) => (
-        <NewsCard key={index} />
+      {data?.map((item: any, index: any) => (
+        <NewsCard key={index} data={item} />
       ))}
     </>
   );

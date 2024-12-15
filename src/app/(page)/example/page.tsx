@@ -6,7 +6,9 @@ export default function ExamplePage() {
       </div>
 
       <div className="w-full max-w-4xl space-y-8 m-4">
-        <p className="text-lg text-muted-foreground">This page demonstrates various UI components.</p>
+        <p className="text-lg text-muted-foreground">
+          This page demonstrates various UI components.
+        </p>
 
         <div className="flex flex-row gap-8">
           <p>Text</p>
@@ -15,5 +17,5 @@ export default function ExamplePage() {
         </div>
       </div>
     </main>
-  )
+  );
 }

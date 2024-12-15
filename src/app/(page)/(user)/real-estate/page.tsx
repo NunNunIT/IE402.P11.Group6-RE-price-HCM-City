@@ -21,7 +21,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const res = await fetch(`/api/real-estates?limit=10&page=${page}`);
+      const res = await fetch(`/api/real-estates?limit=12&page=${page}`);
       if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
       console.log();
 

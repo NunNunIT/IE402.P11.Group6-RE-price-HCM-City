@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
-type TPosition = {
-  lat: number;
-  long: number;
-};
+interface IDefaultPageProps {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+interface IDefaultLayoutProps extends Omit<IDefaultPageProps, "searchParams"> {
+  children: React.ReactNode;
+}
 
 interface ISelectorLocationComponentProps {
   title?: string;
@@ -11,8 +14,8 @@ interface ISelectorLocationComponentProps {
   noTranslateOptions?: boolean;
   typeTrigger?: number;
   search?: boolean;
-  selectedValue: string | string[];
-  setSelectedValue: (value: string | string[]) => void;
+  selectedValue: T;
+  setSelectedValue: (value: T) => void;
   triggerCustomize?: any;
   children?: any;
   onlyDialog?: boolean;
@@ -43,4 +46,56 @@ interface locate {
   diachi?: string;
 }
 
+interface SelectOption {
+  value: string | any;
+  icon?: string | any;
+  emoji?: string | any;
+  label?: string;
+  price?: number;
+  days?: number;
+  desc?: string;
+  Id?: string;
+  Name?: string;
+  Img?: string;
+  isSelected?: boolean;
 
+  [key: string]: any;
+}
+
+interface IMetadataSelect {
+  translate?: string;
+  name?: string;
+  placeholder?: string;
+  multiChoice: boolean;
+  icon?: string;
+  label: string;
+  desc?: string;
+  options?: SelectOption[];
+}
+
+interface ISelectComponentProps {
+  label?: any;
+  error?: any;
+  translate?: string;
+  noTranslateOptions?: boolean;
+  type?: number;
+  typeLayoutOption?: number;
+  search?: boolean;
+  metadataSelect: IMetadataSelect;
+  selectedValue: string | string[] | any;
+  setSelectedValue: (value: string | string[]) => void;
+  triggerCustomize?: any;
+  children?: any;
+  onlyDialog?: boolean;
+  onlySheet?: boolean;
+  onlyDrawer?: boolean;
+  onlyPopover?: boolean;
+  desc?: boolean;
+  layoutOptionClassName?: string;
+  disabled?: boolean;
+  required?: boolean;
+  icon?: boolean;
+  multiChoice?: boolean; // chỉ áp dụng locationSelectorDialogSheet
+  hideLabel?: boolean;
+  urlPart?: string;
+}

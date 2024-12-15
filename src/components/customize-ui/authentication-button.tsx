@@ -3,7 +3,7 @@
 import { Button, ButtonProps } from "../ui/button";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-import { useAuthDialogContext } from "@/provider";
+import { useAuthDialogContext } from "@/hooks";
 
 export function LoginButton(props: Omit<ButtonProps, "onClick">) {
   const { onOpenChange } = useAuthDialogContext();
