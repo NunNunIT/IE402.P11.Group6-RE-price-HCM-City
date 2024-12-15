@@ -54,6 +54,7 @@ export const GET = async (req: NextRequest) => {
       },
     });
   } catch (error) {
+    console.error("Error in @GET /api/location:", error.message);
     return errorResponse({
       message: 'Đã có lỗi xảy ra khi lấy danh sách địa điểm',
       error,

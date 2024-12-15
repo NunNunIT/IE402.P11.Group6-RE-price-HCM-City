@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { TrendingUp } from "lucide-react";
 import {
   Line,
@@ -26,45 +27,123 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-const chartData = [
-  { month: "January", price: 186 },
-  { month: "February", price: 305 },
-  { month: "March", price: 237 },
-  { month: "April", price: 73 },
-  { month: "May", price: 209 },
-  { month: "June", price: 214 },
-  { month: "July", price: 250 },
-  { month: "August", price: 190 },
-  { month: "September", price: 220 },
-  { month: "October", price: 300 },
-  { month: "November", price: 185 },
-  { month: "December", price: 260 },
-];
+type YearData = {
+  [year: string]: {
+    priceAVG: number;
+    [month: string]: number; // Represents months as "01", "02", ..., "12"
+  };
+};
 
-const averagePrice =
-  chartData.reduce((sum, { price }) => sum + price, 0) / chartData.length;
+// Define year data in the new format
+const yearData: YearData = {
+  "2022": {
+    priceAVG: 150,
+    "01": 96,
+    "02": 121,
+    "03": 129,
+    "04": 146,
+    "05": 171,
+    "06": 263,
+    "07": 215,
+    "08": 292,
+    "09": 253,
+    "10": 357,
+    "11": 375,
+    "12": 286,
+  },
+  "2023": {
+    priceAVG: 220,
+    "01": 225,
+    "02": 185,
+    "03": 219,
+    "04": 274,
+    "05": 241,
+    "06": 288,
+    "07": 224,
+    "08": 290,
+    "09": 262,
+    "10": 258,
+    "11": 290,
+    "12": 255,
+  },
+  "2024": {
+    priceAVG: 214,
+    "01": 213,
+    "02": 247,
+    "03": 273,
+    "04": 59,
+    "05": 192,
+    "06": 240,
+    "07": 278,
+    "08": 157,
+    "09": 216,
+    "10": 355,
+    "11": 219,
+    "12": 262,
+  },
+};
+
+// Transform year data to fit the chart
+const transformYearData = (data: Record<string, number>) => {
+  return Object.entries(data)
+    .filter(([key]) => key !== "priceAVG") // Exclude the `priceAVG` field
+    .sort(([a], [b]) => parseInt(a) - parseInt(b)) // Sort months numerically
+    .map(([month, price]) => ({
+      month, // Keep the month as-is, e.g., "01", "02"
+      price,
+    }));
+};
 
 const chartConfig = {
   price: {
     label: "Giá",
-    color: "hsl(var(--chart-1))", // Add your desired color configuration here
+    color: "hsl(var(--chart-1))", // Customize as needed
   },
   average: {
     label: "Trung Bình Năm",
-    color: "hsl(var(--chart-2))", // Add your desired color configuration here
+    color: "hsl(var(--chart-2))", // Customize as needed
   },
 } satisfies ChartConfig;
 
 export function AreaChartComponent() {
+  const [selectedYear, setSelectedYear] = useState<keyof YearData>("2024");
+
+  // Transform the selected year's data for the chart
+  const chartData = transformYearData(yearData[selectedYear]);
+  const averagePrice = yearData[selectedYear].priceAVG;
+
+  // Dynamically calculate Y-axis domain
+  const yAxisDomain = [
+    Math.floor(Math.min(...chartData.map((data) => data.price)) / 100) * 100, // Round down to nearest 100
+    Math.ceil(Math.max(...chartData.map((data) => data.price)) / 100) * 100, // Round up to nearest 100
+  ];
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Biểu Đồ Giá Cả - Năm 2024</CardTitle>
+        <CardTitle>Biểu Đồ Giá Cả</CardTitle>
         <CardDescription>
-          Hiển thị giá trị theo từng tháng trong năm 2024.
+          Hiển thị giá trị theo từng tháng. Chọn năm để xem dữ liệu tương ứng.
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="flex items-center mb-4">
+          <label htmlFor="year-selector" className="font-medium w-auto mr-2">
+            Chọn năm:
+          </label>
+          <select
+            id="year-selector"
+            className="rounded-md border-gray-300 shadow-sm focus:ring focus:ring-opacity-50 w-auto p-1"
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+          >
+            {Object.keys(yearData).map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
         <ChartContainer config={chartConfig}>
           <LineChart
             data={chartData}
@@ -72,8 +151,8 @@ export function AreaChartComponent() {
               left: 12,
               right: 12,
             }}
-            width={600}
-            height={300}
+            width={1000} // Extended chart width
+            height={400} // Keep height unchanged
           >
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis
@@ -81,9 +160,9 @@ export function AreaChartComponent() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => `${value}`}
             />
-            <YAxis />
+            <YAxis domain={yAxisDomain} /> {/* Dynamic Y-axis */}
             <Legend verticalAlign="top" height={36} />
             <ChartTooltip
               cursor={{ strokeDasharray: "3 3" }}
@@ -118,7 +197,7 @@ export function AreaChartComponent() {
               <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              Năm 2024
+              Năm {selectedYear}
             </div>
           </div>
         </div>
