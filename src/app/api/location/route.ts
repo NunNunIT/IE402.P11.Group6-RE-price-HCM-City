@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ILocationModel } from "@/lib/model";
 import { auth } from "@/lib/auth";
 import { NextAuthRequest } from "node_modules/next-auth/lib";
-import { isValidObjectId } from "mongoose";
+import { isValidObjectId, Types } from "mongoose";
 
 export const GET = async (req: NextRequest) => {
   try {
@@ -65,12 +65,14 @@ export const POST = auth(
 
       if (!role || role != "Admin" || !userId || !isValidObjectId(userId))
         return forbiddenResponse();
-      const body: ILocationModel = await req.json();
-
-      const location = body;
+      const body = await req.json();
+      const { locate, ...location } = body;
       location.owner = userId;
-      location.createdAt = new Date();
-      location.updatedAt = new Date();
+      location.locate = {
+        lat: locate[0],
+        long: locate[1],
+        ward: new Types.ObjectId(),
+      };
 
       const newLocation = new Location(location);
 
@@ -80,6 +82,7 @@ export const POST = auth(
         data: savedLocation,
       });
     } catch (error: any) {
+      console.error(error.message);
       return errorResponse({
         message: "Đã có lỗi xảy ra khi thêm địa điểm",
         error,

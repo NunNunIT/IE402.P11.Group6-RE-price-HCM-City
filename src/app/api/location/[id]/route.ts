@@ -57,6 +57,8 @@ export const PUT = auth(
         });
 
       const updatedLocation = await req.json();
+      console.log(updatedLocation);
+      return successResponse();
       let location = await Location.findById(id);
 
       if (!location)
