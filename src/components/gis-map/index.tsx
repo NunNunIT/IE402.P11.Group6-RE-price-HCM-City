@@ -64,8 +64,8 @@ export default function MapComponent(props: IMapProps) {
     mapInstanceRef.current = new Map({ basemap: 'topo-vector' });
     pointGraphicsLayerRef.current = new GraphicsLayer();
     districtGraphicsLayerRef.current = new GraphicsLayer();
-    mapInstanceRef.current.add(pointGraphicsLayerRef.current);
     mapInstanceRef.current.add(districtGraphicsLayerRef.current);
+    mapInstanceRef.current.add(pointGraphicsLayerRef.current);
     if (mergedProps.mode === ENUM_MAP_MODE.Edit) {
       editGraphicRef.current = new GraphicsLayer();
       mapInstanceRef.current.add(editGraphicRef.current);

@@ -1,7 +1,7 @@
-import { badRequestResponse, errorResponse, notFoundResponse, successResponse } from "@/utils";
+import { badRequestResponse, errorResponse, haversineDistance, notFoundResponse, sortHandler, successResponse } from "@/utils";
 
 import { NextRequest } from "next/server";
-import { RealEstate } from "@/lib/model"
+import { Location, RealEstate } from "@/lib/model"
 import { isValidObjectId } from "mongoose";
 
 export const GET = async (req: NextRequest, { params: { id } }: { params: { id: string } }) => {
@@ -14,10 +14,8 @@ export const GET = async (req: NextRequest, { params: { id } }: { params: { id: 
 
     let realEstate = await RealEstate
       .findById(id)
-      .populate("owner", "username avt")
+      .populate("owner", "username avt email phone")
       .lean();
-
-    const { locate } = realEstate as any;
 
     if (!realEstate)
       return notFoundResponse({
@@ -25,11 +23,20 @@ export const GET = async (req: NextRequest, { params: { id } }: { params: { id: 
         error: "REAL_ESTATE_NOT_FOUND"
       });
 
-    const locations = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/locate?sort:locate${locate.lat},${locate.long}&limit=24`)
-      .then(res => res.json())
-      .then(payload => payload.data);
+    const { locate } = realEstate as any;
+    const { locateSort } = sortHandler(`locate:${locate.lat},${locate.long}`);
+    let locations = await Location.find().select("title locate category").lean();
+    const temp = locations.map(location => {
+      const distance = haversineDistance(locateSort, location.locate);
+      return ({ ...location, distance });
+    });
+    temp.sort((a, b) => a.distance - b.distance);
+    locations = temp.map(({ distance: __distance, ...location }) => ({ ...location }))
+      .slice(0, 24);
+
     return successResponse({ data: { ...realEstate, locations } });
   } catch (error) {
+    console.error('>> Error in @GET /api/real-estates/[id]:', error.message);
     return errorResponse({
       message: "Đã có lỗi xảy ra",
       error
