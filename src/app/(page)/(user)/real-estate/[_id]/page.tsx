@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import translateKey from "@/lib/func/transfer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { SeeMoreType1 } from "@/components/seeMore";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
@@ -100,7 +101,7 @@ export default async function RealEstateDetailPage({
             </Avatar>
             <div className="ml-4 flex flex-col justify-center">
               <p className="font-semibold text-lg">{data.owner?.username ?? "Tên"}</p>
-              {data.owner?.phone ?? <p className="text-sky-500">{data.owner?.phone}</p>}
+              {!!data.owner?.phone && <p className="text-sky-500">{data.owner?.phone}</p>}
               <a
                 href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}
                 className="text-zinc-500 hover:text-sky-500 no-underline"
@@ -108,8 +109,8 @@ export default async function RealEstateDetailPage({
                 {data.owner?.email ?? "123@gmail.com"}
               </a>
             </div>
-            <div className="flex flex-col">
-              {data.owner?.phone ?? <Button>Gọi điện</Button>}
+            <div className="flex flex-col ml-auto">
+              {!!data.owner?.phone && <Button>Gọi điện</Button>}
               <Button variant="secondary" href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}>
                 Gửi mail
               </Button>
@@ -136,6 +137,14 @@ export default async function RealEstateDetailPage({
           }))
         ]}
       />
-    </div >
+
+      <div className="mr-4">
+        <SeeMoreType1
+          typeCard="location"
+          title="Các địa điểm gần đó"
+          linkFetch={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
+        />
+      </div>
+    </div>
   );
 }

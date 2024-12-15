@@ -76,7 +76,7 @@ export default function SeeMore({
       <div className="w-full grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-3">
         {RenderCard()}
       </div>
-      <Button href={seeMoreLink ?? "#"}>Xem thêm</Button>
+      {seeMoreLink && <Button href={seeMoreLink ?? "#"}>Xem thêm</Button>}
     </div>
   );
 }

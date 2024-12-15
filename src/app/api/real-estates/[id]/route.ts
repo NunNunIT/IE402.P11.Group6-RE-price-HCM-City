@@ -14,7 +14,7 @@ export const GET = async (req: NextRequest, { params: { id } }: { params: { id: 
 
     let realEstate = await RealEstate
       .findById(id)
-      .populate("owner", "username avt")
+      .populate("owner", "username avt email phone")
       .lean();
 
     if (!realEstate)
