@@ -3,10 +3,14 @@
 import { ENUM_MARKER_SYMBOL, parseObjectToSearchParams } from "@/utils";
 import { useEffect, useRef } from "react";
 
-import { NewSearchResultCard } from "@/components/card";
+import { NewsCard, NewSearchResultCard } from "@/components/card";
 import { SearchTab } from "@/components/search";
 import { Skeleton } from "@/components/ui/skeleton";
 import useSWRInfinite from "swr/infinite";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { IoSearchOutline } from "react-icons/io5";
+import { cn } from "@/lib/utils";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -60,15 +64,39 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
   }, [size, isLoadingMore, hasMoreData, setSize]);
 
   return (
-    <div className="w-screen h-screen bg-white dark:bg-zinc-900 flex flex-col p-3">
+    <div className="max-w-5xl mx-auto w-full">
       {/* Search Tab */}
-      <div className="w-full max-w-4xl mx-auto my-4">
-        <SearchTab />
+      <div className="w-full mx-auto my-4">
+      <form
+          action={`/news-search-result`}
+          method="GET"
+          className={cn(
+            "gap-8 flex w-full rounded-md",
+            "border border-zinc-200 bg-white px-4 py-2 text-sm",
+            "ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium",
+            "placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2",
+            "focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed",
+            "disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950",
+            "dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
+          )}
+        >
+          {/* Search keyword input */}
+          <Input
+            type="text"
+            name="keyword"
+            placeholder="Nhập từ khóa để tìm tin tức"
+            className="flex-1 border-none"
+            required
+          />
+          <Button type="submit">
+            <IoSearchOutline className="size-6" />
+          </Button>
+        </form>
       </div>
 
       {/* Search Results */}
       <div className="flex-1 flex flex-col">
-        <div className="px-4 mb-4">
+        <div className="md:p-0 p-2 mb-4">
           <h1>
             Tin tức có tên gần với{" "}
             <span className="text-orange-500">{searchParams.keyword}</span>{" "}
@@ -79,9 +107,9 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
         </div>
 
         {flattenedData.length > 0 ? (
-          <div className="w-full flex flex-col gap-3 md:p-0 p-2">
+          <div className="w-full grid grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-3 md:p-0 p-2">
             {flattenedData.map((item, index) => (
-              <NewSearchResultCard key={index} {...item} />
+              <NewsCard key={index} data={item} />
             ))}
           </div>
         ) : (

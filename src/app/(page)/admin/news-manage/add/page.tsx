@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,12 +17,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageDropZone } from "@/components"; // Import ImageDropZone component
 import { useRouter } from "next/navigation"; // Import useRouter from next/navigation
+import Editor from "@/components/rich-text/editor";
+import { uploadFilesToCloudinary } from "@/lib/func/cloudinary";
 
 const FormSchema = z.object({
   title: z.string().min(1, "Title is required."),
   content: z.string().min(1, "Content is required."),
-  owner: z.string().min(1, "Owner is required."), // Add owner field
-  imageUrls: z.array(z.string()).min(1, "At least one image must be uploaded."), // Add imageUrls field
+  img: z.array(z.string()).min(1, "At least one image must be uploaded."), // Add imageUrls field
 });
 
 export default function NewsForm() {
@@ -32,49 +33,64 @@ export default function NewsForm() {
     defaultValues: {
       title: "",
       content: "",
-      owner: "", // Add default value for owner
-      imageUrls: [], // Add default value for imageUrls
+      img: [], // Add default value for imageUrls
     },
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    const blobUrls = values.img; // Mảng blob URL
+    if (!blobUrls || blobUrls.length === 0) {
+      console.error("No images to process!");
+      return;
+    }
+  
     try {
-      console.log("Form submitted with values:", values);
-      const response = await fetch("/api/news-manage", {
-        method: "POST",
+      // Bước 1: Chuyển đổi blob URLs thành File
+      const files = await Promise.all(
+        blobUrls.map(async (blobUrl) => {
+          const res = await fetch(blobUrl);
+          const blob = await res.blob();
+          const fileName = `image-${Date.now()}.jpeg`;
+          return new File([blob], fileName, { type: blob.type });
+        })
+      );
+  
+      console.log("Files converted from blob URLs:", files);
+  
+      // Bước 2: Upload files lên Cloudinary
+      const uploadedUrls = await uploadFilesToCloudinary(files, "ie402/news");
+      console.log("Uploaded URLs from Cloudinary:", uploadedUrls);
+  
+      // Bước 3: Thay thế imgs trong form
+      const updatedValues = {
+        ...values,
+        img: uploadedUrls,
+      };
+  
+      console.log("Updated form values:", updatedValues);
+  
+      // Bước 4: Gửi dữ liệu tới API `/api/real-estate/add`
+      const response = await fetch('/api/news-manage', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(updatedValues), // Gửi dữ liệu dạng JSON
       });
-
-      console.log("Response status:", response.status);
-      const result = await response.json();
-      console.log("Response body:", result);
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to create news");
+  
+      if (response.ok) {
+        const result = await response.json();
+        console.log("API Response:", result);
+        toast.success("Real estate added successfully!");
+        router.push("/admin/news-manage")
+      } else {
+        const error = await response.json();
+        console.error("API Error:", error);
+        toast.error(`Failed to add real estate: ${error.message}`);
       }
-
-      toast({
-        title: "News created successfully",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(result.data, null, 2)}
-            </code>
-          </pre>
-        ),
-      });
-
-      router.push("/admin/news-manage"); // Navigate to news-manage page
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+      console.error("Error processing images:", error);
+      toast.error("Failed to upload images or save data.");
     }
   };
 
@@ -106,32 +122,16 @@ export default function NewsForm() {
                 <FormItem>
                   <FormLabel className="font-semibold">Nội dung</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Nhập nội dung"
-                      {...field}
-                      className="min-h-[200px]"
-                    />
+                    <Editor content={field.value} onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
-              name="owner"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Owner</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Nhập owner" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="imageUrls"
+              name="img"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-semibold">Hình ảnh</FormLabel>

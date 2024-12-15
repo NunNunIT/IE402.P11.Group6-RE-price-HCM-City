@@ -1,6 +1,8 @@
 import { errorResponse, successResponse } from "@/utils";
 import { News } from "@/lib/model";
 import { NextRequest } from "next/server";
+import { NextAuthRequest } from "node_modules/next-auth/lib";
+import { auth } from "@/lib/auth";
 
 export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
@@ -31,12 +33,24 @@ export const GET = async (req: NextRequest) => {
   }
 };
 
-export const POST = async (req: NextRequest) => {
+export const POST = auth(async (req: NextAuthRequest) => {
+  const session = req.auth;
+  const userId = session?.user?.id;
+  console.log("userId:", userId)
+
   try {
     console.log("POST request received");
-    const body = await req.json();
-    console.log("Request body:", body);
-    const newNews = new News(body);
+    const {
+      title,
+      content,
+      img
+    } = await req.json();
+    const newNews = new News({
+      title,
+      content,
+      img: img[0],
+      owner: userId
+    });
     await newNews.save();
     console.log("News saved:", newNews);
 
@@ -48,7 +62,7 @@ export const POST = async (req: NextRequest) => {
       error: error.message, // Log the error message
     });
   }
-};
+});
 
 export const PUT = async (req: NextRequest) => {
   try {
