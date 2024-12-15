@@ -36,32 +36,43 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useEffect, useState } from "react"
 
 type News = {
   id: string
   title: string
-  date: string
+  createdAt: string
 }
 
-const data: News[] = [
-  {
-    id: "1",
-    title: "Gem Park - Lợi Cho Người Ở, Lãi Cho Người Đầu Tư",
-    date: "2024-12-01",
-  },
-  {
-    id: "2",
-    title: "News Title 2",
-    date: "2023-10-02",
-  },
-  {
-    id: "3",
-    title: "News Title 3",
-    date: "2023-10-03",
-  },
-];
+const fetchNewsData = async () => {
+  try {
+    const response = await fetch("/api/news-manage");
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const { data } = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch news data:", error);
+    return [];
+  }
+};
 
-const columns: ColumnDef<News>[] = [
+const handleDelete = async (id: string, setNewsData: React.Dispatch<React.SetStateAction<News[]>>) => {
+  try {
+    const response = await fetch(`/api/news-manage?id=${id}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error("Failed to delete news article");
+    }
+    setNewsData((prevData) => prevData.filter((news) => news.id !== id));
+  } catch (error) {
+    console.error("Error deleting news article:", error);
+  }
+};
+
+const columns = (setNewsData: React.Dispatch<React.SetStateAction<News[]>>): ColumnDef<News>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -95,13 +106,13 @@ const columns: ColumnDef<News>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <Link href="http://localhost:3000/news/gem-park-loi-cho-nguoi-o-lai-cho-nguoi-dau-tu">
+      <Link href={`/news/${row.original.id}`}>
         {row.getValue("title")}
       </Link>
     ),
   },
   {
-    accessorKey: "date",
+    accessorKey: "createdAt",
     header: ({ column }) => (
       <Button
         variant="ghost"
@@ -111,7 +122,7 @@ const columns: ColumnDef<News>[] = [
         {column.getIsSorted() ? <ArrowUpDown /> : null}
       </Button>
     ),
-    cell: ({ row }) => <div>{row.getValue("date")}</div>,
+    cell: ({ row }) => <div>{new Date(row.getValue("createdAt")).toLocaleDateString()}</div>,
   },
   {
     id: "actions",
@@ -128,10 +139,10 @@ const columns: ColumnDef<News>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <Link href="/admin/news-manage/edit">
+            <Link href={`/admin/news-manage/edit/${news.id}`}>
               <DropdownMenuItem>Chỉnh sửa</DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>Xóa</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDelete(news.id, setNewsData)}>Xóa</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -144,10 +155,15 @@ export default function NewsManage() {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [newsData, setNewsData] = useState<News[]>([]);
+
+  useEffect(() => {
+    fetchNewsData().then(setNewsData);
+  }, []);
 
   const table = useReactTable({
-    data,
-    columns,
+    data: newsData,
+    columns: columns(setNewsData),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

@@ -21,7 +21,6 @@ import { useRouter } from "next/navigation";
 const FormSchema = z.object({
   title: z.string().min(1, "Title is required."),
   content: z.string().min(1, "Content is required."),
-  imgUrl: z.string().url("Invalid URL").optional(),
 });
 
 interface Params {
@@ -33,25 +32,27 @@ export default function NewsEdit({ params }: { params: Params }) {
   const [newsData, setNewsData] = useState<{
     title: string;
     content: string;
-    imgUrl?: string;
   } | null>(null);
 
   useEffect(() => {
+    // Giả lập fetch dữ liệu
     const fetchNewsData = async () => {
-      const response = await fetch(`/api/news-manage?id=${params.id}`);
-      const data = await response.json();
-      setNewsData(data.data);
+      const defaultData = {
+        title: "Gem Park - Lợi Cho Người Ở, Lãi Cho Người Đầu Tư",
+        content:
+          "Trong số gần 150 booking đầu tiên tại Gem Park tháng 11 mới đây có vợ chồng bác sĩ Hoài Thu. Cậu con trai duy nhất đi du học bên Đức, anh chị quyết định bán căn nhà nhỏ trong ngõ để mua 2 căn hộ Gem Park, 1 căn 3 phòng ngủ để ở và 1 căn 2 phòng ngủ để đầu tư. Do lịch thanh toán nhẹ nhàng nên khoản tín dụng trong ngân hàng vẫn giữ được 2 năm cho đến kỳ thanh toán cuối, đảm bảo cho nhu cầu học tập của cậu con trai cưng lẫn chi phí sinh hoạt. Giống như vợ chồng chị Hoài Thu, những người Hải Phòng thành đạt sau những năm tháng tập trung cho sự nghiệp và gia đình, giờ đây họ muốn sống chậm, thư thái và tận hưởng. Một không gian sống sang trọng, tiện nghi, gần trung tâm cũ – nơi có những góc phố chứa đầy kỷ niệm cùng quán xá với hương vị thân quen và trung tâm mới, nơi sẽ diễn ra những hoạt động lễ hội của thành phố sẽ là chốn an dưỡng lý tưởng. Chỉ cách trung tâm cũ và trung tâm mới 8 phút di chuyển, Gem Park cũng nằm ở vị trí khá lý tưởng cho người trẻ muốn tối ưu thời gian cho cả ba nhu cầu: sống – làm việc – giải trí. “Có tới 56 tiện ích bao quanh căn hộ, tất cả nhu cầu thường nhật của một con người hiện đại: nghỉ ngơi, làm việc, học tập, vui chơi, rèn luyện thể chất, phát triển và kết nối – đều ở ngay bên cạnh, muốn tiếp cận chỉ cần một nút chạm.” – Quỳnh Anh, một chuyên viên quản lý quỹ đầu tư sinh năm 1994 cho biết lý do cô muốn trở thành cư dân Gem Park. Với số tiền tích lũy sau 6 năm làm việc cho một công ty đa quốc gia, Quỳnh Anh dễ dàng sở hữu căn hộ với khoản thanh toán ban đầu 480 triệu (tương đương 20% giá trị căn hộ). Ngân hàng hỗ trợ 65%, lãi suất 0% cho đến khi nhận nhà vào năm 2026, vì vậy với mức lương khá cao của vị trí quản lý của tập đoàn đa quốc gia và chi tiêu tiết kiệm tại Hải Phòng, Quỳnh Anh có thể thong dong cho đến ngày nhận nhà. Bàn giao căn hộ thanh toán 10%. Nhận sổ hồng thanh toán 5%. Bên cạnh đó, khách hàng còn được hưởng lợi nhân đôi 50 triệu đồng khi booking không hoàn lại và nhận ưu đãi đến 6%.",
+      };
+      setNewsData(defaultData);
     };
 
     fetchNewsData();
-  }, [params.id]);
+  }, []);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       title: "",
       content: "",
-      imgUrl: "",
     },
   });
 
@@ -60,41 +61,19 @@ export default function NewsEdit({ params }: { params: Params }) {
       form.reset({
         title: newsData.title,
         content: newsData.content,
-        imgUrl: newsData.imgUrl,
       });
     }
   }, [newsData, form]);
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    try {
-      const response = await fetch(`/api/news-manage`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: params.id, ...values }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update news");
-      }
-
-      toast({
-        title: "News updated successfully",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-          </pre>
-        ),
-      });
-
-      router.push("/admin/news-manage");
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: error.message,
-      });
-    }
+    toast({
+      title: "News updated successfully",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+        </pre>
+      ),
+    });
   };
 
   if (!newsData) {
@@ -136,22 +115,6 @@ export default function NewsEdit({ params }: { params: Params }) {
                       // placeholder="Nhập nội dung"
                       {...field}
                       className="min-h-[200px]"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="imgUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Image URL</FormLabel>
-                  <FormControl>
-                    <Input
-                      // placeholder="Nhập URL hình ảnh"
-                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
