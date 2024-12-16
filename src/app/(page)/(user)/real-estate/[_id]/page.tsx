@@ -179,17 +179,17 @@ export default async function RealEstateDetailPage({
           isShowDistrict
           center={data.locate}
           points={[
-            {
-              ...data.locate,
-              title: data.title,
-              type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
-            },
             // eslint-disable-next-line no-unsafe-optional-chaining
             ...data.locations?.slice(0, 24).map((location: any) => ({
               ...location.locate,
               title: location.title,
               type: location.category,
             })),
+            {
+              ...data.locate,
+              title: data.title,
+              type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
+            },
           ]}
         />
       </div>

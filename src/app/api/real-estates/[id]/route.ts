@@ -25,17 +25,16 @@ export const GET = async (req: NextRequest, { params: { id } }: { params: { id: 
 
     const { locate } = realEstate as any;
     const { locateSort } = sortHandler(`locate:${locate.lat},${locate.long}`);
-    let locations = await Location.find().select("title locate category imageUrls").lean();
+    let locations = await Location.find().select("title locate category imageUrls").lean() as any[];
     const temp = locations.map(location => {
       const distance = haversineDistance(locateSort, location.locate);
       return ({ ...location, distance });
     });
     temp.sort((a, b) => a.distance - b.distance);
-    locations = temp.map(({ distance: __distance, ...location }) =>
+    locations = temp.map(({ distance: __distance, imageUrls, ...location }) =>
     ({
       ...location,
-      imageUrl: (location as unknown as { imageUrls: string[] }).imageUrls?.[0],
-      imageUrls: undefined
+      imageUrl: imageUrls?.[0]
     })
     ).slice(0, 24);
 

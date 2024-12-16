@@ -56,6 +56,9 @@ body.unremoved-classname[data-scroll-locked] {
   --sidebar-accent-foreground: 240 5.9% 10%;
   --sidebar-border: 220 13% 91%;
   --sidebar-ring: 217.2 91.2% 59.8%;
+
+  --color-dark-10: #ffffff;
+  --color-dark-3: #2c2c2c;
 }
 
 .dark {
@@ -175,6 +178,7 @@ p {
 }
 
 @media (max-width: 1024px) {
+
   .swiper-button-prev,
   .swiper-button-next {
     display: none !important;
