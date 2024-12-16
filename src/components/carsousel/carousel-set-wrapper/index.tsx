@@ -8,7 +8,10 @@ import { cn } from "@/lib/utils";
 
 import "./carousel-wrapper.css";
 import useSWR from "swr";
-import { LocationCard, RealEstateCard } from "@/components/card";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+const LocationCard = dynamic(() => import("@/components/card/location"));
+const RealEstateCard = dynamic(() => import("@/components/card/realestate"));
 
 interface ICarouselWrapperProps {
   loop?: boolean;
@@ -77,7 +80,9 @@ function CarouselWrapperSwipper<T>({
     >
       {data.map((data, index) => (
         <SwiperSlide key={index}>
-          <Component data={data} />
+          <Suspense>
+            <Component data={data} />
+          </Suspense>
         </SwiperSlide>
       ))}
     </Swiper>
