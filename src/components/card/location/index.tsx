@@ -9,10 +9,9 @@ import { SaveBtn } from "@/components";
 interface LocationCardProps {
   imageUrl?: string;
   title?: string;
-  location?: string;
-  duration?: string;
-  workshopType?: string;
-  rating?: number;
+  locate?: any;
+  category?: string;
+  avgStarGGMap?: number;
 }
 
 const LocationCard = ({
@@ -36,12 +35,12 @@ const LocationCard = ({
           <div className="absolute bottom-2 left-0 pl-3 pr-8 py-2 bg-gradient-to-r from-black/90 to-black/10 flex items-center">
             <FaStar className={`size-5 text-yellow-500`} />
             <span className="text-sm text-white dark:text-white ml-2">
-              {data?.rating ?? "5"}
+              {data?.avgStarGGMap ?? "5"}
             </span>
           </div>
 
           <div className="absolute top-2 right-2 p-2 bg-indigo-600 text-white flex items-center">
-            {data?.workshopType ?? "coffee shop"}
+            {data?.category ?? "coffee shop"}
           </div>
         </div>
 
@@ -51,7 +50,7 @@ const LocationCard = ({
             {data?.title ?? "name"}
           </h3>
           <p className="text-sm text-zinc-500 dark:text-zinc-300">
-            {data?.location ?? "dia chi"} • {data?.duration ?? "15m"}
+            {data?.locate ? `${data.locate.diachi}, ${data.locate.xa}, ${data.locate.huyen}, ${data.locate.tinh}`: "dia chi"}
           </p>
         </div>
       </Link>

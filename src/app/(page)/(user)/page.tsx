@@ -11,7 +11,7 @@ export default function Home() {
           alt="Background"
           width="1000"
           height="1000"
-          className="absolute z-5 w-full h-full object-cover brightness-75"
+          className="absolute z-5 w-full h-full object-cover"
         />
         <div className="w-full max-w-4xl mx-auto my-auto z-10 pt-16 md:px-0 px-3">
           <SearchTab />

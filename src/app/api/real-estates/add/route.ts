@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { NextAuthRequest } from "node_modules/next-auth/lib";
 import { RealEstate } from '@/lib/model';
 import { auth } from "@/lib/auth";
-
+const mongoose = require('mongoose');
 
 export const POST = auth(async (req: NextAuthRequest) => {
   const session = req.auth;
@@ -53,7 +53,7 @@ export const POST = auth(async (req: NextAuthRequest) => {
         ...rest
       },
       polygon,
-      owner: userId
+      owner: mongoose.Types.ObjectId(userId),
     };
 
     // Lưu tài liệu vào cơ sở dữ liệu (giả sử dùng Mongoose hoặc ORM khác)
