@@ -70,102 +70,82 @@ export default async function RealEstateDetailPage({
               </span>
             </div>
           </div>
-
-          <div className="flex flex-row justify-between items-center gap-6">
-            <div className="flex flex-row gap-8">
-              <div className="flex flex-col">
-                <span className="text-zinc-600 dark:text-zinc-400">Giá</span>
-                <span className="font-semibold text-red-600 dark:text-red-500 text-xl">
-                  {data.price} tỷ
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-zinc-600 dark:text-zinc-400">
-                  Diện tích
-                </span>
-                <span className="font-semibold text-red-600 dark:text-red-500 text-xl">
-                  {data.area} m<sup>2</sup>
-                </span>
-              </div>
-            </div>
-            <SaveRealBtn component="real-estate" realEstateId={data._id} />
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <h2 className="font-bold text-xl">Đặc điểm bất động sản</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {Object.entries(data?.info ?? {}).map(([key, value], index) => (
-                <div
-                  key={index}
-                  className="py-2 flex flex-row justify-between items-center border-y-2 border-y-zinc-200 dark:border-y-zinc-800"
-                >
-                  <span className="font-semibold">{translateKey(key)}</span>
-                  <span>
-                    {typeof value === "number"
-                      ? value
-                      : translateKey(value as string)}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <h2 className="font-bold text-xl">Thông tin mô tả</h2>
-            <div dangerouslySetInnerHTML={{ __html: data.desc }} />
-          </div>
-
-          <div className="rounded-lg border-2 border-zinc-200 dark:border-zinc-800 p-3">
-            <h2 className="font-bold text-xl mb-1">Liên hệ</h2>
-            <div className="flex flex-row">
-              <Avatar>
-                <AvatarImage
-                  src={
-                    data.owner?.avt ??
-                    "https://cdn.caohockinhte.edu.vn/wp-content/uploads/2024/10/avatar-vo-tri-cute-meo-1.jpg"
-                  }
-                />
-                <AvatarFallback>
-                  {data.owner?.username?.[0] ?? "U"}
-                </AvatarFallback>
-              </Avatar>
-              <div className="ml-4 flex flex-col justify-center">
-                <p className="font-semibold text-lg">
-                  {data.owner?.username ?? "Tên"}
-                </p>
-                {!!data.owner?.phone && (
-                  <p className="text-sky-500">{data.owner?.phone}</p>
-                )}
-                <a
-                  href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}
-                  className="text-zinc-500 hover:text-sky-500 no-underline"
-                >
-                  {data.owner?.email ?? "123@gmail.com"}
-                </a>
-              </div>
-              <div className="flex flex-col ml-auto gap-2">
-                {!!data.owner?.phone && <Button size="sm">Gọi điện</Button>}
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}
-                >
-                  Gửi mail
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          <CarouselWrapper
-            link={`/api/real-estates?sort=locate:${data.locate?.lat},${data.locate?.long}&relative=1`}
-            type="realEstate"
-          />
-
-          <CarouselWrapper
-            link={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
-            type="location"
-          />
         </div>
+
+        <div className="flex flex-col gap-3">
+          <h2 className="font-bold text-xl">Đặc điểm bất động sản</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {Object.entries(data?.info ?? {}).map(([key, value], index) => (
+              <div
+                key={index}
+                className="py-2 flex flex-row justify-between items-center border-y-2 border-y-zinc-200 dark:border-y-zinc-800"
+              >
+                <span className="font-semibold">{translateKey(key)}</span>
+                <span>
+                  {typeof value === "number"
+                    ? value
+                    : translateKey(value as string)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <h2 className="font-bold text-xl">Thông tin mô tả</h2>
+          <div dangerouslySetInnerHTML={{ __html: data.desc }} />
+        </div>
+
+        <div className="rounded-lg border-2 border-zinc-200 dark:border-zinc-800 p-3">
+          <h2 className="font-bold text-xl mb-1">Liên hệ</h2>
+          <div className="flex flex-row">
+            <Avatar>
+              <AvatarImage
+                src={
+                  data.owner?.avt ??
+                  "https://cdn.caohockinhte.edu.vn/wp-content/uploads/2024/10/avatar-vo-tri-cute-meo-1.jpg"
+                }
+              />
+              <AvatarFallback>
+                {data.owner?.username?.[0] ?? "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="ml-4 flex flex-col justify-center">
+              <p className="font-semibold text-lg">
+                {data.owner?.username ?? "Tên"}
+              </p>
+              {!!data.owner?.phone && (
+                <p className="text-sky-500">{data.owner?.phone}</p>
+              )}
+              <a
+                href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}
+                className="text-zinc-500 hover:text-sky-500 no-underline"
+              >
+                {data.owner?.email ?? "123@gmail.com"}
+              </a>
+            </div>
+            <div className="flex flex-col ml-auto gap-2">
+              {!!data.owner?.phone && <Button size="sm">Gọi điện</Button>}
+              <Button
+                variant="secondary"
+                size="sm"
+                href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}
+              >
+                Gửi mail
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <CarouselWrapper
+          link={`/api/real-estates?sort=locate:${data.locate?.lat},${data.locate?.long}&relative=1`}
+          type="realEstate"
+        />
+
+        <CarouselWrapper
+          link={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
+          type="location"
+        />
       </div>
 
       <GISMap
