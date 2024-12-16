@@ -43,6 +43,11 @@ export const GET = async (req: NextRequest) => {
     const total = locations.length;
     if (!getAll) locations = locations.slice((page - 1) * limit, page * limit);
 
+    locations = locations.map(({ imageUrls, ...location }) => ({
+      ...location,
+      imageUrl: imageUrls[0],
+    }));
+
     return NextResponse.json({
       message: 'Lấy danh sách địa điểm thành công',
       data: locations,

@@ -12,31 +12,48 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type DataColumns = {
   _id: string;
   title: string;
-  fullAddress: string;
   price: number;
   area: number;
-  isAuth: boolean;
+  imageUrl: string;
+  locate: locate;
 };
 
 export const columns: ColumnDef<DataColumns>[] = [
   {
-    accessorKey: "title",
-    header: () => <div className="text-right">Tiêu đề</div>,
+    accessorKey: "imageUrl",
+    header: () => <div className="text-left font-semibold"></div>,
     cell: ({ row }) => {
       return (
-        <div className="text-right font-medium">{row.getValue("title")}</div>
+        <Image
+          src={row.getValue("imageUrl")}
+          alt={"Hình ảnh"}
+          className="object-cover aspect-square"
+          width={100}
+          height={100}
+          unoptimized
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "title",
+    header: () => <div className="text-left font-semibold">Tiêu đề</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="text-left font-medium">{row.getValue("title")}</div>
       );
     },
   },
   {
     accessorKey: "price",
-    header: () => <div className="text-right">Giá</div>,
+    header: () => <div className="text-right font-semibold">Giá</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("price"));
 
@@ -45,7 +62,7 @@ export const columns: ColumnDef<DataColumns>[] = [
   },
   {
     accessorKey: "area",
-    header: () => <div className="text-right">Diện tích</div>,
+    header: () => <div className="text-right font-semibold">Diện tích</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("area"));
 
@@ -57,14 +74,13 @@ export const columns: ColumnDef<DataColumns>[] = [
     },
   },
   {
-    accessorKey: "fullAddress",
-    header: () => <div className="text-right">Địa chỉ</div>,
+    accessorKey: "locate",
+    header: () => <div className="text-right font-semibold">Địa chỉ</div>,
     cell: ({ row }) => {
-      // const fullAddress = row.getValue("fullAddress");
-
+      const locate = row.original.locate; // Truy cập toàn bộ locate object
       return (
         <div className="text-right font-medium">
-          {row.getValue("fullAddress")}
+          {locate.diachi}, {locate.xa}, {locate.huyen}, {locate.tinh}
         </div>
       );
     },
@@ -72,8 +88,6 @@ export const columns: ColumnDef<DataColumns>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -86,6 +100,7 @@ export const columns: ColumnDef<DataColumns>[] = [
             <DropdownMenuLabel>Hành động</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Xem</DropdownMenuItem>
+            <DropdownMenuItem>Xóa</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
