@@ -180,11 +180,11 @@ export default async function RealEstateDetailPage({
           center={data.locate}
           points={[
             // eslint-disable-next-line no-unsafe-optional-chaining
-            ...data.locations?.slice(0, 24).map((location: any) => ({
+            ...(data.locations?.map((location: any) => ({
               ...location.locate,
               title: location.title,
               type: location.category,
-            })),
+            })) || []),
             {
               ...data.locate,
               title: data.title,
