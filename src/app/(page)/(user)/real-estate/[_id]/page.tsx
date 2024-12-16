@@ -10,13 +10,6 @@ import translateKey from "@/lib/func/transfer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CarouselWrapper } from "@/components/carsousel";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"; // Import Breadcrumb components
-import { Slash } from "lucide-react";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
@@ -45,39 +38,35 @@ export default async function RealEstateDetailPage({
   if (!data) return notFound();
 
   return (
-    <div>
-      <div className="w-full p-2 mb-4 mx-auto">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <a href="/">Trang chủ</a>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator>
-              <Slash />
-            </BreadcrumbSeparator>
-            <BreadcrumbItem>
-              <a href="/real-estate">Bất động sản</a>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator>
-              <Slash />
-            </BreadcrumbSeparator>
-            <BreadcrumbItem>
-              <span>{data.title}</span>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full mx-auto p-3">
-        <div className="w-full h-full bg-white dark:bg-zinc-900 space-y-6 pr-3">
-          <ImageViewType1 images={data.imageUrls} />
+    <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full mx-auto p-3">
+      <div className="w-full h-full bg-white dark:bg-zinc-900 space-y-6 pr-3">
+        <ImageViewType1 images={data.imageUrls} />
 
-          <div className="flex flex-col gap-3">
-            <h1 className="font-bold text-3xl">{data.title}</h1>
-            <div className="flex flex-row gap-2 items-center font-semibold">
-              <FaLocationDot />
-              <span>
-                {data.locate?.diachi}, {data.locate?.xa}, {data.locate?.huyen},{" "}
-                {data.locate?.tinh}
+        <div className="flex flex-col gap-3">
+          <h1 className="font-bold text-3xl">{data.title}</h1>
+          <div className="flex flex-row gap-2 items-center font-semibold">
+            <FaLocationDot />
+            <span>
+              {data.locate?.diachi}, {data.locate?.xa}, {data.locate?.huyen},{" "}
+              {data.locate?.tinh}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-row justify-between items-center gap-6">
+          <div className="flex flex-row gap-8">
+            <div className="flex flex-col">
+              <span className="text-zinc-600 dark:text-zinc-400">Giá</span>
+              <span className="font-semibold text-red-600 dark:text-red-500 text-xl">
+                {data.price} tỷ
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-zinc-600 dark:text-zinc-400">
+                Diện tích
+              </span>
+              <span className="font-semibold text-red-600 dark:text-red-500 text-xl">
+                {data.area} m<sup>2</sup>
               </span>
             </div>
           </div>
@@ -177,31 +166,29 @@ export default async function RealEstateDetailPage({
             type="location"
           />
         </div>
-
-        {JSON.stringify(data.locations)}
-
-        <GISMap
-          zoom={20}
-          className="container"
-          isShowDistrict
-          center={data.locate}
-          points={[
-            ...(Array.isArray(data.locations)
-              ? data.locations.map((location: any) => ({
-                ...location.locate,
-                title: location.title,
-                type: location.category,
-              }))
-              : []
-            ),
-            {
-              ...data.locate,
-              title: data.title,
-              type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
-            },
-          ]}
-        />
       </div>
+
+      <GISMap
+        zoom={20}
+        className="container"
+        isShowDistrict
+        center={data.locate}
+        points={[
+          ...(Array.isArray(data.locations)
+            ? data.locations.map((location: any) => ({
+              ...location.locate,
+              title: location.title,
+              type: location.category,
+            }))
+            : []
+          ),
+          {
+            ...data.locate,
+            title: data.title,
+            type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
+          },
+        ]}
+      />
     </div>
   );
 }
