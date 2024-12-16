@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useAuthWrapperFunction } from "@/hooks";
 
-export default function SaveBtn({
+export default function SaveRealBtn({
   component = "real-estate",
   realEstateId,
 }: {

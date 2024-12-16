@@ -144,25 +144,25 @@ export default async function RealEstateDetailPage({
         />
       </div>
 
-      <GISMap
-        zoom={20}
-        className="container"
-        isShowDistrict
-        center={data.locate}
-        points={[
-          {
-            ...data.locate,
-            title: data.title,
-            type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
-          },
-          // eslint-disable-next-line no-unsafe-optional-chaining
-          ...data.locations?.slice(0, 24).map((location: any) => ({
-            ...location.locate,
-            title: location.title,
-            type: location.category,
-          })),
-        ]}
-      />
-    </div>
+        <GISMap
+          zoom={20}
+          className="container"
+          isShowDistrict
+          center={data.locate}
+          points={[
+            // eslint-disable-next-line no-unsafe-optional-chaining
+            ...data.locations?.slice(0, 24).map((location: any) => ({
+              ...location.locate,
+              title: location.title,
+              type: location.category,
+            })),
+            {
+              ...data.locate,
+              title: data.title,
+              type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
+            },
+          ]}
+        />
+      </div>
   );
 }

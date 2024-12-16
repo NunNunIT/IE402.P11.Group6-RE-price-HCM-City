@@ -73,9 +73,10 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
             <h1>
               Bất động sản tại{" "}
               <span className="text-orange-500">
-                {!!searchParams.ward && `${searchParams.ward}, `}
-                {searchParams.district}, {searchParams.province}
-              </span>{" "}
+                {searchParams.ward && `${searchParams.ward}, `}
+                {searchParams.district && `${searchParams.district}, `}
+                {searchParams.province}
+              </span>
             </h1>
             {!(isLoading || error) && (
               <p>Hiện có {flattenedData.length} tin đăng bán tại khu vực này</p>
