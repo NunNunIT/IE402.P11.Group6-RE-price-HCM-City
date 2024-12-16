@@ -2,6 +2,12 @@ import Image from "next/image";
 import { SearchTab } from "@/components/search";
 import { SeeMoreType1 } from "@/components/seeMore";
 import { GroupPicture } from "@/components";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Trang chủ",
+  description: "Viết đi",
+};
 
 export default function Home() {
   return (
@@ -25,15 +31,14 @@ export default function Home() {
           linkFetch="/api/real-estates?page=1"
           seeMoreLink="/real-estate"
         />
+        <GroupPicture />
+
         <SeeMoreType1
           typeCard="news"
           title="Tin tức"
           linkFetch="/api/news?page=1"
           seeMoreLink="/news"
         />
-      </div>
-      <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 my-6">
-        <GroupPicture />
       </div>
     </div>
   );
