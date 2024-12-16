@@ -5,8 +5,21 @@ import { HiHomeModern } from "react-icons/hi2";
 import Link from "next/link";
 import { LoginButton } from "@/components/customize-ui/authentication-button";
 import { NAVIGATION_DESKTOP_DATA } from "@/data/navigation.data";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, Search, XIcon } from "lucide-react";
 import { Sidebar } from "@/components/customize-ui/sidebar";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import SearchTabs from "@/components/search/searchTab";
+import Image from "next/image";
+import { Input } from "@/components/ui/input";
 
 export default function NavBar() {
   return (
@@ -22,11 +35,55 @@ export default function NavBar() {
 
           <div className="md:flex ml-6 gap-3 hidden">
             {NAVIGATION_DESKTOP_DATA.map((data) => (
-              <Button key={data.link} href={data.link} variant="ghost" className="font-semibold">
+              <Button
+                key={data.link}
+                href={data.link}
+                variant="ghost"
+                className="font-semibold"
+              >
                 {data.title}
               </Button>
             ))}
           </div>
+        </div>
+
+        <div className="w-full flex justify-end items-end mr-3">
+          <Sheet>
+            <SheetTrigger asChild>
+              <div className="cursor-pointer w-fit md:p-2 rounded-full border-1 bg-white flex flex-row gap-6 justify-between items-center">
+                <span className="text-zinc-600 truncate text-nowrap ml-2 md:block hidden">
+                  Tìm kiếm ...
+                </span>
+                <div className="rounded-full p-1 bg-zinc-100">
+                  <Search className="size-6 text-zinc-600" />
+                </div>
+              </div>
+            </SheetTrigger>
+            <SheetContent
+              side="bottom"
+              style={{
+                backgroundImage: "url('/decorate/searchTab.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+              className="inset-y-0 h-[100dvh] p-0"
+            >
+              <div className="relative h-full w-full mx-auto">
+                <SheetClose className="z-10">
+                  <Button
+                    variant="secondary"
+                    className="rounded-full absolute top-2 right-2 z-10"
+                    size="icon"
+                  >
+                    <XIcon className="size-6" />
+                  </Button>
+                </SheetClose>
+                <div className="max-w-4xl mx-auto w-full z-10 mt-20 md:p-0 p-2">
+                  <SearchTabs />
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
 
         <div className="gap-3 md:flex hidden">
