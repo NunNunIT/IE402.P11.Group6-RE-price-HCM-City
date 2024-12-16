@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { SaveBtn } from "@/components";
+import { MAPPING_MARKER_SYMBOL } from "@/utils";
 
 interface LocationCardProps {
   imageUrl?: string;
@@ -40,7 +41,7 @@ const LocationCard = ({
           </div>
 
           <div className="absolute top-2 right-2 p-2 bg-indigo-600 text-white flex items-center">
-            {data?.category ?? "coffee shop"}
+            {MAPPING_MARKER_SYMBOL[data?.category as keyof typeof MAPPING_MARKER_SYMBOL] ?? "coffee shop"}
           </div>
         </div>
 
@@ -50,7 +51,7 @@ const LocationCard = ({
             {data?.title ?? "name"}
           </h3>
           <p className="text-sm text-zinc-500 dark:text-zinc-300">
-            {data?.locate ? `${data.locate.diachi}, ${data.locate.xa}, ${data.locate.huyen}, ${data.locate.tinh}`: "dia chi"}
+            {data?.locate ? `${data.locate.diachi}, ${data.locate.xa}, ${data.locate.huyen}, ${data.locate.tinh}` : "dia chi"}
           </p>
         </div>
       </Link>

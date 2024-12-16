@@ -55,6 +55,26 @@ export enum ENUM_MARKER_SYMBOL {
   THEATER = "theater",
 }
 
+export const MAPPING_MARKER_SYMBOL = {
+  [ENUM_MARKER_SYMBOL.APARTMENT]: "Căn hộ",
+  [ENUM_MARKER_SYMBOL.COMPANY]: "Công ty",
+  [ENUM_MARKER_SYMBOL.DEFAULT]: "Mặc định",
+  [ENUM_MARKER_SYMBOL.DRINK]: "Quán uống",
+  [ENUM_MARKER_SYMBOL.FACTORY]: "Nhà máy",
+  [ENUM_MARKER_SYMBOL.FOOD]: "Quán ăn",
+  [ENUM_MARKER_SYMBOL.GARA]: "Gara",
+  [ENUM_MARKER_SYMBOL.HOSPITAL]: "Bệnh viện",
+  [ENUM_MARKER_SYMBOL.HOTEL]: "Khách sạn",
+  [ENUM_MARKER_SYMBOL.MARKET]: "Chợ",
+  [ENUM_MARKER_SYMBOL.PARK]: "Công viên",
+  [ENUM_MARKER_SYMBOL.REAL_ESTATE]: "Bất động sản",
+  [ENUM_MARKER_SYMBOL.SALON]: "Salon",
+  [ENUM_MARKER_SYMBOL.SCHOOL]: "Trường học",
+  [ENUM_MARKER_SYMBOL.SHOP]: "Cửa hàng",
+  [ENUM_MARKER_SYMBOL.TEMPLE]: "Chùa",
+  [ENUM_MARKER_SYMBOL.THEATER]: "Nhà hát",
+}
+
 export enum ENUM_MAP_MODE {
   Edit = 'edit',
   View = 'view',
