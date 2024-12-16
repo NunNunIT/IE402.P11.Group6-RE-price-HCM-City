@@ -1,3 +1,4 @@
+import { SeeMoreType2 } from "@/components/seeMore";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -32,63 +33,54 @@ export default async function NewsDetailPage({
   if (!data) return notFound();
 
   return (
-    <div className="min-h-screen">
-      <main className="max-w-6xl mx-auto px-4 py-4">
-        <div className="max-w-screen-xl mx-auto mt-8 grid grid-cols-12 gap-8">
-          <div className="col-span-8">
-            <h2 className="mb-5 font-bold">{data.title}</h2>
-            <div className="text-gray-600 flex gap-2 mb-5 text-sm">
-              <Image
-                src={data?.owner?.avt}
-                alt={data?.owner?.username}
-                width={40}
-                height={40}
-                className="h-10 w-10 rounded-full border"
-                unoptimized
-              />
+    <div className="min-h-screen w-full">
+      <div className="max-w-6xl mx-auto mt-8 grid md:grid-cols-[2fr_1fr] grid-cols-1 gap-8">
+        <div className="md:p-0 px-2">
+          <h2 className="mb-5 font-bold">{data.title}</h2>
+          <div className="text-gray-600 flex gap-2 mb-5 text-sm">
+            <Image
+              src={data?.owner?.avt}
+              alt={data?.owner?.username}
+              width={40}
+              height={40}
+              className="h-10 w-10 rounded-full border"
+              unoptimized
+            />
+            <div>
+              <p>
+                <span className="mr-1">Được đăng bởi</span>
+                <strong>{data?.owner?.username}</strong>
+              </p>
               <div>
-                <p>
-                  <span className="mr-1">Được đăng bởi</span>
-                  <strong>{data?.owner?.username}</strong>
-                </p>
-                <div>
-                  <span className="mr-2">
-                    Cập nhật lần cuối vào{" "}
-                    {new Date(data.updatedAt).toLocaleString()}
-                  </span>
-                </div>
+                <span className="mr-2">
+                  Cập nhật lần cuối vào{" "}
+                  {new Date(data.updatedAt).toLocaleString()}
+                </span>
               </div>
             </div>
-            <article data-clarity-region="article">
-              <div className="content-wrapper">
-                <div
-                  className="prose mt-4"
-                  dangerouslySetInnerHTML={{ __html: data.content }}
-                />
-                <div className="p">—————–</div>
-              </div>
-            </article>
           </div>
-
-          <aside className="col-span-4">
-            <div className="border rounded-lg p-4">
-              <h4 className="mb-4">Bài viết được xem nhiều nhất</h4>
-              <ul className="space-y-2">
-                <li className="py-2 border-b border-gray-200">
-                  Trọn Bộ Lãi Suất Vay Mua Nhà Mới Nhất Tháng 11/2024
-                </li>
-                <li className="py-2 border-b border-gray-200">
-                  Thị Trường BĐS Tháng 10/2024: Phục Hồi Cả Nhu Cầu Và Lượng Tin
-                  Đăng
-                </li>
-                <li className="py-2 border-gray-200">
-                  Bất Động Sản Đông Anh (Hà Nội) Tiếp Tục Nổi Sóng Mới
-                </li>
-              </ul>
+          <article data-clarity-region="article">
+            <div className="content-wrapper">
+              <div
+                className="prose mt-4"
+                dangerouslySetInnerHTML={{ __html: data.content }}
+              />
+              <div className="p">—————–</div>
             </div>
-          </aside>
+          </article>
         </div>
-      </main>
+
+        <aside className="">
+          <div className="border rounded-lg p-4">
+            <SeeMoreType2
+              typeCard="news"
+              title="Bài viết khác"
+              linkFetch="/api/news?page=1"
+              seeMoreLink="/news"
+            />
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }
