@@ -9,9 +9,8 @@ import { SaveBtn } from "@/components";
 interface LocationCardProps {
   imageUrl?: string;
   title?: string;
-  location?: string;
-  duration?: string;
-  workshopType?: string;
+  locate?: any;
+  category?: string;
   rating?: number;
 }
 
@@ -41,7 +40,7 @@ const LocationCard = ({
           </div>
 
           <div className="absolute top-2 right-2 p-2 bg-indigo-600 text-white flex items-center">
-            {data?.workshopType ?? "coffee shop"}
+            {data?.category ?? "coffee shop"}
           </div>
         </div>
 
@@ -51,7 +50,7 @@ const LocationCard = ({
             {data?.title ?? "name"}
           </h3>
           <p className="text-sm text-zinc-500 dark:text-zinc-300">
-            {data?.location ?? "dia chi"} • {data?.duration ?? "15m"}
+            {data?.locate ? `${data.locate.diachi}, ${data.locate.xa}, ${data.locate.huyen}, ${data.locate.tinh}`: "dia chi"}
           </p>
         </div>
       </Link>
