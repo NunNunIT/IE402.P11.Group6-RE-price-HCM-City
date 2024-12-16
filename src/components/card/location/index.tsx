@@ -11,7 +11,7 @@ interface LocationCardProps {
   title?: string;
   locate?: any;
   category?: string;
-  rating?: number;
+  avgStarGGMap?: number;
 }
 
 const LocationCard = ({
@@ -35,7 +35,7 @@ const LocationCard = ({
           <div className="absolute bottom-2 left-0 pl-3 pr-8 py-2 bg-gradient-to-r from-black/90 to-black/10 flex items-center">
             <FaStar className={`size-5 text-yellow-500`} />
             <span className="text-sm text-white dark:text-white ml-2">
-              {data?.rating ?? "5"}
+              {data?.avgStarGGMap ?? "5"}
             </span>
           </div>
 
