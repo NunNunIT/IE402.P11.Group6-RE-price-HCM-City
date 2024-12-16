@@ -11,15 +11,9 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import SearchTabs from "@/components/search/searchTab";
-import Image from "next/image";
-import { Input } from "@/components/ui/input";
 
 export default function NavBar() {
   return (
