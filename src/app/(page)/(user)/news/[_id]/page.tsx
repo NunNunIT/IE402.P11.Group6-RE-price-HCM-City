@@ -1,10 +1,3 @@
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbSeparator
-} from "@/components/ui/breadcrumb"; // Import Breadcrumb components
-import { Slash } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -32,28 +25,6 @@ export default async function NewsDetailPage({ params: { _id } }: { params: { _i
   return (
     <div className="min-h-screen">
       <main className="max-w-6xl mx-auto px-4 py-4">
-        <div className="w-full p-2 mb-4 mx-auto">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <a href="/">Trang chủ</a>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator>
-                <Slash />
-              </BreadcrumbSeparator>
-              <BreadcrumbItem>
-                <a href="/news">Tin tức</a>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator>
-                <Slash />
-              </BreadcrumbSeparator>
-              <BreadcrumbItem>
-                <span>{data.title}</span>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
-
         <div className="max-w-screen-xl mx-auto mt-8 grid grid-cols-12 gap-8">
           <div className="col-span-8">
             <h2 className="mb-5 font-bold">{data.title}</h2>
