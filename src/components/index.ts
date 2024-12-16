@@ -3,3 +3,4 @@ export { default as ImageDropZone } from "./ImageDropZone";
 export { default as SaveBtn } from "./saveBtn";
 export { default as SaveRealBtn } from "./saveRealBtn";
 export { default as SingleImgDropZone } from "./dropzone/single-img";
+export { default as BreadcrumbCustom } from "./breadcrumb";

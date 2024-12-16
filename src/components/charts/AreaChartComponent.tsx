@@ -122,7 +122,7 @@ function TableDemo() {
           <TableHead className="w-2/3 font-semibold">
             So sánh giá khu vực lân cận
           </TableHead>
-          <TableHead className="font-semibold">Giá bán phổ biến nhất</TableHead>
+          <TableHead className="font-semibold">Giá bán phổ biến hiện tại</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

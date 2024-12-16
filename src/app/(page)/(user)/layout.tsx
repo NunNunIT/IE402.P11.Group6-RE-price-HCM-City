@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import NavBar from "@/partial/nav";
+import { BreadcrumbCustom } from "@/components";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,6 +15,7 @@ export default function RootLayout({
   return (
     <>
       <NavBar />
+      <BreadcrumbCustom />
       {children}
     </>
   );
