@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 
 const SearchCardWrapper = dynamic(
   () => import("./components").then((mod) => mod.SearchCardWrapper),
-  { ssr: false, loading: () => <>Loading...</> }
+  { ssr: false, loading: () => <p>Loading...</p> }
 );
 
 export default async function SearchResultPage({

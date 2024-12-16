@@ -25,6 +25,8 @@ export const GET = async (req: NextRequest) => {
       .sort(mongooseSort)
       .lean();
 
+    const total = realEstates.length;
+
     if (locateSort.useHaversine) {
       const temp = realEstates.map(realEstate => {
         const distance = haversineDistance(locateSort, realEstate.locate);
@@ -43,7 +45,7 @@ export const GET = async (req: NextRequest) => {
       imageUrl: imageUrls[0],
     }));
 
-    return successResponse({ data: realEstates });
+    return successResponse({ data: { rows: realEstates, total } });
   } catch (error) {
     console.error('>> Error in @GET /api/real-estates:', error.message);
     return errorResponse({
