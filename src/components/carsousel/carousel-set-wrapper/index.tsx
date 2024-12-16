@@ -58,19 +58,19 @@ function CarouselWrapperSwipper<T>({
         disableOnInteraction: true,
       }}
       breakpoints={{
-        200: { slidesPerView: 1, spaceBetween: 16 },
-        300: { slidesPerView: 1, spaceBetween: 16 },
-        400: { slidesPerView: 1, spaceBetween: 16 },
-        500: { slidesPerView: 1, spaceBetween: 16 },
-        640: { slidesPerView: 2, spaceBetween: 16 },
-        768: { slidesPerView: 2, spaceBetween: 16 },
-        821: { slidesPerView: 2, spaceBetween: 16 },
-        868: { slidesPerView: 2, spaceBetween: 16 },
-        1024: { slidesPerView: 2, spaceBetween: 16 },
+        200: { slidesPerView: 1.75, spaceBetween: 12 },
+        300: { slidesPerView: 1.75, spaceBetween: 12 },
+        400: { slidesPerView: 1.75, spaceBetween: 12 },
+        500: { slidesPerView: 1.75, spaceBetween: 12 },
+        640: { slidesPerView: 2.5, spaceBetween: 12 },
+        768: { slidesPerView: 2.5, spaceBetween: 12 },
+        821: { slidesPerView: 2.5, spaceBetween: 12 },
+        868: { slidesPerView: 2.5, spaceBetween: 12 },
+        1024: { slidesPerView: 2.5, spaceBetween: 12 },
       }}
       // freeMode={true}
       navigation={true}
-      pagination={{ clickable: true }}
+      // pagination={{ clickable: true }}
       loop={loop}
       modules={[Navigation, Pagination]}
       className={cn("carousel-set-wrapper relative mb-8", className)}
