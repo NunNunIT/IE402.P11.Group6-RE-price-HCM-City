@@ -25,14 +25,19 @@ export const GET = async (req: NextRequest, { params: { id } }: { params: { id: 
 
     const { locate } = realEstate as any;
     const { locateSort } = sortHandler(`locate:${locate.lat},${locate.long}`);
-    let locations = await Location.find().select("title locate category").lean();
+    let locations = await Location.find().select("title locate category imageUrls").lean();
     const temp = locations.map(location => {
       const distance = haversineDistance(locateSort, location.locate);
       return ({ ...location, distance });
     });
     temp.sort((a, b) => a.distance - b.distance);
-    locations = temp.map(({ distance: __distance, ...location }) => ({ ...location }))
-      .slice(0, 24);
+    locations = temp.map(({ distance: __distance, ...location }) =>
+    ({
+      ...location,
+      imageUrl: (location as unknown as { imageUrls: string[] }).imageUrls?.[0],
+      imageUrls: undefined
+    })
+    ).slice(0, 24);
 
     return successResponse({ data: { ...realEstate, locations } });
   } catch (error) {

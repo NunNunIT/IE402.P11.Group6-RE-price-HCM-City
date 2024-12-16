@@ -8,12 +8,13 @@ import { cn } from "@/lib/utils";
 
 import "./carousel-wrapper.css";
 import useSWR from "swr";
+import { LocationCard, RealEstateCard } from "@/components/card";
 
-interface ICarouselWrapperProps<T> {
+interface ICarouselWrapperProps {
   loop?: boolean;
   className?: string;
   link: string;
-  component: React.ComponentType<{ data: T }>;
+  type: "location" | "realEstate";
 }
 
 const fetcher = async (url: string) => {
@@ -23,7 +24,7 @@ const fetcher = async (url: string) => {
   return payload.data;
 }
 
-export default function CarouselWrapper<T>({ link, ...props }: ICarouselWrapperProps<T>) {
+export default function CarouselWrapper({ link, ...props }: ICarouselWrapperProps) {
   const { data, isLoading, error } = useSWR(link, fetcher)
   if (isLoading || error) return <p>Loading...</p>
   if (!data.length) return <p>No data found</p>
@@ -31,18 +32,24 @@ export default function CarouselWrapper<T>({ link, ...props }: ICarouselWrapperP
 }
 
 interface ICarouselWrapperSwipperProps<T> {
-  component: React.ComponentType<{ data: T }>;
+  type: "location" | "realEstate";
   className?: string;
   data: T[];
   loop?: boolean;
 }
 
+const MAPPING_COMPONENT = {
+  location: LocationCard,
+  realEstate: RealEstateCard,
+}
+
 function CarouselWrapperSwipper<T>({
-  component: Component,
+  type,
   className,
   data,
   loop,
 }: ICarouselWrapperSwipperProps<T>) {
+  const Component = MAPPING_COMPONENT[type];
   return (
     <Swiper
       // initialSlide={0}

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { SaveBtn } from "@/components";
 
 interface LocationCardProps {
-  image?: string;
+  imageUrl?: string;
   title?: string;
   location?: string;
   duration?: string;
@@ -27,7 +27,7 @@ const LocationCard = ({
             width={1000}
             height={500}
             src={
-              data?.image ??
+              data?.imageUrl ??
               "https://kenhhomestay.com/wp-content/uploads/2021/06/quan-an-ngon-bien-hoa-dong-nai-2-2.jpg"
             }
             alt={data?.title ?? "Name"}

@@ -1,3 +1,5 @@
+"use server";
+
 import { ENUM_MARKER_SYMBOL } from "@/utils";
 import { FaLocationDot } from "react-icons/fa6";
 import { ImageViewType1 } from "@/components/imageView";
@@ -8,7 +10,6 @@ import translateKey from "@/lib/func/transfer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CarouselWrapper } from "@/components/carsousel";
-import { LocationCard } from "@/components/card";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
@@ -123,7 +124,7 @@ export default async function RealEstateDetailPage({
 
         <CarouselWrapper
           link={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
-          component={LocationCard}
+          type="location"
         />
       </div>
 
@@ -138,12 +139,13 @@ export default async function RealEstateDetailPage({
             title: data.title,
             type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
           },
-          ...data.locations!
-            .slice(0, 24)
+          // eslint-disable-next-line no-unsafe-optional-chaining
+          ...data.locations
+            ?.slice(0, 24)
             .map((location: any) => ({
               ...location.locate,
-              title: data.title,
-              type: data.category,
+              title: location.title,
+              type: location.category,
             }))
         ]}
       />

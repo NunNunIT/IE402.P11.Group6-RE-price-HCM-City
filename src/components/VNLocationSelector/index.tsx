@@ -1,6 +1,5 @@
 "use client";
 
-// import libs
 import {
   type Dispatch,
   type SetStateAction,
@@ -9,7 +8,6 @@ import {
 } from "react";
 import { useMediaQuery } from "usehooks-ts";
 
-// import components
 import {
   Combobox,
   ComboboxContent,
@@ -19,10 +17,8 @@ import {
 } from "@/components/customize-ui/combobox";
 import { ComboboxDrawer } from "../customize-ui";
 
-// import data
 import VNLocationData from "../VNLocationSelector/data.json";
 
-// import utils
 import { ENUM_LOCATION_TYPE, checkIncludeByAscii } from "@/utils";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
@@ -31,6 +27,7 @@ export interface ILocation {
   province?: string | null;
   district?: string | null;
   ward?: string | null;
+  wardId?: string | null;
   street?: string | null;
 }
 
@@ -61,14 +58,14 @@ export default function LocationSelect({
   ...props
 }: TLocationSelectProps) {
   const isMobile = useMediaQuery("(max-width: 640px)");
-  const selectDatas = useMemo(() => {
+  const selectData = useMemo(() => {
     const selectedProvince = location?.province
       ? VNLocationData.find((province) => province.Name === location?.province)
       : undefined;
     const selectedDistrict = location?.district
       ? selectedProvince?.Districts.find(
-          (district) => district.Name === location.district
-        )
+        (district) => district.Name === location.district
+      )
       : undefined;
 
     return {
@@ -82,7 +79,7 @@ export default function LocationSelect({
       }),
       ...(depthLevel >= ENUM_LOCATION_TYPE.WARD && {
         wards: selectedDistrict
-          ? selectedDistrict.Wards.map((ward: any) => ward.Name || ward.Level)
+          ? selectedDistrict.Wards.map((ward) => ward.Name)
           : [],
       }),
     };
@@ -101,9 +98,16 @@ export default function LocationSelect({
         newLocation.district = undefined;
         if (depthLevel >= ENUM_LOCATION_TYPE.WARD) {
           newLocation.ward = undefined;
+          newLocation.wardId = undefined;
         }
       } else if (key === "district" && depthLevel >= ENUM_LOCATION_TYPE.WARD) {
         newLocation.ward = undefined;
+        newLocation.wardId = undefined;
+      } else if (key === 'ward' && depthLevel >= ENUM_LOCATION_TYPE.WARD) {
+        newLocation.wardId =
+          VNLocationData.find(province => province.Name === location.province)
+            ?.Districts.find(district => district.Name === location.district)
+            ?.Wards.find(ward => ward.Name === value)?.Id;
       }
 
       setLocation?.(newLocation);
@@ -123,7 +127,7 @@ export default function LocationSelect({
             modal={modal}
             filterItems={(inputValue, items) =>
               items.filter(({ value }) => {
-                const province = selectDatas.provinces?.find(
+                const province = selectData.provinces?.find(
                   (province) => province === value
                 );
                 return !inputValue || checkIncludeByAscii(province, inputValue);
@@ -136,7 +140,7 @@ export default function LocationSelect({
               {...props}
             />
             <ComboboxContent>
-              {selectDatas.provinces.map((province) => (
+              {selectData.provinces.map((province) => (
                 <ComboboxItem
                   key={province}
                   value={province}
@@ -149,7 +153,7 @@ export default function LocationSelect({
         ) : (
           <ComboboxDrawer
             disabled={disabled}
-            selectData={selectDatas.provinces}
+            selectData={selectData.provinces}
             value={location?.province ?? ""}
             onChange={(value: string) =>
               handleLocationChange("province", value)
@@ -167,7 +171,7 @@ export default function LocationSelect({
             modal={modal}
             filterItems={(inputValue, items) =>
               items.filter(({ value }) => {
-                const district = selectDatas.districts?.find(
+                const district = selectData.districts?.find(
                   (district) => district === value
                 );
                 return !inputValue || checkIncludeByAscii(district, inputValue);
@@ -180,7 +184,7 @@ export default function LocationSelect({
               {...props}
             />
             <ComboboxContent>
-              {selectDatas.districts.map((district) => (
+              {selectData.districts.map((district) => (
                 <ComboboxItem
                   key={district}
                   value={district}
@@ -193,7 +197,7 @@ export default function LocationSelect({
         ) : (
           <ComboboxDrawer
             disabled={!location?.province}
-            selectData={selectDatas.districts}
+            selectData={selectData.districts}
             value={location?.district ?? ""}
             onChange={(value: string) =>
               handleLocationChange("district", value)
@@ -211,7 +215,7 @@ export default function LocationSelect({
             modal={modal}
             filterItems={(inputValue, items) =>
               items.filter(({ value }) => {
-                const ward = selectDatas.wards?.find((ward) => ward === value);
+                const ward = selectData.wards?.find((ward) => ward === value);
                 return !inputValue || checkIncludeByAscii(ward, inputValue);
               })
             }
@@ -222,7 +226,7 @@ export default function LocationSelect({
               {...props}
             />
             <ComboboxContent>
-              {selectDatas.wards.map((ward) => (
+              {selectData.wards.map((ward) => (
                 <ComboboxItem key={ward} value={ward} label={ward} />
               ))}
               <ComboboxEmpty>No results</ComboboxEmpty>
@@ -231,7 +235,7 @@ export default function LocationSelect({
         ) : (
           <ComboboxDrawer
             disabled={!location?.district}
-            selectData={selectDatas.wards}
+            selectData={selectData.wards}
             value={location?.ward ?? ""}
             onChange={(value: string) => handleLocationChange("ward", value)}
             placeholder={placeholders?.ward ?? "Chọn phường/xã"}
