@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { SearchTab } from "@/components/search";
 import { SeeMoreType1 } from "@/components/seeMore";
+import { GroupPicture } from "@/components";
 
 export default function Home() {
   return (
@@ -28,6 +29,9 @@ export default function Home() {
           title="Tin tức"
           linkFetch="/api/news?page=1"
         />
+      </div>
+      <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 my-6">
+        <GroupPicture />
       </div>
     </div>
   );
