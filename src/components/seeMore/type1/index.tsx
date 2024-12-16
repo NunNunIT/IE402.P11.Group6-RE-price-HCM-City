@@ -45,7 +45,7 @@ export default function SeeMore({
   const RenderLocation = () => (
     <>
       {data?.map((item: any, index: any) => (
-        <LocationCard key={index} />
+        <LocationCard key={index} data={item} />
       ))}
     </>
   );

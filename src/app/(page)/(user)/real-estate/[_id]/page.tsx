@@ -7,7 +7,8 @@ import { notFound } from "next/navigation";
 import translateKey from "@/lib/func/transfer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { SeeMoreType1 } from "@/components/seeMore";
+import { CarouselWrapper } from "@/components/carsousel";
+import { LocationCard } from "@/components/card";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
@@ -39,6 +40,7 @@ export default async function RealEstateDetailPage({
     <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full mx-auto p-3">
       <div className="w-full h-full bg-white dark:bg-zinc-900 space-y-6 pr-3">
         <ImageViewType1 images={data.imageUrls} />
+
         <div className="flex flex-col gap-3">
           <h1 className="font-bold text-3xl">{data.title}</h1>
           <div className="flex flex-row gap-2 items-center font-semibold">
@@ -49,6 +51,7 @@ export default async function RealEstateDetailPage({
             </span>
           </div>
         </div>
+
         <div className="flex flex-row justify-between items-center gap-6">
           <div className="flex flex-row gap-8">
             <div className="flex flex-col">
@@ -109,14 +112,19 @@ export default async function RealEstateDetailPage({
                 {data.owner?.email ?? "123@gmail.com"}
               </a>
             </div>
-            <div className="flex flex-col ml-auto">
-              {!!data.owner?.phone && <Button>Gọi điện</Button>}
-              <Button variant="secondary" href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}>
+            <div className="flex flex-col ml-auto gap-2">
+              {!!data.owner?.phone && <Button size="sm">Gọi điện</Button>}
+              <Button variant="secondary" size="sm" href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}>
                 Gửi mail
               </Button>
             </div>
           </div>
         </div>
+
+        <CarouselWrapper
+          link={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
+          component={LocationCard}
+        />
       </div>
 
       <GISMap
@@ -139,14 +147,6 @@ export default async function RealEstateDetailPage({
             }))
         ]}
       />
-
-      <div className="mr-4">
-        <SeeMoreType1
-          typeCard="location"
-          title="Các địa điểm gần đó"
-          linkFetch={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
-        />
-      </div>
     </div>
   );
 }
