@@ -13,14 +13,14 @@ const LogoutButton = dynamic(
 );
 
 const isActiveLink = (pathname: string, link: string) => {
-  return pathname.startsWith(link);
+  return pathname === link;
 }
 
 export default function UserLayout({ children }: IDefaultLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 mx-auto container my-4 px-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] mx-auto container my-4 px-4 gap-4">
       <Card className="h-fit">
         <CardContent className="mt-6">
           <ul className="flex flex-col w-full gap-2">
@@ -44,7 +44,7 @@ export default function UserLayout({ children }: IDefaultLayoutProps) {
           </LogoutButton>
         </CardContent>
       </Card>
-      <div className="md:col-span-2 lg:col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="gap-4">
         {children}
       </div>
     </div>

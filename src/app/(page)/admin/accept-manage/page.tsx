@@ -1,58 +1,56 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
 import { DataColumns, columns } from "./columns";
 import { DataTable } from "./data-table";
+import { PlusIcon } from "lucide-react";
+import useSWR from "swr";
 
-async function getData(): Promise<DataColumns[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      _id: "728ed52f",
-      title: "Tên bất động sản",
-      price: 100,
-      area: 25,
-      fullAddress: "Địa chỉ đầy đủ đã qua chỉnh sửa ở API 6",
-      isAuth: false,
-    },
-    {
-      _id: "728ed52f",
-      title: "Tên bất động sản",
-      price: 100,
-      area: 25,
-      fullAddress: "Địa chỉ đầy đủ đã qua chỉnh sửa ở API 5",
-      isAuth: false,
-    },
-    {
-      _id: "728ed52f",
-      title: "Tên bất động sản",
-      price: 100,
-      area: 25,
-      fullAddress: "Địa chỉ đầy đủ đã qua chỉnh sửa ở API 4",
-      isAuth: false,
-    },
-    {
-      _id: "728ed52f",
-      title: "Tên bất động sản",
-      price: 100,
-      area: 25,
-      fullAddress: "Địa chỉ đầy đủ đã qua chỉnh sửa ở API 3",
-      isAuth: false,
-    },
-    {
-      _id: "728ed52f",
-      title: "Tên bất động sản",
-      price: 100,
-      area: 25,
-      fullAddress: "Địa chỉ đầy đủ đã qua chỉnh sửa ở API 2",
-      isAuth: false,
-    },
-  ];
+async function getData(url: string): Promise<DataColumns[]> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json", },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data from API");
+    }
+
+    const result = await response.json();
+
+    // Assuming your API response contains a "data" field with the array of items
+    return result.data.map((item: any) => ({
+      _id: item._id,
+      title: item.title,
+      price: item.price,
+      area: item.area,
+      locate: item.locate,
+      imageUrl: item.imageUrl,
+    }));
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return []; // Return an empty array if there's an error
+  }
 }
 
-export default async function DemoPage() {
-  const data = await getData();
+export default function DemoPage() {
+  const { data, isLoading, error } = useSWR('/api/real-estates?getAll=true', getData);
 
   return (
     <div className="container mx-auto py-10 px-2">
-      <DataTable columns={columns} data={data} />
+      <div className="flex flex-row justify-between items-center">
+        <h1>Quản lý bất động sản</h1>
+        <Button href="/create-new-re" startIcon={<PlusIcon className="size-6" />}>Tạo mới</Button>
+      </div>
+      {isLoading || error ? (
+        <p>Loading...</p>
+      ) : (
+        <DataTable columns={columns} data={data} />
+      )}
     </div>
   );
 }

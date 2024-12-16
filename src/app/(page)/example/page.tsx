@@ -1,4 +1,28 @@
+"use client";
+
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+const LocationSelector = dynamic(() => import('@/components/VNLocationSelector'), { loading: () => <p>Loading...</p> });
+
 export default function ExamplePage() {
+  const [location, setLocation] = useState({
+    province: null,
+    district: null,
+    ward: null,
+    wardId: null,
+    street: null,
+  });
+  useEffect(() => {
+    toast.info("location", {
+      description: (
+        <pre>
+          {JSON.stringify(location, null, 2)}
+        </pre>
+      )
+    })
+  }, [location])
+
   return (
     <main className="flex flex-col items-center justify-center">
       <div className="flex justify-between items-center sticky top-0 bg-background p-2 py-8 w-full max-w-4xl mx-4 z-50">
@@ -6,15 +30,7 @@ export default function ExamplePage() {
       </div>
 
       <div className="w-full max-w-4xl space-y-8 m-4">
-        <p className="text-lg text-muted-foreground">
-          This page demonstrates various UI components.
-        </p>
-
-        <div className="flex flex-row gap-8">
-          <p>Text</p>
-          <p>Text</p>
-          <p>Text</p>
-        </div>
+        <LocationSelector value={location} onChange={setLocation} />
       </div>
     </main>
   );

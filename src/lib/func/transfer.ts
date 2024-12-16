@@ -19,8 +19,9 @@ export default function TranslateKey(key: string): string {
     taybac: "Tây Bắc",
     dongbac: "Đông Bắc",
     taynam: "Tây Nam",
-    dongnam: "Đông Nam"
+    dongnam: "Đông Nam",
+    interior: "Nội thất",
   };
 
-  return dictionary[key] || "Không tìm thấy giá trị tương ứng";
+  return dictionary[key] || "Không";
 }

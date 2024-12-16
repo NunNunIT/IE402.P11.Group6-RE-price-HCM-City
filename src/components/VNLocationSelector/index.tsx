@@ -1,27 +1,24 @@
 "use client";
 
-// import libs
 import {
   type Dispatch,
   type SetStateAction,
-  useCallback, useMemo,
+  useCallback,
+  useMemo,
 } from "react";
 import { useMediaQuery } from "usehooks-ts";
 
-// import components
 import {
   Combobox,
   ComboboxContent,
   ComboboxEmpty,
   ComboboxInput,
   ComboboxItem,
-} from '@/components/customize-ui/combobox';
+} from "@/components/customize-ui/combobox";
 import { ComboboxDrawer } from "../customize-ui";
 
-// import data
 import VNLocationData from "../VNLocationSelector/data.json";
 
-// import utils
 import { ENUM_LOCATION_TYPE, checkIncludeByAscii } from "@/utils";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
@@ -30,14 +27,13 @@ export interface ILocation {
   province?: string | null;
   district?: string | null;
   ward?: string | null;
+  wardId?: string | null;
   street?: string | null;
 }
 
 type TLocationSelectProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  "value"
-  | "onChange"
-  | "placeholder"
+  "value" | "onChange" | "placeholder"
 > & {
   value: ILocation;
   onChange: Dispatch<SetStateAction<ILocation>>;
@@ -47,89 +43,96 @@ type TLocationSelectProps = Omit<
     district?: string;
     ward?: string;
     street?: string;
-  }
+  };
   modal?: boolean;
-}
+};
 
-export default function LocationSelect(
-  { value: location, onChange: setLocation, className,
-    depthLevel = ENUM_LOCATION_TYPE.STREET,
-    placeholders, modal,
-    disabled,
-    ...props
-  }: TLocationSelectProps
-) {
-  const isMobile = useMediaQuery('(max-width: 640px)');
-  const selectDatas = useMemo(() => {
+export default function LocationSelect({
+  value: location,
+  onChange: setLocation,
+  className,
+  depthLevel = ENUM_LOCATION_TYPE.STREET,
+  placeholders,
+  modal,
+  disabled,
+  ...props
+}: TLocationSelectProps) {
+  const isMobile = useMediaQuery("(max-width: 640px)");
+  const selectData = useMemo(() => {
     const selectedProvince = location?.province
       ? VNLocationData.find((province) => province.Name === location?.province)
       : undefined;
     const selectedDistrict = location?.district
-      ? selectedProvince?.Districts.find((district) => district.Name === location.district)
+      ? selectedProvince?.Districts.find(
+        (district) => district.Name === location.district
+      )
       : undefined;
 
     return {
-      ...(depthLevel >= ENUM_LOCATION_TYPE.PROVINCE
-        && {
+      ...(depthLevel >= ENUM_LOCATION_TYPE.PROVINCE && {
         provinces: VNLocationData.map((province) => province.Name),
       }),
-      ...(depthLevel >= ENUM_LOCATION_TYPE.DISTRICT
-        && {
+      ...(depthLevel >= ENUM_LOCATION_TYPE.DISTRICT && {
         districts: selectedProvince
-          ? selectedProvince.Districts.map(district => district.Name)
+          ? selectedProvince.Districts.map((district) => district.Name)
           : [],
       }),
-      ...(depthLevel >= ENUM_LOCATION_TYPE.WARD
-        && {
+      ...(depthLevel >= ENUM_LOCATION_TYPE.WARD && {
         wards: selectedDistrict
-          ? selectedDistrict.Wards.map((ward: any) => ward.Name || ward.Level)
+          ? selectedDistrict.Wards.map((ward) => ward.Name)
           : [],
       }),
     };
   }, [location, depthLevel]);
 
-  const handleLocationChange = useCallback((key: keyof ILocation, value: string) => {
-    if (location?.[key] === value) {
-      setLocation?.(location);
-      return location;
-    }
-
-    const newLocation: ILocation = { ...location, [key]: value };
-
-    if (
-      key === 'province'
-      && depthLevel >= ENUM_LOCATION_TYPE.DISTRICT
-    ) {
-      newLocation.district = undefined;
-      if (depthLevel >= ENUM_LOCATION_TYPE.WARD) {
-        newLocation.ward = undefined;
+  const handleLocationChange = useCallback(
+    (key: keyof ILocation, value: string) => {
+      if (location?.[key] === value) {
+        setLocation?.(location);
+        return location;
       }
-    } else if (
-      key === 'district'
-      && depthLevel >= ENUM_LOCATION_TYPE.WARD
-    ) {
-      newLocation.ward = undefined;
-    }
 
-    setLocation?.(newLocation);
-    return newLocation;
-  }, [location, depthLevel, setLocation]);
+      const newLocation: ILocation = { ...location, [key]: value };
+
+      if (key === "province" && depthLevel >= ENUM_LOCATION_TYPE.DISTRICT) {
+        newLocation.district = undefined;
+        if (depthLevel >= ENUM_LOCATION_TYPE.WARD) {
+          newLocation.ward = undefined;
+          newLocation.wardId = undefined;
+        }
+      } else if (key === "district" && depthLevel >= ENUM_LOCATION_TYPE.WARD) {
+        newLocation.ward = undefined;
+        newLocation.wardId = undefined;
+      } else if (key === 'ward' && depthLevel >= ENUM_LOCATION_TYPE.WARD) {
+        newLocation.wardId =
+          VNLocationData.find(province => province.Name === location.province)
+            ?.Districts.find(district => district.Name === location.district)
+            ?.Wards.find(ward => ward.Name === value)?.Id;
+      }
+
+      setLocation?.(newLocation);
+      return newLocation;
+    },
+    [location, depthLevel, setLocation]
+  );
 
   return (
     <div className={cn(className ?? "flex flex-col gap-2")}>
-      {depthLevel >= ENUM_LOCATION_TYPE.PROVINCE && (
-        !isMobile ? (
+      {depthLevel >= ENUM_LOCATION_TYPE.PROVINCE &&
+        (!isMobile ? (
           <Combobox
             defaultValue={location?.province}
-            value={location?.province ?? ''}
-            onValueChange={(value) => handleLocationChange('province', value)}
+            value={location?.province ?? ""}
+            onValueChange={(value) => handleLocationChange("province", value)}
             modal={modal}
             filterItems={(inputValue, items) =>
               items.filter(({ value }) => {
-                const province = selectDatas.provinces?.find((province) => province === value);
-                return !inputValue
-                  || checkIncludeByAscii(province, inputValue)
-              })}
+                const province = selectData.provinces?.find(
+                  (province) => province === value
+                );
+                return !inputValue || checkIncludeByAscii(province, inputValue);
+              })
+            }
           >
             <ComboboxInput
               placeholder={placeholders?.province ?? "Chọn tỉnh/thành phố"}
@@ -137,8 +140,12 @@ export default function LocationSelect(
               {...props}
             />
             <ComboboxContent>
-              {selectDatas.provinces.map((province) => (
-                <ComboboxItem key={province} value={province} label={province} />
+              {selectData.provinces.map((province) => (
+                <ComboboxItem
+                  key={province}
+                  value={province}
+                  label={province}
+                />
               ))}
               <ComboboxEmpty>No results</ComboboxEmpty>
             </ComboboxContent>
@@ -146,27 +153,30 @@ export default function LocationSelect(
         ) : (
           <ComboboxDrawer
             disabled={disabled}
-            selectData={selectDatas.provinces}
-            value={location?.province ?? ''}
-            onChange={(value: string) => handleLocationChange('province', value)}
+            selectData={selectData.provinces}
+            value={location?.province ?? ""}
+            onChange={(value: string) =>
+              handleLocationChange("province", value)
+            }
             placeholder={placeholders?.province ?? "Chọn tỉnh/thành phố"}
           />
-        )
-      )}
+        ))}
 
-      {depthLevel >= ENUM_LOCATION_TYPE.DISTRICT && (
-        !isMobile ? (
+      {depthLevel >= ENUM_LOCATION_TYPE.DISTRICT &&
+        (!isMobile ? (
           <Combobox
             defaultValue={location?.district}
-            value={location?.district ?? ''}
-            onValueChange={(value) => handleLocationChange('district', value)}
+            value={location?.district ?? ""}
+            onValueChange={(value) => handleLocationChange("district", value)}
             modal={modal}
             filterItems={(inputValue, items) =>
               items.filter(({ value }) => {
-                const district = selectDatas.districts?.find((district) => district === value);
-                return !inputValue
-                  || checkIncludeByAscii(district, inputValue)
-              })}
+                const district = selectData.districts?.find(
+                  (district) => district === value
+                );
+                return !inputValue || checkIncludeByAscii(district, inputValue);
+              })
+            }
           >
             <ComboboxInput
               placeholder={placeholders?.district ?? "Chọn quận/huyện"}
@@ -174,8 +184,12 @@ export default function LocationSelect(
               {...props}
             />
             <ComboboxContent>
-              {selectDatas.districts.map((district) => (
-                <ComboboxItem key={district} value={district} label={district} />
+              {selectData.districts.map((district) => (
+                <ComboboxItem
+                  key={district}
+                  value={district}
+                  label={district}
+                />
               ))}
               <ComboboxEmpty>No results</ComboboxEmpty>
             </ComboboxContent>
@@ -183,27 +197,28 @@ export default function LocationSelect(
         ) : (
           <ComboboxDrawer
             disabled={!location?.province}
-            selectData={selectDatas.districts}
-            value={location?.district ?? ''}
-            onChange={(value: string) => handleLocationChange('district', value)}
+            selectData={selectData.districts}
+            value={location?.district ?? ""}
+            onChange={(value: string) =>
+              handleLocationChange("district", value)
+            }
             placeholder={placeholders?.district ?? "Chọn quận/huyện"}
           />
-        )
-      )}
+        ))}
 
-      {depthLevel >= ENUM_LOCATION_TYPE.WARD && (
-        !isMobile ? (
+      {depthLevel >= ENUM_LOCATION_TYPE.WARD &&
+        (!isMobile ? (
           <Combobox
             defaultValue={location?.ward}
-            value={location?.ward ?? ''}
-            onValueChange={(value) => handleLocationChange('ward', value)}
+            value={location?.ward ?? ""}
+            onValueChange={(value) => handleLocationChange("ward", value)}
             modal={modal}
             filterItems={(inputValue, items) =>
               items.filter(({ value }) => {
-                const ward = selectDatas.wards?.find((ward) => ward === value);
-                return !inputValue
-                  || checkIncludeByAscii(ward, inputValue)
-              })}
+                const ward = selectData.wards?.find((ward) => ward === value);
+                return !inputValue || checkIncludeByAscii(ward, inputValue);
+              })
+            }
           >
             <ComboboxInput
               placeholder={placeholders?.ward ?? "Chọn phường/xã"}
@@ -211,7 +226,7 @@ export default function LocationSelect(
               {...props}
             />
             <ComboboxContent>
-              {selectDatas.wards.map((ward) => (
+              {selectData.wards.map((ward) => (
                 <ComboboxItem key={ward} value={ward} label={ward} />
               ))}
               <ComboboxEmpty>No results</ComboboxEmpty>
@@ -220,23 +235,24 @@ export default function LocationSelect(
         ) : (
           <ComboboxDrawer
             disabled={!location?.district}
-            selectData={selectDatas.wards}
-            value={location?.ward ?? ''}
-            onChange={(value: string) => handleLocationChange('ward', value)}
+            selectData={selectData.wards}
+            value={location?.ward ?? ""}
+            onChange={(value: string) => handleLocationChange("ward", value)}
             placeholder={placeholders?.ward ?? "Chọn phường/xã"}
           />
-        )
-      )}
+        ))}
 
       {depthLevel >= ENUM_LOCATION_TYPE.STREET && (
         <Input
           value={location?.street}
-          onChange={(e) => handleLocationChange('street', e.currentTarget.value)}
+          onChange={(e) =>
+            handleLocationChange("street", e.currentTarget.value)
+          }
           maxLength={50}
           placeholder={placeholders?.street ?? "Nhập địa chỉ chi tiết"}
           {...props}
         />
       )}
-    </div >
+    </div>
   );
 }

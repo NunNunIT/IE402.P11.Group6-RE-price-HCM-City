@@ -12,7 +12,7 @@ export default function Home() {
           alt="Background"
           width="1000"
           height="1000"
-          className="absolute z-5 w-full h-full object-cover brightness-75"
+          className="absolute z-5 w-full h-full object-cover"
         />
         <div className="w-full max-w-4xl mx-auto my-auto z-10 pt-16 md:px-0 px-3">
           <SearchTab />
@@ -23,11 +23,13 @@ export default function Home() {
           typeCard="realEstate"
           title="Bất động sản"
           linkFetch="/api/real-estates?page=1"
+          seeMoreLink="/real-estate"
         />
         <SeeMoreType1
           typeCard="news"
           title="Tin tức"
           linkFetch="/api/news?page=1"
+          seeMoreLink="/news"
         />
       </div>
       <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 my-6">

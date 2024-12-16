@@ -18,6 +18,6 @@ const CommentSchema = new Schema({
   refType: { type: String, enum: ENUM_REF_TYPE, required: true },
   userId: { type: String, required: true },
   content: { type: String, required: true },
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
 export const Comment = models?.Comment ?? model('Comment', CommentSchema);

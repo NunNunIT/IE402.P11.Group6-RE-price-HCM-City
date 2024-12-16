@@ -1,0 +1,182 @@
+:root {
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+}
+
+.dark {
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+}
+
+.editor .tiptap.ProseMirror {
+  height: 100%;
+  min-height: 60px;
+  padding: 1rem;
+  /* border-top: 1px solid var(--border-outline-2); */
+  outline: none;
+}
+
+/* editor.css */
+.editor {
+  /* Chịu mày */
+  /* min-height: 16rem;
+  max-height: 500px; */
+  overflow-y: auto;
+  /* Enables vertical scrolling */
+  overflow-x: hidden;
+  /* Disables horizontal scrolling */
+}
+
+.editor * {
+  text-align: left;
+}
+
+.editor h1 {
+  font-size: 1.5rem;
+}
+
+.editor h2 {
+  font-size: 1.4rem;
+}
+
+.editor h3 {
+  font-size: 1.3rem;
+}
+
+.editor h4 {
+  font-size: 1.2rem;
+}
+
+.editor h5 {
+  font-size: 1.1rem;
+}
+
+.editor h6 {
+  font-size: 1rem;
+}
+
+.editor p {
+  font-size: 0.875rem;
+}
+
+.editor ul li {
+  list-style-type: disc;
+  margin-left: 2rem;
+}
+
+.editor ol li {
+  list-style-type: decimal;
+  margin-left: 2rem;
+}
+
+.editor a {
+  color: rgb(59 130 246);
+  text-decoration: underline;
+}
+
+.editor .temp-url {
+  display: inline-block;
+}
+
+.editor.prod .temp-url {
+  display: none;
+}
+
+.editor blockquote {
+  width: fit-content;
+  position: relative;
+  font-style: italic;
+  margin: 12px 4px;
+}
+
+.editor blockquote::before {
+  content: "“";
+  font-size: 2em;
+  position: absolute;
+  left: -14px;
+  top: -10px;
+  color: #999;
+}
+
+.editor blockquote::after {
+  content: "”";
+  font-size: 2em;
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
+  color: #999;
+}
+
+.editor figure {
+  width: fit-content;
+}
+
+.editor img {
+  max-height: 100px;
+}
+
+.editor figcaption {
+  width: fit-content;
+  height: fit-content;
+  font-style: italic;
+}
+
+.editor table {
+  width: 100%;
+  border-collapse: collapse;
+  /* Kết hợp các đường biên của các ô lại với nhau */
+}
+
+.editor tr {
+  border: 1px solid #6b7280;
+  /* Đường biên cho các hàng */
+}
+
+.editor th {
+  border: 1px solid #6b7280;
+  /* Đường biên cho các cột header */
+  background-color: rgb(228 228 231);
+  /* Màu nền cho các cột header */
+  color: black;
+  /* Màu chữ cho các cột header */
+  text-align: left;
+  /* Căn trái cho chữ trong header */
+  padding: 8px;
+  /* Khoảng cách bên trong cho các ô header */
+}
+
+.dark .editor th {
+  background-color: rgb(24 24 27);
+  color: white;
+}
+
+.editor td {
+  border: 1px solid #6b7280;
+  /* Đường biên cho các ô dữ liệu */
+  padding: 8px;
+  /* Khoảng cách bên trong cho các ô dữ liệu */
+  text-align: left;
+  /* Căn trái cho chữ trong ô dữ liệu */
+}
+
+.editor th,
+.editor td {
+  width: 25%;
+  /* Chiều rộng bằng nhau cho các cột (thay đổi nếu cần thiết) */
+}
+
+.data-\[state\=on\]\:bg-accent[data-state="on"] {
+  background-color: hsl(var(--accent));
+}
+
+.data-\[state\=on\]\:text-accent-foreground[data-state="on"] {
+  color: hsl(var(--accent-foreground));
+}
+
+p.is-editor-empty:first-child::before {
+  color: rgb(113 113 122);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

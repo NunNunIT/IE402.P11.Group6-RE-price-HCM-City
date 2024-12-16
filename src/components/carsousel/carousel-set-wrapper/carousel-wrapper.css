@@ -1,0 +1,12 @@
+.carousel-set-wrapper .swiper-slide {
+  min-width: 268px;
+  width: 100%;
+  padding-bottom: 3rem;
+  /* width: 50% !important; */
+  /* max-width: 300px; */
+  height: max-content;
+}
+
+.swiper-button-disabled {
+  display: none;
+}

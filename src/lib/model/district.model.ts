@@ -14,6 +14,6 @@ export const DistrictSchema: Schema = new Schema({
   province: { type: Schema.Types.ObjectId, ref: "Province", required: true },
   imageUrl: { type: [String], default: [] },
   analysis: analysisSchema,
-}, { timestamps: true });
+}, { timestamps: true, strict: false });
 
 export const District = models?.District ?? model<IDistrict>('District', DistrictSchema);

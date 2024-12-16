@@ -1,0 +1,1 @@
+export { default as CarouselWrapper } from './carousel-set-wrapper';
