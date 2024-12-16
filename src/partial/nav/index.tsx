@@ -50,7 +50,7 @@ export default function NavBar() {
         <div className="w-full flex justify-end items-end mr-3">
           <Sheet>
             <SheetTrigger asChild>
-              <div className="cursor-pointer w-fit md:p-2 rounded-full border-1 bg-white flex flex-row gap-6 justify-between items-center">
+              <div className="cursor-pointer w-fit md:p-2 rounded-full border-2 border-zinc-400 bg-white flex flex-row gap-6 justify-between items-center">
                 <span className="text-zinc-600 truncate text-nowrap ml-2 md:block hidden">
                   Tìm kiếm ...
                 </span>

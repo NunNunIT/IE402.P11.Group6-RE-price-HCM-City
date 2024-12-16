@@ -16,9 +16,9 @@ export default function UserPage() {
       <Skeleton />
     </>
   ) : (
-    <>
+    <div className="space-y-6">
       <PersonalInformation data={data} />
       <PersonalLocation data={data} />
-    </>
+    </div>
   )
 }

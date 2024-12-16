@@ -7,7 +7,7 @@ export const NAVIGATION_DESKTOP_DATA = [
 export const NAVIGATION_OPTIONS_DATA = [
   { title: 'Quản lý', link: '/admin', isNeedHighPermission: true, isNeedSeparator: true },
   { title: 'Đăng tin', link: '/create-new-re', isNeedAuth: true },
-  { title: 'Bất động sản của tôi', link: '#', isNeedAuth: true},
+  { title: 'Bất động sản của tôi', link: '/user/my-re', isNeedAuth: true},
   { title: 'Lưu', link: '/user/saved', isNeedAuth: true, isNeedSeparator: true },
 ];
 
