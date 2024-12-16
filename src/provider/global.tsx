@@ -1,11 +1,11 @@
 "use server";
 
+import { Toaster as Toaster2 } from "@/components/ui/toaster"
 import { auth } from "@/lib/auth";
 import dynamic from "next/dynamic";
 
 const AlertProvider = dynamic(() => import("./alert-dialog").then(mod => mod.AlertProvider), { ssr: false });
 const Toaster = dynamic(() => import("@/components/ui/sonner").then(mod => mod.Toaster), { ssr: false });
-const Toaster2 = dynamic(() => import("@/components/ui/toaster").then(mod => mod.Toaster), { ssr: false });
 const AuthDialogProvider = dynamic(() => import("./auth-dialog").then(mod => mod.AuthDialogProvider), { ssr: false });
 const SessionProvider = dynamic(() => import("next-auth/react").then(mod => mod.SessionProvider), { ssr: false });
 
