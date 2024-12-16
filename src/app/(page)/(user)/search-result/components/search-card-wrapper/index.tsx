@@ -101,7 +101,7 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
           {isLoadingMore && <Skeleton className="w-full h-20" />}
 
           {/* Intersection Observer Target */}
-          {hasMoreData && <div ref={observerRef} className="h-10"></div>}
+          {hasMoreData && <div ref={observerRef} className="h-10" />}
         </div>
       </div>
       <GISMap

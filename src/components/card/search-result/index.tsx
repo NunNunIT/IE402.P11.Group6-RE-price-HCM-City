@@ -101,7 +101,7 @@ export default function SearchResultCard({
                 {owner?.username ?? "Unknown"}
               </p>
               <p className="text-[8px] text-gray-500">
-                Ngày đăng: {new Date(createdAt).toLocaleDateString()}
+                Ngày đăng: {(createdAt ? new Date(createdAt) : new Date()).toLocaleDateString()}
               </p>
             </div>
           </div>
