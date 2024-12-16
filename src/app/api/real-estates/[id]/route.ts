@@ -31,12 +31,10 @@ export const GET = async (req: NextRequest, { params: { id } }: { params: { id: 
       return ({ ...location, distance });
     });
     temp.sort((a, b) => a.distance - b.distance);
-    locations = temp.map(({ distance: __distance, imageUrls, ...location }) =>
-    ({
+    locations = temp.map(({ distance: __distance, imageUrls, ...location }) => ({
       ...location,
       imageUrl: imageUrls?.[0]
-    })
-    ).slice(0, 24);
+    })).slice(0, 24);
 
     return successResponse({ data: { ...realEstate, locations } });
   } catch (error) {
