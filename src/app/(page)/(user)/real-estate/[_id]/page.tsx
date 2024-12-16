@@ -168,10 +168,17 @@ export default async function RealEstateDetailPage({
           </div>
 
           <CarouselWrapper
+            link={`/api/real-estates?sort=locate:${data.locate?.lat},${data.locate?.long}&relative=1`}
+            type="realEstate"
+          />
+
+          <CarouselWrapper
             link={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
             type="location"
           />
         </div>
+
+        {JSON.stringify(data.locations)}
 
         <GISMap
           zoom={20}
@@ -179,12 +186,14 @@ export default async function RealEstateDetailPage({
           isShowDistrict
           center={data.locate}
           points={[
-            // eslint-disable-next-line no-unsafe-optional-chaining
-            ...(data.locations?.map((location: any) => ({
-              ...location.locate,
-              title: location.title,
-              type: location.category,
-            })) || []),
+            ...(Array.isArray(data.locations)
+              ? data.locations.map((location: any) => ({
+                ...location.locate,
+                title: location.title,
+                type: location.category,
+              }))
+              : []
+            ),
             {
               ...data.locate,
               title: data.title,

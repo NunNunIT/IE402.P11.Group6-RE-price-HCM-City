@@ -11,6 +11,7 @@ export const GET = async (req: NextRequest) => {
   const page = Number(searchParams.get('page') ?? 1);
   const sort = searchParams.getAll('sort');
   const getAll = !!searchParams.get('getAll'); // Chuyển getAll thành boolean
+  const relative = !!searchParams.get('relative');
 
   try {
     const { locateSort, mongooseSort } = sortHandler(sort);
@@ -28,7 +29,7 @@ export const GET = async (req: NextRequest) => {
       const temp = realEstates.map(realEstate => {
         const distance = haversineDistance(locateSort, realEstate.locate);
         return ({ ...realEstate, distance });
-      });
+      }).filter(({ distance }) => !relative || distance >= 0.0000001);
       temp.sort((a, b) => a.distance - b.distance);
       realEstates = temp.map(({ distance: __distance, ...realEstate }) => ({ ...realEstate }));
     }
