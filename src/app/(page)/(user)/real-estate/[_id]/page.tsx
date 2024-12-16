@@ -138,8 +138,9 @@ export default async function RealEstateDetailPage({
             title: data.title,
             type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
           },
-          ...data.locations!
-            .slice(0, 24)
+          // eslint-disable-next-line no-unsafe-optional-chaining
+          ...data.locations
+            ?.slice(0, 24)
             .map((location: any) => ({
               ...location.locate,
               title: data.title,
