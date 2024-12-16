@@ -144,8 +144,8 @@ export default async function RealEstateDetailPage({
             ?.slice(0, 24)
             .map((location: any) => ({
               ...location.locate,
-              title: data.title,
-              type: data.category,
+              title: location.title,
+              type: location.category,
             }))
         ]}
       />
