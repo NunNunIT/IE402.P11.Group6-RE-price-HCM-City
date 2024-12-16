@@ -7,7 +7,8 @@ import { notFound } from "next/navigation";
 import translateKey from "@/lib/func/transfer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { SeeMoreType1 } from "@/components/seeMore";
+import { CarouselWrapper } from "@/components/carsousel";
+import { LocationCard } from "@/components/card";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
@@ -120,10 +121,9 @@ export default async function RealEstateDetailPage({
           </div>
         </div>
 
-        <SeeMoreType1
-          typeCard="location"
-          title="Các địa điểm gần đó"
-          linkFetch={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
+        <CarouselWrapper
+          link={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
+          component={LocationCard}
         />
       </div>
 
