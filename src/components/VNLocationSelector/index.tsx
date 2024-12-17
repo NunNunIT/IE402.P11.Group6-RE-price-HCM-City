@@ -180,7 +180,7 @@ export default function LocationSelect({
           >
             <ComboboxInput
               placeholder={placeholders?.district ?? "Chọn quận/huyện"}
-              disabled={!location?.province}
+              disabled={!location?.province || disabled}
               {...props}
             />
             <ComboboxContent>
@@ -196,7 +196,7 @@ export default function LocationSelect({
           </Combobox>
         ) : (
           <ComboboxDrawer
-            disabled={!location?.province}
+            disabled={!location?.province || disabled}
             selectData={selectData.districts}
             value={location?.district ?? ""}
             onChange={(value: string) =>
@@ -222,7 +222,7 @@ export default function LocationSelect({
           >
             <ComboboxInput
               placeholder={placeholders?.ward ?? "Chọn phường/xã"}
-              disabled={!location?.district}
+              disabled={!location?.district || disabled}
               {...props}
             />
             <ComboboxContent>
@@ -234,7 +234,7 @@ export default function LocationSelect({
           </Combobox>
         ) : (
           <ComboboxDrawer
-            disabled={!location?.district}
+            disabled={!location?.district || disabled}
             selectData={selectData.wards}
             value={location?.ward ?? ""}
             onChange={(value: string) => handleLocationChange("ward", value)}
