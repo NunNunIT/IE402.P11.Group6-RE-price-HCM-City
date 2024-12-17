@@ -143,7 +143,7 @@ export default async function RealEstateDetailPage({
         />
 
         <CarouselWrapper
-          link={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
+          link={`/api/locations?sort=locate:${data.locate?.lat},${data.locate?.long}`}
           type="location"
         />
       </div>

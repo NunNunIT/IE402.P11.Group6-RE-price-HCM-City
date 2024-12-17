@@ -13,7 +13,7 @@ const LocationCard = dynamic(() => import("@/components/card/location"));
 const fetcher = (url: string) =>
   fetch(url)
     .then((res) => res.json())
-    .then((payload) => payload.data);
+    .then((payload) => payload.data?.rows);
 
 export default function SeeMore({
   typeCard,

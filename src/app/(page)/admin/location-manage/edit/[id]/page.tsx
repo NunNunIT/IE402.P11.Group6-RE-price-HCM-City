@@ -66,7 +66,7 @@ const EXTENSION_OPTIONS = DATA_SERVICES.options.map((option) => {
 export default function EditLocation() {
   const { id } = useParams();
   const router = useRouter();
-  const { data, isLoading, error } = useSWR(`/api/location/${id}`, fetcher);
+  const { data, isLoading, error } = useSWR(`/api/locations/${id}`, fetcher);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -104,7 +104,7 @@ export default function EditLocation() {
           formData.append("folder", "location-upload");
 
           // Gọi API của bạn để upload
-          const response = await fetch(
+          const res = await fetch(
             `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cloudinary`,
             {
               method: "POST",
@@ -112,10 +112,10 @@ export default function EditLocation() {
             }
           );
 
-          if (!response.ok) {
+          if (!res.ok)
             throw new Error("Error uploading image");
-          }
-          const result = await response.json();
+
+          const result = await res.json();
 
           return result.url; // Trả về URL đã upload
         }
@@ -134,8 +134,8 @@ export default function EditLocation() {
         imageUrls: uploadedImageUrls, // Thay thế imageUrls bằng URL đã upload
       };
 
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/location/${id}`,
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/locations/${id}`,
         {
           method: "PUT",
           body: JSON.stringify(updateValues),
@@ -145,12 +145,12 @@ export default function EditLocation() {
       );
 
       // Kiểm tra nếu yêu cầu không thành công
-      if (!result.ok) {
-        throw new Error(`Failed to submit data: ${result.statusText}`);
+      if (!res.ok) {
+        throw new Error(`Failed to submit data: ${res.statusText}`);
       }
 
       // Xử lý kết quả thành công
-      await result.json();
+      await res.json();
       toast.info("Cập nhật địa điểm thành công", {
         description: "Địa điểm đã đưuọc cập nhật",
       });

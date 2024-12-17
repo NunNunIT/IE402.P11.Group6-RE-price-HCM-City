@@ -48,18 +48,14 @@ export const GET = async (req: NextRequest) => {
       imageUrl: imageUrls[0],
     }));
 
-    return NextResponse.json({
-      message: 'Lấy danh sách địa điểm thành công',
-      data: locations,
-      meta: {
-        page,
-        limit,
-        total: total,
-        totalPages: total / limit,
-      },
-    });
+    return successResponse({
+      data: {
+        rows: locations,
+        total,
+      }
+    })
   } catch (error) {
-    console.error("Error in @GET /api/location:", error.message);
+    console.error("Error in @GET /api/locations:", error.message);
     return errorResponse({
       message: 'Đã có lỗi xảy ra khi lấy danh sách địa điểm',
       error,
