@@ -1,4 +1,4 @@
-import { errorResponse, forbiddenResponse, haversineDistance, sortHandler, successResponse } from '@/utils';
+import { errorResponse, forbiddenResponse, haversineDistance, isNotNullAndUndefined, sortHandler, successResponse } from '@/utils';
 
 import { Location } from '@/lib/model';
 import { NextRequest, NextResponse } from 'next/server';
@@ -36,12 +36,14 @@ export const GET = async (req: NextRequest) => {
         const distance = haversineDistance(locateSort, location.locate);
         return ({ ...location, distance });
       });
-      temp.sort((a, b) => a.distance - b.distance);
+      temp.filter(({ distance }) => isNotNullAndUndefined(distance))
+        .sort((a, b) => a.distance - b.distance);
       locations = temp.map(({ distance: __distance, ...location }) => ({ ...location }));
     }
 
     const total = locations.length;
-    if (!getAll) locations = locations.slice((page - 1) * limit, page * limit);
+    if (!getAll)
+      locations = locations.slice((page - 1) * limit, page * limit);
 
     locations = locations.map(({ imageUrls, ...location }) => ({
       ...location,
