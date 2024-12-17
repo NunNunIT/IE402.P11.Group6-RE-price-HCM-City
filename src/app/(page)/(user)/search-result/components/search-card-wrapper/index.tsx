@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 
 import { SearchResultCard } from "@/components/card";
 import { SearchTab } from "@/components/search";
-import { Skeleton } from "@/components/ui/skeleton";
 import dynamic from "next/dynamic";
 import useSWRInfinite from "swr/infinite";
 

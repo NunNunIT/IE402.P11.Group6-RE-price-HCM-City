@@ -8,7 +8,7 @@ import useSWR from "swr";
 
 async function getData(url: string): Promise<DataColumns[]> {
   try {
-    const response = await fetch(
+    const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`,
       {
         method: "GET",
@@ -16,14 +16,14 @@ async function getData(url: string): Promise<DataColumns[]> {
       }
     );
 
-    if (!response.ok) {
+    if (!res.ok) {
       throw new Error("Failed to fetch data from API");
     }
 
-    const result = await response.json();
+    const payload = await res.json();
 
     // Assuming your API response contains a "data" field with the array of items
-    return result.data.map((item: any) => ({
+    return payload.data.rows.map((item: any) => ({
       _id: item._id,
       title: item.title,
       price: item.price,

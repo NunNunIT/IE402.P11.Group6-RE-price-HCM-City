@@ -24,7 +24,7 @@ const fetcher = async (url: string) => {
   const res = await fetch(url, { cache: "reload" });
   if (!res.ok) throw new Error("Failed to fetch data from API");
   const payload = await res.json();
-  return payload.data;
+  return payload.data.rows;
 }
 
 export default function CarouselWrapper({ link, ...props }: ICarouselWrapperProps) {

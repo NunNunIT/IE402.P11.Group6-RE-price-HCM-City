@@ -140,13 +140,13 @@ const Columns: ColumnDef<ILocationModel & { _id: any }>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "imageUrls",
+    accessorKey: "imageUrl",
     header: "Hình ảnh",
     cell: ({ row }) => (
       <div className="capitalize">
         <Image
-          src={((row.getValue("imageUrls") as string[]) || [])[0]}
-          alt="imageUrls"
+          src={row.getValue("imageUrl")}
+          alt={row.getValue("title")}
           width="1000"
           height="1000"
           className="w-32"
