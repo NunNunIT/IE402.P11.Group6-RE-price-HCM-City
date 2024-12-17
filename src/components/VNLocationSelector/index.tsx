@@ -244,6 +244,7 @@ export default function LocationSelect({
 
       {depthLevel >= ENUM_LOCATION_TYPE.STREET && (
         <Input
+          disabled={disabled}
           value={location?.street}
           onChange={(e) =>
             handleLocationChange("street", e.currentTarget.value)
