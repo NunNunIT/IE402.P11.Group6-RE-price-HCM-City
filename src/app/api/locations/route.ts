@@ -35,9 +35,8 @@ export const GET = async (req: NextRequest) => {
       const temp = locations.map(location => {
         const distance = haversineDistance(locateSort, location.locate);
         return ({ ...location, distance });
-      });
-      temp.filter(({ distance }) => isNotNullAndUndefined(distance))
-        .sort((a, b) => a.distance - b.distance);
+      }).filter(({ distance }) => isNotNullAndUndefined(distance));
+      temp.sort((a, b) => a.distance - b.distance);
       locations = temp.map(({ distance: __distance, ...location }) => ({ ...location }));
     }
 
