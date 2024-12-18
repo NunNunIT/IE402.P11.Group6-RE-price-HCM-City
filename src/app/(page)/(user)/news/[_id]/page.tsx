@@ -1,6 +1,34 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+export async function generateMetadata({ params: { _id } }: { params: { _id: string } }) {
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news/${_id}`
+  )
+    .then(async (res) => {
+      const payload = await res.json();
+      return payload;
+    })
+    .then(async (payload) => {
+      const data = payload.data;
+      return data;
+    })
+    .catch((error): null => {
+      console.error(
+        ">> Error:",
+        error instanceof Error ? error.message : "unknown error"
+      );
+      return null;
+    });
+
+  if (!data) return { title: "News Not Found" };
+
+  return {
+    title: data.title,
+    description: data.description,
+  };
+}
+
 export default async function NewsDetailPage({ params: { _id } }: { params: { _id: string } }) {
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news/${_id}`

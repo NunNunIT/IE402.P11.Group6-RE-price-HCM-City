@@ -22,9 +22,8 @@ export default function Home() {
       if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
       const { data } = await res.json();
 
-
       if (data.rows?.length > 0) {
-        setCards((prev) => [...prev, ...data]); // Thêm dữ liệu mới vào danh sách
+        setCards((prev) => [...prev, ...data.rows]); // Thêm dữ liệu mới vào danh sách
         setPage((prev) => prev + 1); // Tăng số trang
       }
     } catch (error) {

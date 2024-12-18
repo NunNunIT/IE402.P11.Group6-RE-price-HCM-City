@@ -5,6 +5,13 @@ import { AppSidebar } from "@/partial/sidebar";
 // import { ENUM_ROLE } from "@/utils";
 // import { auth } from "@/lib/auth";
 // import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Quản trị viên",
+  description:
+    "Trang quản trị viên.",
+};
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   // TODO: Uncomment this code to enable authentication

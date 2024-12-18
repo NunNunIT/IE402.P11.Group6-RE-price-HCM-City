@@ -11,43 +11,99 @@ import {
 import { usePathname } from "next/navigation";
 
 export default function BreadcrumbWithCustomSeparator() {
-  const tranfer = [
-    { route: "/", label: ["Trang chủ"] },
-    { route: "/user", label: ["Trang chủ", "Tài khoản"] },
-    { route: "/real-estate", label: ["Trang chủ", "Bất động sản"] },
+  const transfer = [
+    { pathRoute: "/", nav: [{ route: "/", label: "Trang chủ" }] },
     {
-      route: "/user/saved",
-      label: ["Trang chủ", "Tài khoản", "Bộ sưu tập lưu"],
+      pathRoute: "/analysis",
+      nav: [
+        { route: "/", label: "Trang chủ" },
+        { route: "/analysis", label: "Biến động" },
+      ],
     },
     {
-      route: "/user/my-re",
-      label: ["Trang chủ", "Tài khoản", "Bất động sản của tôi"],
+      pathRoute: "/create-new-re",
+      nav: [
+        { route: "/", label: "Trang chủ" },
+        { route: "/create-new-re", label: "Tạo tin đăng bán bất động sản" },
+      ],
     },
-    { route: "/analysis", label: ["Trang chủ", "Biến động"] },
-    { route: "/news", label: ["Trang chủ", "Tin tức"] },
+    {
+      pathRoute: "/news",
+      nav: [
+        { route: "/", label: "Trang chủ" },
+        { route: "/news", label: "Tin tức" },
+      ],
+    },
+    {
+      pathRoute: "/news-search-result",
+      nav: [
+        { route: "/", label: "Trang chủ" },
+        { route: "/news-search-result", label: "Kết quả tìm kiếm tin tức" },
+      ],
+    },
+    {
+      pathRoute: "/search-result",
+      nav: [
+        { route: "/", label: "Trang chủ" },
+        { route: "/search-result", label: "Kết quả tìm kiếm bất động sản" },
+      ],
+    },
+    {
+      pathRoute: "/notifications",
+      nav: [
+        { route: "/", label: "Trang chủ" },
+        { route: "/notifications", label: "Thông báo" },
+      ],
+    },
+    {
+      pathRoute: "/real-estate",
+      nav: [
+        { route: "/", label: "Trang chủ" },
+        { route: "/real-estate", label: "Bất động sản" },
+      ],
+    },
+    {
+      pathRoute: "/user",
+      nav: [
+        { route: "/", label: "Trang chủ" },
+        { route: "/user", label: "Tài khoản" },
+      ],
+    },
+
+    {
+      pathRoute: "/user/saved",
+      nav: [
+        { route: "/", label: "Trang chủ" },
+        { route: "/user", label: "Tài khoản" },
+        { route: "/user/saved", label: "Bộ sưu tập lưu" },
+      ],
+    },
+    {
+      pathRoute: "/user/my-re",
+      nav: [
+        { route: "/", label: "Trang chủ" },
+        { route: "/user", label: "Tài khoản" },
+        { route: "/user/my-re", label: "Bất động sản của tôi" },
+      ],
+    },
   ];
 
   const pathname = usePathname();
 
-  // Extract the breadcrumb labels for the current path
-  const breadcrumbLabels =
-    tranfer.find((item) => item.route === pathname)?.label || [];
+  // Extract the breadcrumb navigation for the current path
+  const breadcrumbNav =
+    transfer.find((item) => item.pathRoute === pathname)?.nav || [];
 
   return (
     <div className="bg-white p-2 md:px-6 w-full">
       <Breadcrumb>
         <BreadcrumbList>
-          {breadcrumbLabels.map((label, index) => (
+          {breadcrumbNav.map((navItem, index) => (
             <BreadcrumbItem key={index}>
-              <BreadcrumbLink
-                href={
-                  tranfer.find((item) => item.label.includes(label))?.route ||
-                  "#"
-                }
-              >
-                {label}
+              <BreadcrumbLink href={navItem.route}>
+                {navItem.label}
               </BreadcrumbLink>
-              {index < breadcrumbLabels.length - 1 && (
+              {index < breadcrumbNav.length - 1 && (
                 <BreadcrumbSeparator>
                   <Slash />
                 </BreadcrumbSeparator>
