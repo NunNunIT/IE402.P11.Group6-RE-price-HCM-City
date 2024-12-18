@@ -13,6 +13,32 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import { toast } from "sonner";
+
+const postConfirmRealEstate = async (id: string) => {
+  const res = await fetch(`/api/real-estates/${id}/confirm`, {
+    method: "PUT",
+    body: JSON.stringify({
+      isAuth: true,
+    }),
+  });
+  if (!res.ok) {
+    throw new Error("Network response was not ok");
+  }
+  const payload = await res.json();
+  console.log("payload", payload);
+  return payload.data;
+};
+
+const confirmRealEstate = async (id: string) => {
+  toast.promise(postConfirmRealEstate(id), {
+    loading: "Đang Xác nhận...",
+    success: (data) => {
+      return "Xác nhận thành công";
+    },
+    error: () => "Xác nhận thất bại",
+  });
+};
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -99,8 +125,14 @@ export const columns: ColumnDef<DataColumns>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Hành động</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Xem</DropdownMenuItem>
-            <DropdownMenuItem>Xóa</DropdownMenuItem>
+            <DropdownMenuItem
+              className="hover:cursor-pointer"
+              onClick={() => {
+                confirmRealEstate(row.original._id);
+              }}
+            >
+              Xác nhận
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -30,6 +30,7 @@ import MultipleSelector from "@/components/ui/multiple-selector";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ENUM_MAP_MODE } from "@/utils";
+import LocationSelect from "@/components/VNLocationSelector";
 const GisMap = dynamic(() => import("@/components/gis-map"), {
   ssr: false,
   loading: () => <>Loading...</>,
@@ -42,7 +43,49 @@ const FormSchema = z.object({
   title: z.string().min(1, "Title không được bỏ trống."),
   desc: z.string(),
   category: z.enum(cateEnum as unknown as [string, ...string[]]).optional(),
-  locate: z.tuple([z.number(), z.number()]),
+  coordinates: z.tuple([z.number(), z.number()]),
+  // tinh
+  // huyen
+  // xa
+  // diachi
+  locate: z
+    .object({
+      province: z.string().nullable().optional(),
+      district: z.string().nullable().optional(),
+      ward: z.string().nullable().optional(),
+      street: z.string().nullable().optional(),
+    })
+    .superRefine((data, ctx) => {
+      if (!data.province) {
+        return ctx.addIssue({
+          path: [],
+          code: "custom",
+          message: "Tỉnh không được để trống",
+        });
+      }
+
+      if (!data.district) {
+        ctx.addIssue({
+          path: [],
+          code: "custom",
+          message: "Huyện không được để trống",
+        });
+      }
+      if (!data.ward) {
+        ctx.addIssue({
+          path: [],
+          code: "custom",
+          message: "Xã không được để trống",
+        });
+      }
+      if (!data.street) {
+        ctx.addIssue({
+          path: [],
+          code: "custom",
+          message: "Đường không được để trống",
+        });
+      }
+    }),
   imageUrls: z
     .array(z.string())
     .min(1, "Ít nhất một hình ảnh phải được tải lên."),
@@ -141,7 +184,7 @@ export default function AddLocation() {
       };
 
       const result = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/location`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/locations`,
         {
           method: "POST",
           body: JSON.stringify(addValues),
@@ -309,10 +352,26 @@ export default function AddLocation() {
               />
             </div>
 
-            <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg">
+            <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
               <FormField
                 control={form.control}
                 name="locate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Địa điểm</FormLabel>
+                    <FormControl>
+                      <LocationSelect {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg">
+              <FormField
+                control={form.control}
+                name="coordinates"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-semibold">Vị trí</FormLabel>
