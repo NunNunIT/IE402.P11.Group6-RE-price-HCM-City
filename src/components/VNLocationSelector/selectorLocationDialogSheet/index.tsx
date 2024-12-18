@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { FaChevronDown, FaLocationDot } from "react-icons/fa6";
-import React, { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import {
   Sheet,
   SheetClose,
@@ -53,7 +53,7 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
 }) => {
   const isDesktop = useMediaQuery("(min-width: 860px)");
   const [searchText, setSearchText] = useState("");
-  const [filteredOptions, setFilteredOptions] = useState<any[]>([selectData]);
+  const [filteredOptions, setFilteredOptions] = useState<any[]>(selectData);
 
   const renderButtonPositioning = () => (
     <Button
@@ -116,42 +116,44 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
     });
   }, [setCurrentPosition, setSelectedValue]);
 
-  useEffect(() => {
-    setFilteredOptions(selectData);
-  }, []);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setSearchText(value);
     setFilteredOptions(
       selectData.filter(
-        (option) => option.Name.toLowerCase().includes(value.toLowerCase()) // Lọc theo tên không phân biệt hoa thường
+      (option) => option.Name.toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .includes(value.toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, ""))
       )
     );
-  };
+    setSearchText(value);
+  }, []);
 
-  const renderSelectTrigger2 = () => (
+  const renderSelectTrigger2 = ({ value }: { value: string }) => (
     <div className="h-full flex flex-nowrap justify-center items-center gap-2 text-base min-w-[100px] text-nowrap cursor-pointer">
       <FaLocationDot className="size-4 text-zinc-800" />
-      {selectedValue}
+      {value}
       <FaChevronDown className="size-2 text-zinc-800" />
     </div>
   );
 
   const renderSelectTrigger1 = () => triggerCustomize;
 
-  const RenderSelectTrigger = () => {
+  const renderSelectTrigger = ({ value }: { value: string }) => {
     switch (typeTrigger) {
       case 1:
         return renderSelectTrigger1();
       case 2:
-        return renderSelectTrigger2();
+        return renderSelectTrigger2({ value });
       default:
         return renderSelectTrigger1();
     }
   };
 
-  const RenderSearch = () => (
+  const RenderSearch = useCallback(({ value, onChange }: { value: string, onChange: any }) => (
     <div className="flex items-center justify-center pt-2">
       <div className="w-full relative flex flex-nowrap items-center">
         <Input
@@ -160,18 +162,12 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
           autoCapitalize="off"
           placeholder="Tìm kiếm"
           type="search"
-          value={searchText}
-          onChange={handleSearchChange}
+          value={value}
+          onChange={onChange}
         />
-        <button
-          type="submit"
-          className="absolute right-2 inline-flex w-fit h-5/6 aspect-square items-center justify-center px-6 py-0 rounded-lg border border-transparent bg-zinc-100 dark:bg-zinc-900 font-medium text-pri-red-1 shadow-sm hover:bg-zinc-200 dark:hover:bg-zinc-800  focus:outline-none"
-        >
-          <CiSearch className="w-auto h-1/2" />
-        </button>
       </div>
     </div>
-  );
+  ), []);
 
   const RenderOptions = (item: SelectorLocationOption) => {
     switch (typeOptions) {
@@ -193,18 +189,14 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
       )}
       onClick={() => setSelectedValue(item.Name!)}
     >
-      <div
-        className={cn(
-          "flex justify-center items-center p-[2px] w-6 h-6 rounded-full border-2 group-hover:border-pri-red-1",
-          selectedValue === item.Name ? "border-pri-red-1" : "border-zinc-500"
-        )}
-      >
-        <div
-          className={cn(
-            "w-4 h-4 rounded-full",
-            selectedValue === item.Name ? "bg-pri-red-1" : "bg-transparent"
-          )}
-        />
+      <div className={cn(
+        "flex justify-center items-center p-[2px] w-6 h-6 rounded-full border-2 group-hover:border-pri-red-1",
+        selectedValue === item.Name ? "border-pri-red-1" : "border-zinc-500"
+      )}>
+        <div className={cn(
+          "w-4 h-4 rounded-full",
+          selectedValue === item.Name ? "bg-pri-red-1" : "bg-transparent"
+        )} />
       </div>
 
       {item.Name}
@@ -221,28 +213,21 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
       style={{ backgroundImage: `url(${item.Img})`, backgroundSize: "cover" }}
       onClick={() => setSelectedValue(item.Name!)}
     >
-      <div
-        className={cn(
-          "p-2 flex gap-2 items-end absolute bottom-0  w-full z-10",
-          selectedValue === item.Name
-            ? "h-fit bg-gradient-to-tr from-pri-red-1"
-            : "h-1/2 bg-gradient-to-t from-black/80"
-        )}
-      >
-        <div
-          className={cn(
-            "flex justify-center items-center p-[2px] w-6 h-6 rounded-full border-2 group-hover:border-pri-red-1",
-            selectedValue === item.Name ? "border-white" : "border-zinc-500"
-          )}
-        >
-          <div
-            className={cn(
-              "w-4 h-4 rounded-full",
-              selectedValue === item.Name ? "bg-white" : "bg-transparent"
-            )}
-          />
+      <div className={cn(
+        "p-2 flex gap-2 items-end absolute bottom-0  w-full z-10",
+        selectedValue === item.Name
+          ? "h-fit bg-gradient-to-tr from-pri-red-1"
+          : "h-1/2 bg-gradient-to-t from-black/80"
+      )}>
+        <div className={cn(
+          "flex justify-center items-center p-[2px] w-6 h-6 rounded-full border-2 group-hover:border-pri-red-1",
+          selectedValue === item.Name ? "border-white" : "border-zinc-500"
+        )}>
+          <div className={cn(
+            "w-4 h-4 rounded-full",
+            selectedValue === item.Name ? "bg-white" : "bg-transparent"
+          )} />
         </div>
-
         {item.Name}
       </div>
     </div>
@@ -317,10 +302,9 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
       <Dialog open={isDialogOpen} onOpenChange={handleDialogOpenChange}>
         <div className="relative">
           {!viewOnly && (
-            <DialogTrigger asChild>{RenderSelectTrigger()}</DialogTrigger>
+            <DialogTrigger asChild>{renderSelectTrigger({ value: selectedValue })}</DialogTrigger>
           )}
-          {/* Nếu viewOnly bật thì không hiển thị DialogTrigger mà chỉ hiển thị nội dung */}
-          {viewOnly && RenderSelectTrigger()}
+          {viewOnly && renderSelectTrigger({ value: selectedValue })}
         </div>
 
         <DialogContent className="w-[50vw]">
@@ -328,7 +312,7 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
             <DialogTitle className="uppercase">{title}</DialogTitle>
             <DialogDescription className="text-zinc-500 text-sm">
               {desc}
-              {search && <RenderSearch />}
+              {search && <RenderSearch value={searchText} onChange={handleSearchChange} />}
             </DialogDescription>
           </DialogHeader>
 
@@ -344,8 +328,8 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
               multiChoice
                 ? "flex flex-wrap justify-start"
                 : typeOptions == 2
-                ? "grid grid-cols-2"
-                : "grid"
+                  ? "grid grid-cols-2"
+                  : "grid"
             )}
           >
             {filteredOptions?.map((item, index) =>
@@ -376,9 +360,9 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
       <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
         <div className="relative">
           {!viewOnly && (
-            <SheetTrigger asChild>{RenderSelectTrigger()}</SheetTrigger>
+            <SheetTrigger asChild>{renderSelectTrigger({ value: selectedValue })}</SheetTrigger>
           )}
-          {viewOnly && RenderSelectTrigger()}
+          {viewOnly && renderSelectTrigger({ value: selectedValue })}
         </div>
         <SheetContent side="bottom" className="">
           <SheetHeader>
@@ -387,7 +371,7 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
           </SheetHeader>
           <SheetDescription>
             {desc}
-            {search && <RenderSearch />}
+            {search && <RenderSearch value={searchText} onChange={handleSearchChange} />}
           </SheetDescription>
           {positioning && (
             <div className="col-span-2 w-full">
@@ -402,8 +386,8 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
               multiChoice
                 ? "flex flex-wrap justify-start items-start"
                 : typeOptions == 2
-                ? "grid grid-cols-2"
-                : "grid"
+                  ? "grid grid-cols-2"
+                  : "grid"
             )}
           >
             {filteredOptions?.map((item, index) =>

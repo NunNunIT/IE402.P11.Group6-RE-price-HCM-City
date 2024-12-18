@@ -10,13 +10,6 @@ import translateKey from "@/lib/func/transfer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CarouselWrapper } from "@/components/carsousel";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"; // Import Breadcrumb components
-import { Slash } from "lucide-react";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
@@ -24,11 +17,39 @@ interface IRealEstateDetailPageProps extends IDefaultPageProps {
   params: { _id: string };
 }
 
+export async function generateMetadata({ params: { _id } }: IRealEstateDetailPageProps) {
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`,
+    { cache: "reload" }
+  )
+    .then(async (res) => {
+      const payload = await res.json();
+      return payload.data;
+    })
+    .catch((error): null => {
+      console.error("🚀 ~ .catch ~ error", error.message);
+      return null;
+    });
+
+  if (!data) return {};
+
+  return {
+    title: data.title,
+    description: data.desc,
+    openGraph: {
+      title: data.title,
+      description: data.desc,
+      images: data.imageUrls,
+    },
+  };
+}
+
 export default async function RealEstateDetailPage({
   params: { _id },
 }: IRealEstateDetailPageProps) {
   const data = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`,
+    { cache: "reload" }
   )
     .then(async (res) => {
       const payload = await res.json();
@@ -45,154 +66,149 @@ export default async function RealEstateDetailPage({
   if (!data) return notFound();
 
   return (
-    <div>
-      <div className="w-full p-2 mb-4 mx-auto">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <a href="/">Trang chủ</a>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator>
-              <Slash />
-            </BreadcrumbSeparator>
-            <BreadcrumbItem>
-              <a href="/real-estate">Bất động sản</a>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator>
-              <Slash />
-            </BreadcrumbSeparator>
-            <BreadcrumbItem>
-              <span>{data.title}</span>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full mx-auto p-3">
-        <div className="w-full h-full bg-white dark:bg-zinc-900 space-y-6 pr-3">
-          <ImageViewType1 images={data.imageUrls} />
+    <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full mx-auto p-3">
+      <div className="w-full h-full bg-white dark:bg-zinc-900 space-y-6 pr-3">
+        <ImageViewType1 images={data.imageUrls} />
 
-          <div className="flex flex-col gap-3">
-            <h1 className="font-bold text-3xl">{data.title}</h1>
-            <div className="flex flex-row gap-2 items-center font-semibold">
-              <FaLocationDot />
-              <span>
-                {data.locate?.diachi}, {data.locate?.xa}, {data.locate?.huyen},{" "}
-                {data.locate?.tinh}
+        <div className="flex flex-col gap-3">
+          <h1 className="font-bold text-3xl">{data.title}</h1>
+          <div className="flex flex-row gap-2 items-center font-semibold">
+            <FaLocationDot />
+            <span>
+              {data.locate?.diachi}, {data.locate?.xa}, {data.locate?.huyen},{" "}
+              {data.locate?.tinh}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-row justify-between items-center gap-6">
+          <div className="flex flex-row gap-8">
+            <div className="flex flex-col">
+              <span className="text-zinc-600 dark:text-zinc-400">Giá</span>
+              <span className="font-semibold text-red-600 dark:text-red-500 text-xl">
+                {data.price} tỷ
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-zinc-600 dark:text-zinc-400">
+                Diện tích
+              </span>
+              <span className="font-semibold text-red-600 dark:text-red-500 text-xl">
+                {data.area} m<sup>2</sup>
               </span>
             </div>
           </div>
 
-          <div className="flex flex-row justify-between items-center gap-6">
-            <div className="flex flex-row gap-8">
-              <div className="flex flex-col">
-                <span className="text-zinc-600 dark:text-zinc-400">Giá</span>
-                <span className="font-semibold text-red-600 dark:text-red-500 text-xl">
-                  {data.price} tỷ
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-zinc-600 dark:text-zinc-400">
-                  Diện tích
-                </span>
-                <span className="font-semibold text-red-600 dark:text-red-500 text-xl">
-                  {data.area} m<sup>2</sup>
-                </span>
-              </div>
-            </div>
-            <SaveRealBtn component="real-estate" realEstateId={data._id} />
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <h2 className="font-bold text-xl">Đặc điểm bất động sản</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {Object.entries(data?.info ?? {}).map(([key, value], index) => (
-                <div
-                  key={index}
-                  className="py-2 flex flex-row justify-between items-center border-y-2 border-y-zinc-200 dark:border-y-zinc-800"
-                >
-                  <span className="font-semibold">{translateKey(key)}</span>
-                  <span>
-                    {typeof value === "number"
-                      ? value
-                      : translateKey(value as string)}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <h2 className="font-bold text-xl">Thông tin mô tả</h2>
-            <div dangerouslySetInnerHTML={{ __html: data.desc }} />
-          </div>
-
-          <div className="rounded-lg border-2 border-zinc-200 dark:border-zinc-800 p-3">
-            <h2 className="font-bold text-xl mb-1">Liên hệ</h2>
-            <div className="flex flex-row">
-              <Avatar>
-                <AvatarImage
-                  src={
-                    data.owner?.avt ??
-                    "https://cdn.caohockinhte.edu.vn/wp-content/uploads/2024/10/avatar-vo-tri-cute-meo-1.jpg"
-                  }
-                />
-                <AvatarFallback>
-                  {data.owner?.username?.[0] ?? "U"}
-                </AvatarFallback>
-              </Avatar>
-              <div className="ml-4 flex flex-col justify-center">
-                <p className="font-semibold text-lg">
-                  {data.owner?.username ?? "Tên"}
-                </p>
-                {!!data.owner?.phone && (
-                  <p className="text-sky-500">{data.owner?.phone}</p>
-                )}
-                <a
-                  href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}
-                  className="text-zinc-500 hover:text-sky-500 no-underline"
-                >
-                  {data.owner?.email ?? "123@gmail.com"}
-                </a>
-              </div>
-              <div className="flex flex-col ml-auto gap-2">
-                {!!data.owner?.phone && <Button size="sm">Gọi điện</Button>}
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}
-                >
-                  Gửi mail
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          <CarouselWrapper
-            link={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
-            type="location"
-          />
+          <SaveRealBtn component="real-estate" realEstateId={data._id} />
         </div>
 
-        <GISMap
-          zoom={20}
-          className="container"
-          isShowDistrict
-          center={data.locate}
-          points={[
-            {
-              ...data.locate,
-              title: data.title,
-              type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
-            },
-            // eslint-disable-next-line no-unsafe-optional-chaining
-            ...data.locations?.slice(0, 24).map((location: any) => ({
+        <div className="flex flex-col gap-3">
+          <h2 className="font-bold text-xl">Đặc điểm bất động sản</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {Object.entries(data?.info ?? {}).map(([key, value], index) => (
+              <div
+                key={index}
+                className="py-2 flex flex-row justify-between items-center border-y-2 border-y-zinc-200 dark:border-y-zinc-800"
+              >
+                <span className="font-semibold">{translateKey(key)}</span>
+                <span>
+                  {typeof value === "number"
+                    ? value
+                    : translateKey(value as string)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <h2 className="font-bold text-xl">Thông tin mô tả</h2>
+          <div dangerouslySetInnerHTML={{ __html: data.desc }} />
+        </div>
+
+        <div className="rounded-lg border-2 border-zinc-200 dark:border-zinc-800 p-3">
+          <h2 className="font-bold text-xl mb-1">Liên hệ</h2>
+          <div className="flex flex-row">
+            <Avatar>
+              <AvatarImage
+                src={
+                  data.owner?.avt ??
+                  "https://cdn.caohockinhte.edu.vn/wp-content/uploads/2024/10/avatar-vo-tri-cute-meo-1.jpg"
+                }
+              />
+              <AvatarFallback>
+                {data.owner?.username?.[0] ?? "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="ml-4 flex flex-col justify-center">
+              <p className="font-semibold text-lg">
+                {data.owner?.username ?? "Tên"}
+              </p>
+              {!!data.owner?.phone && (
+                <p className="text-sky-500">{data.owner?.phone}</p>
+              )}
+              <a
+                href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}
+                className="text-zinc-500 hover:text-sky-500 no-underline"
+              >
+                {data.owner?.email ?? "123@gmail.com"}
+              </a>
+            </div>
+            <div className="flex flex-col ml-auto gap-2">
+              {!!data.owner?.phone && <Button size="sm">Gọi điện</Button>}
+              <Button
+                variant="secondary"
+                size="sm"
+                href={`mailto:${data.owner?.email ?? "123@gmail.com"}`}
+              >
+                Gửi mail
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full border-b border-zinc-200 dark:border-zinc-800 py-2 mb-3 flex flex-row justify-between items-center">
+          <h3 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+            Các bất động sản gần đây
+          </h3>
+        </div>
+        <CarouselWrapper
+          link={`/api/real-estates?sort=locate:${data.locate?.lat},${data.locate?.long}&relative=1`}
+          type="realEstate"
+        />
+
+        <div className="w-full border-b border-zinc-200 dark:border-zinc-800 py-2 mb-3 flex flex-row justify-between items-center">
+          <h3 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+            Các địa điểm gần đây
+          </h3>
+        </div>
+        <CarouselWrapper
+          link={`/api/locations?sort=locate:${data.locate?.lat},${data.locate?.long}`}
+          type="location"
+        />
+      </div>
+
+      <GISMap
+        zoom={20}
+        className="container"
+        isShowDistrict
+        center={data.locate}
+        points={[
+          ...(Array.isArray(data.locations)
+            ? data.locations.slice(0, 24).map((location: any) => ({
               ...location.locate,
               title: location.title,
               type: location.category,
-            })),
-          ]}
-        />
-      </div>
+            }))
+            : []
+          ),
+          {
+            ...data.locate,
+            title: data.title,
+            type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
+          },
+        ]}
+      />
     </div>
   );
 }

@@ -46,6 +46,7 @@ const FormSchema = z.object({
   price: z.number().min(1, "Giá bán không được bỏ trống."),
   legal: z.enum(["sodo", "hopdong", "dangchoso", "khac", ""]).optional(),
   coordinates: z.tuple([z.number(), z.number()]),
+  polygon: z.array(z.tuple([z.number(), z.number()])),
   locate: z
     .object({
       province: z.string().nullable().optional(),
@@ -125,7 +126,7 @@ export default function InputForm() {
       console.error("No images to process!");
       return;
     }
-  
+
     try {
       // Bước 1: Chuyển đổi blob URLs thành File
       const files = await Promise.all(
@@ -136,21 +137,21 @@ export default function InputForm() {
           return new File([blob], fileName, { type: blob.type });
         })
       );
-  
+
       console.log("Files converted from blob URLs:", files);
-  
+
       // Bước 2: Upload files lên Cloudinary
       const uploadedUrls = await uploadFilesToCloudinary(files, "ie402/real-estates");
       console.log("Uploaded URLs from Cloudinary:", uploadedUrls);
-  
+
       // Bước 3: Thay thế imgs trong form
       const updatedValues = {
         ...values,
         imgs: uploadedUrls,
       };
-  
+
       console.log("Updated form values:", updatedValues);
-  
+
       // Bước 4: Gửi dữ liệu tới API `/api/real-estate/add`
       const response = await fetch('/api/real-estates/add', {
         method: 'POST',
@@ -159,7 +160,7 @@ export default function InputForm() {
         },
         body: JSON.stringify(updatedValues), // Gửi dữ liệu dạng JSON
       });
-  
+
       if (response.ok) {
         const result = await response.json();
         console.log("API Response:", result);
@@ -445,6 +446,7 @@ export default function InputForm() {
                       mode={ENUM_MAP_MODE.Edit}
                       value={field.value?.slice(0, 2) as [number, number]}
                       onChange={field.onChange}
+                      onPolygonComplete={(value) => form.setValue("polygon", value)}
                     />
                   </FormControl>
                   <FormMessage />

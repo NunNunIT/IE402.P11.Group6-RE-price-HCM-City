@@ -13,7 +13,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return baseUrl
     },
     jwt: async ({ token }) => {
-      const { _id, role } = await createUserFromSocial({
+      const { _id, role, avt } = await createUserFromSocial({
         email: token.email,
         socialType: token.provider as ENUM_SOCIAL_TYPE,
         metadata: {
@@ -24,6 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       token._id = _id.toString();
       token.role = role;
+      token.picture = avt;
 
       return token;
     },

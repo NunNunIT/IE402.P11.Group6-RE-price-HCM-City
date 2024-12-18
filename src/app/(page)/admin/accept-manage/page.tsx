@@ -1,9 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { DataColumns, columns } from "./columns";
 import { DataTable } from "./data-table";
-import { PlusIcon } from "lucide-react";
 import useSWR from "swr";
 
 async function getData(url: string): Promise<DataColumns[]> {
@@ -23,7 +21,7 @@ async function getData(url: string): Promise<DataColumns[]> {
     const result = await response.json();
 
     // Assuming your API response contains a "data" field with the array of items
-    return result.data.map((item: any) => ({
+    return result.data.rows.map((item: any) => ({
       _id: item._id,
       title: item.title,
       price: item.price,
@@ -43,8 +41,7 @@ export default function DemoPage() {
   return (
     <div className="container mx-auto py-10 px-2">
       <div className="flex flex-row justify-between items-center">
-        <h1>Quản lý bất động sản</h1>
-        <Button href="/create-new-re" startIcon={<PlusIcon className="size-6" />}>Tạo mới</Button>
+        <h1>Xét duyệt</h1>
       </div>
       {isLoading || error ? (
         <p>Loading...</p>

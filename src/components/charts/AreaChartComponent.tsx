@@ -41,6 +41,7 @@ import LocationSelect from "../VNLocationSelector";
 import { FaArrowCircleDown, FaArrowCircleUp } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { IoIosArrowDown } from "react-icons/io";
+import { number } from "zod";
 
 // Data structure for yearly data
 type YearData = {
@@ -48,6 +49,11 @@ type YearData = {
     priceAVG: number;
     [month: string]: number; // Represents months as "01", "02", ..., "12"
   };
+};
+
+type MonthData = {
+  month: string;
+  price: number;
 };
 
 // Yearly data
@@ -122,7 +128,9 @@ function TableDemo() {
           <TableHead className="w-2/3 font-semibold">
             So sánh giá khu vực lân cận
           </TableHead>
-          <TableHead className="font-semibold">Giá bán phổ biến nhất</TableHead>
+          <TableHead className="font-semibold">
+            Giá bán phổ biến hiện tại
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -143,7 +151,7 @@ function TableDemo() {
 }
 
 function Locate() {
-  const [value, onChangeValue] = useState(undefined)
+  const [value, onChangeValue] = useState(undefined);
 
   return (
     <Dialog>
@@ -188,11 +196,172 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+function calculateMonthRate(
+  chartData: MonthData[],
+  lastChartData: MonthData[] | null,
+  currentMonth: number
+): string | null {
+  const currentMonthStr = currentMonth.toString().padStart(2, "0");
+
+  // Find the current month's data
+  const currentData = chartData.find((item) => item.month === currentMonthStr);
+
+  // Determine the previous month's string, handling the case for December (month 12)
+  const previousMonthStr = (currentMonth - 1).toString().padStart(2, "0");
+  let previousData: MonthData | null = null;
+
+  // Check if the previous month is December and get the data accordingly
+  if (previousMonthStr === "00") {
+    if (lastChartData) {
+      previousData = lastChartData.find((item) => item.month === "12");
+    }
+  } else {
+    previousData = chartData.find((item) => item.month === previousMonthStr);
+  }
+
+  // Calculate the rate of increase/decrease
+  if (currentData && previousData) {
+    const cal =
+      ((currentData.price - previousData.price) / previousData.price) * 100;
+    return cal.toFixed(1); // Return the rate as a string with one decimal
+  }
+
+  // Return null if data is insufficient for calculation
+  return null;
+}
+
+// Helper function to get the month numbers for a given quarter
+function getQuarterMonths(quarter: number, currentMonth: number): number[] {
+  const monthRanges = [
+    [1, 2, 3], // Quarter 1
+    [4, 5, 6], // Quarter 2
+    [7, 8, 9], // Quarter 3
+    [10, 11, 12], // Quarter 4
+  ];
+
+  const quarterMonths = monthRanges[quarter - 1] || [];
+
+  // Filter out months greater than the current month
+  return quarterMonths.filter((month) => month <= currentMonth);
+}
+
+// Helper function to calculate the average price for a set of months
+function calculateAveragePrice(data: MonthData[]): number | null {
+  if (data.length === 0) return null;
+  const total = data.reduce((acc, item) => acc + item.price, 0);
+  return total / data.length;
+}
+
+function calculateQuarterRate(
+  chartData: MonthData[],
+  lastChartData: MonthData[] | null,
+  currentMonth: number
+): string | null {
+  // Determine the current quarter (1-4)
+  const currentQuarter = Math.ceil(currentMonth / 3);
+
+  // Get the range of months for the current and previous quarters
+  const currentQuarterMonths = getQuarterMonths(currentQuarter, currentMonth);
+  const previousQuarterMonths = getQuarterMonths(
+    currentQuarter === 1 ? 4 : currentQuarter - 1,
+    12
+  );
+
+  // Calculate the average price for the current quarter
+  const currentQuarterData = chartData.filter((item) =>
+    currentQuarterMonths.includes(parseInt(item.month))
+  );
+  let previousQuarterData = null;
+  if (currentQuarter === 1) {
+    if (lastChartData) {
+      previousQuarterData = lastChartData.filter((item) =>
+        previousQuarterMonths.includes(parseInt(item.month))
+      );
+    }
+  } else {
+    previousQuarterData = chartData.filter((item) =>
+      previousQuarterMonths.includes(parseInt(item.month))
+    );
+  }
+
+  const currentQuarterAvg = calculateAveragePrice(currentQuarterData);
+  const previousQuarterAvg = calculateAveragePrice(previousQuarterData);
+
+  // If both quarters have data, calculate the rate
+  if (currentQuarterAvg !== null && previousQuarterAvg !== null) {
+    const rate =
+      ((currentQuarterAvg - previousQuarterAvg) / previousQuarterAvg) * 100;
+    return rate.toFixed(1); // Return the rate with one decimal place
+  }
+
+  return null; // Return null if data is insufficient for calculation
+}
+
+function predictNextMonth(
+  chartData: MonthData[],
+  lastChartData: MonthData[] | null,
+  currentMonth: number
+): number | null {
+  const currentMonthStr = currentMonth.toString().padStart(2, "0");
+  const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+  const previous2Month =
+    currentMonth <= 2 ? 12 + (currentMonth - 2) : currentMonth - 2;
+
+  // Get the data for the current, previous, and two months ago
+  const currentData = chartData.find((item) => item.month === currentMonthStr);
+  const previousMonthStr = previousMonth.toString().padStart(2, "0");
+  let prevData = null;
+  if (previousMonth === 12) {
+    prevData = lastChartData.find((item) => item.month === previousMonthStr);
+  } else {
+    prevData = chartData.find((item) => item.month === previousMonthStr);
+  }
+
+  const previous2MonthStr = previous2Month.toString().padStart(2, "0");
+  let prev2Data = null;
+  if (previous2Month >= 11) {
+    prev2Data = lastChartData.find((item) => item.month === previous2MonthStr);
+  } else {
+    prev2Data = chartData.find((item) => item.month === previous2MonthStr);
+  }
+
+  // If we have data for all three months, we can calculate the prediction
+  if (currentData && prevData && prev2Data) {
+    // Calculate the month-to-month price changes
+    const changeCurrentToPrev = currentData.price - prevData.price;
+    const changePrevToTwoMonthsAgo = prevData.price - prev2Data.price;
+
+    // Calculate the average change over the last two months
+    const averageChange = (changeCurrentToPrev + changePrevToTwoMonthsAgo) / 2;
+
+    // Predict the next month's price by adding the average change to the current month's price
+    const predictedNextMonth = currentData.price + averageChange;
+
+    return predictedNextMonth;
+  }
+
+  return null; // Return null if there's insufficient data
+}
+
 export function AreaChartComponent() {
   const [selectedYear, setSelectedYear] = useState(2024);
 
   // Transform the selected year's data for the chart
   const chartData = transformYearData(yearData[selectedYear]);
+  const lastChartData = transformYearData(yearData[selectedYear - 1]);
+
+  const currentMonth = new Date().getMonth() + 1;
+  const avgPrice = yearData[selectedYear]["priceAVG"];
+  const currentPrice =
+    yearData[selectedYear][currentMonth.toString().padStart(2, "0")];
+
+  const monthRate = calculateMonthRate(chartData, lastChartData, currentMonth);
+  const quarterRate = calculateQuarterRate(
+    chartData,
+    lastChartData,
+    currentMonth
+  );
+  const predictData = predictNextMonth(chartData, lastChartData, currentMonth);
 
   // Dynamically calculate Y-axis domain
   const yAxisDomain = [
@@ -230,7 +399,7 @@ export function AreaChartComponent() {
             <div className="flex flex-col gap-2 py-3">
               <div className="flex md:flex-col flex-row-reverse justify-between">
                 <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                  {yearData[selectedYear]?.priceAVG}
+                  {avgPrice}
                   <span className="text-zinc-600 font-medium text-base">
                     tr/m<sup>2</sup>
                   </span>
@@ -239,46 +408,94 @@ export function AreaChartComponent() {
               </div>
               <div className="flex md:flex-col flex-row-reverse justify-between md:mt-0 mt-2">
                 <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                  {yearData[selectedYear]?.["12"]}
+                  {currentPrice}
                   <span className="text-zinc-600 font-medium text-base">
                     tr/m<sup>2</sup>
                   </span>
                 </div>
                 <span className="text-zinc-600 text-base">
-                  Giá trị phổ biến hiện tại
+                  Giá trị phổ biến tháng hiện tại
                 </span>
               </div>
             </div>
             <div className="flex flex-col gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
-              <div className="flex md:flex-col flex-row-reverse justify-between">
-                <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
-                  <FaArrowCircleUp className="size-8 text-green-600" />
-                  5.2%
-                </span>
-                <span className="text-zinc-600 text-base">
-                  Giá trị tăng 5.2% so với tháng trước
-                </span>
-              </div>
-              <div className="flex md:flex-col flex-row-reverse justify-between md:mt-0 mt-2">
-                <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                  <FaArrowCircleDown className="size-8 text-red-500" />
-                  5.2%
-                </span>
-                <span className="text-zinc-600 text-base">
-                  Giá trị tăng 5.2% so với quý trước
-                </span>
-              </div>
+              <>
+                {/* Check if monthRate is null */}
+                {monthRate === null ? (
+                  <span className="text-zinc-600 text-base">
+                    Không có dữ liệu so sánh với tháng trước
+                  </span>
+                ) : // Conditional rendering based on whether rate is negative or positive
+                monthRate[0] === "-" ? (
+                  <>
+                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
+                      <FaArrowCircleDown className="size-8 text-red-500" />
+                      {monthRate}%
+                    </span>
+                    <span className="text-zinc-600 text-base">
+                      Giá trị giảm {monthRate}% so với tháng trước
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
+                      <FaArrowCircleUp className="size-8 text-green-600" />
+                      {monthRate}%
+                    </span>
+                    <span className="text-zinc-600 text-base">
+                      Giá trị tăng {monthRate}% so với tháng trước
+                    </span>
+                  </>
+                )}
+              </>
+              <>
+                {/* Check if quarterRate is null */}
+                {quarterRate === null ? (
+                  <span className="text-zinc-600 text-base">
+                    Không có dữ liệu so sánh với quý trước
+                  </span>
+                ) : // Conditional rendering based on whether rate is negative or positive
+                quarterRate[0] === "-" ? (
+                  <>
+                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
+                      <FaArrowCircleDown className="size-8 text-red-500" />
+                      {quarterRate}%
+                    </span>
+                    <span className="text-zinc-600 text-base">
+                      Giá trị giảm {quarterRate}% so với quý trước
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
+                      <FaArrowCircleUp className="size-8 text-green-600" />
+                      {quarterRate}%
+                    </span>
+                    <span className="text-zinc-600 text-base">
+                      Giá trị tăng {quarterRate}% so với quý trước
+                    </span>
+                  </>
+                )}
+              </>
             </div>
             <div className="flex md:flex-col flex-row-reverse md:justify-center items-center justify-between gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
-              <div className="flex flex-row items-center justify-start gap-2 md:text-2xl text-xl text-red-500 font-semibold">
-                {yearData[selectedYear]?.["12"]}
-                <span className="text-zinc-600 font-medium text-base">
-                  tr/m<sup>2</sup>
+              {predictData === null ? (
+                <span className="text-zinc-600 text-base">
+                  Không có dữ liệu dự đoán
                 </span>
-              </div>
-              <span className="text-zinc-600 text-base">
-                Dự đoán giá trị tháng sau
-              </span>
+              ) : (
+                <>
+                  <div className="flex flex-row items-center justify-start gap-2 md:text-2xl text-xl text-red-500 font-semibold">
+                    {predictData}
+                    <span className="text-zinc-600 font-medium text-base">
+                      tr/m<sup>2</sup>
+                    </span>
+                  </div>
+                  <span className="text-zinc-600 text-base">
+                    Dự đoán giá trị tháng sau
+                  </span>
+                </>
+              )}
             </div>
           </div>
         )}

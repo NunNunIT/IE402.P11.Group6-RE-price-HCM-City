@@ -30,7 +30,7 @@ export default function PersonalAvatar({ data, className }: { data: any, classNa
     toast.promise(trigger(file), {
       loading: "Đang đăng ảnh...",
       success: (data) => {
-        update({ picture: data.avt });
+        update({ image: data.avt });
         return "Hình đại diện được cập nhật thành công";
       },
       error: () => "Cập nhật thất bại",

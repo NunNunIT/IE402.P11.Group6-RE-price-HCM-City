@@ -2,19 +2,9 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"; // Import Breadcrumb components
-import { Slash } from "lucide-react";
 
 // Lazy load components
 const NewsCard = dynamic(() => import("@/components/card/news"));
-const SeeMoreType1 = dynamic(() => import("@/components/seeMore/type1"), {
-  ssr: false, // Chỉ tải trên client
-});
 
 export default function Home() {
   const [cards, setCards] = useState<any[]>([]); // Dữ liệu bất động sản
@@ -30,13 +20,10 @@ export default function Home() {
     try {
       const res = await fetch(`/api/news?limit=12&page=${page}`);
       if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-      console.log();
-
       const { data } = await res.json();
-      console.log("Data lon:", data);
 
-      if (data?.length > 0) {
-        setCards((prev) => [...prev, ...data]); // Thêm dữ liệu mới vào danh sách
+      if (data.rows?.length > 0) {
+        setCards((prev) => [...prev, ...data.rows]); // Thêm dữ liệu mới vào danh sách
         setPage((prev) => prev + 1); // Tăng số trang
       }
     } catch (error) {
@@ -74,21 +61,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh] max-w-6xl mx-auto">
-      <div className="w-full p-2 mb-4 mx-auto">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <a href="/">Trang chủ</a>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator>
-              <Slash />
-            </BreadcrumbSeparator>
-            <BreadcrumbItem>
-              <a href="/news">Tin tức</a>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
       {/* Danh sách bất động sản */}
       <div className="w-full grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-3 md:p-0 p-2">
         {cards.map((item, index) => (

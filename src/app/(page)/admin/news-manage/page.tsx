@@ -46,12 +46,10 @@ type News = {
 
 const fetchNewsData = async () => {
   try {
-    const response = await fetch("/api/news-manage");
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const { data } = await response.json();
-    return data;
+    const res = await fetch("/api/news-manage");
+    if (!res.ok) throw new Error("Network response was not ok");
+    const payload = await res.json();
+    return payload?.data;
   } catch (error) {
     console.error("Failed to fetch news data:", error);
     return [];
@@ -236,9 +234,9 @@ export default function NewsManage() {
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       </TableHead>
                     );
                   })}

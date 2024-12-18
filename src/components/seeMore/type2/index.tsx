@@ -6,17 +6,16 @@ import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
 
-const RealEstateCard = dynamic(() => import("@/components/card/realestate"));
-const NewsCard = dynamic(() => import("@/components/card/news"));
-const LocationCard = dynamic(() => import("@/components/card/location"));
+// const RealEstateCard = dynamic(() => import("@/components/card/realestate"));
+// const NewsCard = dynamic(() => import("@/components/card/news"));
+// const LocationCard = dynamic(() => import("@/components/card/location"));
 
 const fetcher = (url: string) =>
   fetch(url)
     .then((res) => res.json())
-    .then((payload) => payload.data);
+    .then((payload) => payload.data?.rows);
 
 export default function SeeMore({
-  typeCard,
   seeMoreLink,
   title,
   linkFetch,

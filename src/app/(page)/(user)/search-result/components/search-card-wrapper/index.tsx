@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 
 import { SearchResultCard } from "@/components/card";
 import { SearchTab } from "@/components/search";
-import { Skeleton } from "@/components/ui/skeleton";
 import dynamic from "next/dynamic";
 import useSWRInfinite from "swr/infinite";
 
@@ -16,7 +15,7 @@ const fetcher = async (url: string) => {
   if (!res.ok) throw new Error("Failed to fetch data");
 
   const payload = await res.json();
-  return payload.data as any[];
+  return payload.data as { rows: any[], total: number };
 };
 
 export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
@@ -37,10 +36,10 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
     }
   );
 
-  const flattenedData = data ? data.flat() : [];
+  const flattenedData = data ? data.map(item => item.rows).flat() : [];
   const isLoadingMore =
     isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
-  const hasMoreData = !data || (data[size - 1] && data[size - 1].length > 0);
+  const hasMoreData = !data || (data[size - 1] && data[size - 1].rows.length > 0);
 
   useEffect(() => {
     const observerElement = observerRef.current;
@@ -79,7 +78,7 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
               </span>
             </h1>
             {!(isLoading || error) && (
-              <p>Hiện có {flattenedData.length} tin đăng bán tại khu vực này</p>
+              <p>Hiện có {data[0].total} tin đăng bán tại khu vực này</p>
             )}
           </div>
 
@@ -98,10 +97,10 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
           )}
 
           {/* Loading Indicator */}
-          {isLoadingMore && <Skeleton className="w-full h-20" />}
+          {isLoadingMore && <p>Loading...</p>}
 
           {/* Intersection Observer Target */}
-          {hasMoreData && <div ref={observerRef} className="h-10"></div>}
+          {hasMoreData && <div ref={observerRef} className="h-10" />}
         </div>
       </div>
       <GISMap
