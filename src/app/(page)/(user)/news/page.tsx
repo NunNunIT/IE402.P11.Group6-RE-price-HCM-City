@@ -5,9 +5,6 @@ import dynamic from "next/dynamic";
 
 // Lazy load components
 const NewsCard = dynamic(() => import("@/components/card/news"));
-const SeeMoreType1 = dynamic(() => import("@/components/seeMore/type1"), {
-  ssr: false, // Chỉ tải trên client
-});
 
 export default function Home() {
   const [cards, setCards] = useState<any[]>([]); // Dữ liệu bất động sản

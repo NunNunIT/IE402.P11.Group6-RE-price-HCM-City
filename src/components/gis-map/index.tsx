@@ -13,6 +13,7 @@ import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol";
 import PopupTemplate from "@arcgis/core/PopupTemplate";
 import { cn } from '@/lib/utils';
 import { districts } from './assets';
+import SketchViewModel from "@arcgis/core/widgets/Sketch/SketchViewModel";
 
 // Ensure CSS is loaded
 function loadCss() {
@@ -31,6 +32,7 @@ interface IMapProps {
   isShowDistrict?: boolean;
   value?: [number, number];
   onChange?: (__value: [number, number]) => void;
+  onPolygonComplete?: (__polygon: [number, number][]) => void;
 }
 
 const DEFAULT_PROPS = {
@@ -56,29 +58,70 @@ export default function MapComponent(props: IMapProps) {
   const districtGraphicsLayerRef = useRef<GraphicsLayer | null>(null);
   const pointGraphicsLayerRef = useRef<GraphicsLayer | null>(null);
   const editGraphicRef = useRef<GraphicsLayer | null>(null);
+  const sketchViewModelRef = useRef<SketchViewModel | null>(null);
+  const polygonLayerRef = useRef<GraphicsLayer | null>(null);
+  const [isDrawingMode, setIsDrawingMode] = useState(false);
+
   const [zoom, setZoom] = useState(mergedProps.zoom);
 
   useLayoutEffect(() => {
     loadCss();
     if (!mapRef.current) return;
     mapInstanceRef.current = new Map({ basemap: 'topo-vector' });
+
     pointGraphicsLayerRef.current = new GraphicsLayer();
+    polygonLayerRef.current = new GraphicsLayer();
     districtGraphicsLayerRef.current = new GraphicsLayer();
+
     mapInstanceRef.current.add(districtGraphicsLayerRef.current);
+    mapInstanceRef.current.add(polygonLayerRef.current);
     mapInstanceRef.current.add(pointGraphicsLayerRef.current);
+
     if (mergedProps.mode === ENUM_MAP_MODE.Edit) {
       editGraphicRef.current = new GraphicsLayer();
       mapInstanceRef.current.add(editGraphicRef.current);
     }
+
     viewRef.current = new MapView({
       container: mapRef.current,
       map: mapInstanceRef.current,
       center: [mergedProps.center?.long, mergedProps.center?.lat],
       zoom: mergedProps.zoom
     })
+
+    if (viewRef.current) {
+      sketchViewModelRef.current = new SketchViewModel({
+        view: viewRef.current,
+        layer: polygonLayerRef.current,
+        polygonSymbol: {
+          type: "simple-fill",
+          color: "rgba(0, 255, 0, 0.2)",
+          style: "solid",
+          outline: {
+            color: "green",
+            width: 2
+          }
+        }
+      });
+
+      sketchViewModelRef.current.on("create", (event) => {
+        if (event.state === "complete") {
+          const geometry = event.graphic.geometry as Polygon;
+          const polygonCoords = geometry.rings[0].map(point => [point[0], point[1]] as [number, number]);
+
+          // Callback to parent component with polygon coordinates
+          mergedProps.onPolygonComplete?.(polygonCoords);
+
+          // Reset drawing mode
+          setIsDrawingMode(false);
+        }
+      });
+    }
+
     const zoomHandle = viewRef.current.watch('zoom', (newZoom) => {
       setZoom(newZoom)
     });
+
     return () => {
       viewRef.current?.destroy();
       mapInstanceRef.current?.destroy();
@@ -86,6 +129,22 @@ export default function MapComponent(props: IMapProps) {
       zoomHandle.remove();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const toggleDrawingMode = useCallback(() => {
+    if (!sketchViewModelRef.current) return;
+
+    setIsDrawingMode(prev => {
+      const newMode = !prev;
+      if (newMode) {
+        // Start polygon drawing
+        sketchViewModelRef.current?.create("polygon");
+      } else {
+        // Cancel current sketch
+        sketchViewModelRef.current?.cancel();
+      }
+      return newMode;
+    });
   }, []);
 
   useEffect(() => {
@@ -119,6 +178,7 @@ export default function MapComponent(props: IMapProps) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   useEffect(() => {
     if (!mergedProps.isShowDistrict || !viewRef.current || !districtGraphicsLayerRef.current) return;
     districtGraphicsLayerRef.current?.removeAll();
@@ -214,22 +274,22 @@ export default function MapComponent(props: IMapProps) {
       <div className={cn("relative h-full w-full", mergedProps.className)}>
         <div ref={mapRef} className="h-full min-h-[30rem] w-full" />
         <div className="absolute bottom-4 left-4 flex flex-col space-y-2">
-          {/* <input
-            className="px-2 py-1 border rounded"
-            placeholder="Tìm một tọa độ"
-            onKeyDown={handleFindLocation}
-          />
-          <Button variant="outline" onClick={togglePoints}>
-            {isPointsVisible ? "Ẩn địa điểm" : "👁️ Hiển địa điểm"}
-          </Button> */}
           {mergedProps.isShowDistrict && (
             <Button type="button" variant="outline" onClick={toggleArea}>
               {isAreaVisible ? "Ẩn vùng" : "👁️ Hiện vùng"}
             </Button>
           )}
-          {/* <Button variant="outline" onClick={toggleDrawing}>
-            {isDrawing ? "✍️ Đang vẽ" : "✏️ Vẽ"}
-          </Button> */}
+
+          {mergedProps.mode === ENUM_MAP_MODE.Edit && (
+            <Button
+              type="button"
+              variant={isDrawingMode ? "destructive" : "outline"}
+              onClick={toggleDrawingMode}
+            >
+              {isDrawingMode ? "Hủy vẽ" : "✏️ Vẽ Polygon"}
+            </Button>
+          )}
+
           <span className={buttonVariants({ variant: 'outline' })}>
             Độ zoom: {zoom.toFixed(2)}
           </span>

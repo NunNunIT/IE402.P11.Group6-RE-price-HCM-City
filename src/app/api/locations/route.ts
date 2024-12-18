@@ -1,4 +1,4 @@
-import { errorResponse, forbiddenResponse, haversineDistance, sortHandler, successResponse } from '@/utils';
+import { errorResponse, forbiddenResponse, haversineDistance, isNotNullAndUndefined, sortHandler, successResponse } from '@/utils';
 
 import { Location } from '@/lib/model';
 import { NextRequest, NextResponse } from 'next/server';
@@ -35,31 +35,28 @@ export const GET = async (req: NextRequest) => {
       const temp = locations.map(location => {
         const distance = haversineDistance(locateSort, location.locate);
         return ({ ...location, distance });
-      });
+      }).filter(({ distance }) => isNotNullAndUndefined(distance));
       temp.sort((a, b) => a.distance - b.distance);
       locations = temp.map(({ distance: __distance, ...location }) => ({ ...location }));
     }
 
     const total = locations.length;
-    if (!getAll) locations = locations.slice((page - 1) * limit, page * limit);
+    if (!getAll)
+      locations = locations.slice((page - 1) * limit, page * limit);
 
     locations = locations.map(({ imageUrls, ...location }) => ({
       ...location,
       imageUrl: imageUrls[0],
     }));
 
-    return NextResponse.json({
-      message: 'Lấy danh sách địa điểm thành công',
-      data: locations,
-      meta: {
-        page,
-        limit,
-        total: total,
-        totalPages: total / limit,
-      },
-    });
+    return successResponse({
+      data: {
+        rows: locations,
+        total,
+      }
+    })
   } catch (error) {
-    console.error("Error in @GET /api/location:", error.message);
+    console.error("Error in @GET /api/locations:", error.message);
     return errorResponse({
       message: 'Đã có lỗi xảy ra khi lấy danh sách địa điểm',
       error,

@@ -50,7 +50,7 @@ const CellActions = ({ location }: { location: any }) => {
   const deleteLocation = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/location/${location._id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/locations/${location._id}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -140,13 +140,13 @@ const Columns: ColumnDef<ILocationModel & { _id: any }>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "imageUrls",
+    accessorKey: "imageUrl",
     header: "Hình ảnh",
     cell: ({ row }) => (
       <div className="capitalize">
         <Image
-          src={((row.getValue("imageUrls") as string[]) || [])[0]}
-          alt="imageUrls"
+          src={row.getValue("imageUrl")}
+          alt={row.getValue("title")}
           width="1000"
           height="1000"
           className="w-32"
@@ -194,7 +194,7 @@ const Columns: ColumnDef<ILocationModel & { _id: any }>[] = [
   },
 ];
 
-const DataTable = ({ data }: { data: any }) => {
+const DataTable = ({ data }: { data: { rows: any[], total: number } }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] =
@@ -203,7 +203,7 @@ const DataTable = ({ data }: { data: any }) => {
   const router = useRouter();
 
   const table = useReactTable({
-    data,
+    data: data?.rows ?? [],
     columns: Columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -355,12 +355,12 @@ const fetcher = async (url: string) => {
 }
 
 const LocationManage = () => {
-  const { data, isLoading, error } = useSWR("/api/location", fetcher);
+  const { data, isLoading, error } = useSWR("/api/locations", fetcher);
   return (
     <>
       <div className="flex flex-col items-center p-5 min-h-[100dvh]">
         <h1 className="text-4xl font-bold">Quản lý địa điểm</h1>
-        {isLoading ? (
+        {(isLoading || error) ? (
           <div className="mt-10">Loading...</div>
         ) : (
           <DataTable data={data} />

@@ -27,8 +27,6 @@ export default function SeeMore({
   if (error) return <div>Error loading data: {error.message}</div>;
   if (isLoading) return <div>Loading...</div>;
 
-  console.log("Fetched Data:", data);
-
   const RenderCard = () => {
     switch (typeCard) {
       case "location":
@@ -44,7 +42,7 @@ export default function SeeMore({
 
   const RenderLocation = () => (
     <>
-      {data?.map((item: any, index: any) => (
+      {data?.rows?.map((item: any, index: any) => (
         <LocationCard key={index} data={item} />
       ))}
     </>
@@ -52,7 +50,7 @@ export default function SeeMore({
 
   const RenderRealEstate = () => (
     <>
-      {data?.map((item: any, index: any) => (
+      {data?.rows?.map((item: any, index: any) => (
         <RealEstateCard key={index} data={item} />
       ))}
     </>
@@ -60,7 +58,7 @@ export default function SeeMore({
 
   const RenderNews = () => (
     <>
-      {data?.map((item: any, index: any) => (
+      {data?.rows?.map((item: any, index: any) => (
         <NewsCard key={index} data={item} />
       ))}
     </>

@@ -28,7 +28,7 @@ export const GET = async (
     if (!location)
       return notFoundResponse({
         message: "Không tìm thấy địa điểm",
-        error: "LOCATIONLOCATION_NOT_FOUND",
+        error: "LOCATION_NOT_FOUND",
       });
 
     return successResponse({ data: location });
@@ -62,7 +62,7 @@ export const PUT = auth(
       if (!location)
         return notFoundResponse({
           message: "Không tìm thấy địa điểm",
-          error: "LOCATIONLOCATION_NOT_FOUND",
+          error: "LOCATION_NOT_FOUND",
         });
 
       const updatedData = {

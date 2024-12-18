@@ -21,7 +21,8 @@ export default async function RealEstateDetailPage({
   params: { _id },
 }: IRealEstateDetailPageProps) {
   const data = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`,
+    { cache: "reload" }
   )
     .then(async (res) => {
       const payload = await res.json();
@@ -70,6 +71,7 @@ export default async function RealEstateDetailPage({
               </span>
             </div>
           </div>
+
           <SaveRealBtn component="real-estate" realEstateId={data._id} />
         </div>
 
@@ -138,31 +140,48 @@ export default async function RealEstateDetailPage({
           </div>
         </div>
 
+        <div className="w-full border-b border-zinc-200 dark:border-zinc-800 py-2 mb-3 flex flex-row justify-between items-center">
+          <h3 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+            Các bất động sản gần đây
+          </h3>
+        </div>
         <CarouselWrapper
-          link={`/api/location?sort=locate:${data.locate?.lat},${data.locate?.long}`}
+          link={`/api/real-estates?sort=locate:${data.locate?.lat},${data.locate?.long}&relative=1`}
+          type="realEstate"
+        />
+
+        <div className="w-full border-b border-zinc-200 dark:border-zinc-800 py-2 mb-3 flex flex-row justify-between items-center">
+          <h3 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+            Các địa điểm gần đây
+          </h3>
+        </div>
+        <CarouselWrapper
+          link={`/api/locations?sort=locate:${data.locate?.lat},${data.locate?.long}`}
           type="location"
         />
       </div>
 
-        <GISMap
-          zoom={20}
-          className="container"
-          isShowDistrict
-          center={data.locate}
-          points={[
-            // eslint-disable-next-line no-unsafe-optional-chaining
-            ...(data.locations?.map((location: any) => ({
+      <GISMap
+        zoom={20}
+        className="container"
+        isShowDistrict
+        center={data.locate}
+        points={[
+          ...(Array.isArray(data.locations)
+            ? data.locations.slice(0, 24).map((location: any) => ({
               ...location.locate,
               title: location.title,
               type: location.category,
-            })) || []),
-            {
-              ...data.locate,
-              title: data.title,
-              type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
-            },
-          ]}
-        />
-      </div>
+            }))
+            : []
+          ),
+          {
+            ...data.locate,
+            title: data.title,
+            type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
+          },
+        ]}
+      />
+    </div>
   );
 }

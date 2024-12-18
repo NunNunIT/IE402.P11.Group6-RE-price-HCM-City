@@ -26,7 +26,7 @@ export const AuthenticationDropdownMenu = () => {
     status === "authenticated" &&
     !!session?.user?.id && (
       <>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" href="/notifications">
           <IoIosNotifications className="size-6 mx-auto" />
         </Button>
         <DropdownMenu>

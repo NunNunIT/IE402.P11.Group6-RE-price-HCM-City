@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { LoginButton, LogoutButton } from "./authentication-button";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
 
 import { Button } from "../ui/button";
 import { FaBars } from "react-icons/fa6";
@@ -19,7 +19,7 @@ export function Sidebar() {
 
   return (
     <>
-      <Button variant="ghost" size="icon">
+      <Button variant="ghost" size="icon" href="/notifications">
         <IoIosNotifications className="size-6 mx-auto" />
       </Button>
       <Sheet>
@@ -46,9 +46,11 @@ export function Sidebar() {
             {NAVIGATION_MOBILE_DATA.map((data, index) => (
               isVisibleContext(session, data) && (
                 <Fragment key={index}>
-                  <Button key={data.title} href={data.link} variant="ghost" className="w-full justify-start">
-                    {data.title}
-                  </Button>
+                  <SheetClose asChild>
+                    <Button key={data.title} href={data.link} variant="ghost" className="w-full justify-start">
+                      {data.title}
+                    </Button>
+                  </SheetClose>
                   {data.isNeedSeparator && <Separator />}
                 </Fragment>
               )
