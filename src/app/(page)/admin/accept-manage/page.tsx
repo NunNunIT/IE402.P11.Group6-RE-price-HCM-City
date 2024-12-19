@@ -10,7 +10,7 @@ async function getData(url: string): Promise<DataColumns[]> {
       `${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`,
       {
         method: "GET",
-        headers: { "Content-Type": "application/json", },
+        headers: { "Content-Type": "application/json" },
       }
     );
 
@@ -36,7 +36,10 @@ async function getData(url: string): Promise<DataColumns[]> {
 }
 
 export default function DemoPage() {
-  const { data, isLoading, error } = useSWR('/api/real-estates?getAll=true', getData);
+  const { data, isLoading, error } = useSWR(
+    "/api/real-estates?getAll=true&isAuth=false",
+    getData
+  );
 
   return (
     <div className="container mx-auto py-10 px-2">

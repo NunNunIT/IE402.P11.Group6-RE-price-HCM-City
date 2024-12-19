@@ -17,7 +17,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/table";
 
 import {
@@ -61,10 +61,10 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Tìm kiếm theo khu vực..."
-          value={table.getColumn("fullAddress")?.getFilterValue() as string}
+          placeholder="Tìm kiếm theo tiêu đề..."
+          value={table.getColumn("title")?.getFilterValue() as string}
           onChange={(event) =>
-            table.getColumn("fullAddress")?.setFilterValue(event.target.value)
+            table.getColumn("title")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
