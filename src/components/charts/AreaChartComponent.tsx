@@ -120,7 +120,17 @@ const invoices = [
   },
 ];
 
-function TableDemo() {
+function TableDemo({ data }: { data: any }) {
+  if (!data) {
+    return (
+      <div className="text-gray-500 text-center">
+        Vui lòng chọn khu vực để hiển thị dữ liệu.
+      </div>
+    );
+  }
+
+  const rows = data.districts || data.wards || []; // Hiển thị `districts` hoặc `wards`
+
   return (
     <Table>
       <TableHeader>
@@ -128,17 +138,17 @@ function TableDemo() {
           <TableHead className="w-2/3 font-semibold">
             So sánh giá khu vực lân cận
           </TableHead>
-          <TableHead className="font-semibold">
+          <TableHead className="font-semibold text-center">
             Giá bán phổ biến hiện tại
           </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell className="text-right flex flex-row flex-nowrap gap-1">
-              {invoice.totalAmount}
+        {rows.map((item: any, index: number) => (
+          <TableRow key={index}>
+            <TableCell className="font-medium">{item.name}</TableCell>
+            <TableCell className="text-center">
+              {item.analysis !== null ? `${item.analysis}` : "N/A"}{" "}
               <span className="text-zinc-600 font-medium">
                 tr/m<sup>2</sup>
               </span>
@@ -150,14 +160,52 @@ function TableDemo() {
   );
 }
 
-function Locate() {
-  const [value, onChangeValue] = useState(undefined);
+function Locate({ onDataUpdate }: { onDataUpdate: (data: any) => void }) {
+  const [value, onChangeValue] = useState<any>(undefined);
+
+  // Hàm fetch dữ liệu từ API
+  const handleSubmit = () => {
+    if (!value?.province) {
+      alert("Vui lòng chọn tỉnh/thành phố!");
+      return;
+    }
+
+    const queryParams = new URLSearchParams();
+    if (value.province) queryParams.append("province", value.province);
+    if (value.district) queryParams.append("district", value.district);
+    if (value.ward) queryParams.append("ward", value.ward);
+
+    fetch(
+      `${
+        process.env.NEXT_PUBLIC_BACKEND_URL
+      }/api/analysis?${queryParams.toString()}`
+    )
+      .then((res) => res.json())
+      .then((result) => {
+        if (result?.data) {
+          onDataUpdate(result.data); // Cập nhật dữ liệu lên component cha
+        } else {
+          console.error("Lỗi từ API:", result.message || "Không có dữ liệu.");
+          onDataUpdate(null);
+        }
+      })
+      .catch((error) => {
+        console.error("Lỗi khi gọi API:", error);
+        onDataUpdate(null);
+      });
+  };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <span className="flex flex-row gap-1 text-red-500 text-2xl font-bold">
-          TP Hồ Chí Minh
+          {[
+            value?.ward ? `Phường ${value.ward}` : null,
+            value?.district,
+            value?.province || "TP Hồ Chí Minh",
+          ]
+            .filter(Boolean)
+            .join(", ")}{" "}
           <IoIosArrowDown className="size-8 text-red-500" />
         </span>
       </DialogTrigger>
@@ -167,7 +215,9 @@ function Locate() {
         </DialogHeader>
         <LocationSelect value={value} onChange={onChangeValue} depthLevel={3} />
         <DialogFooter className="items-end">
-          <Button type="submit">OK</Button>
+          <Button type="button" onClick={handleSubmit}>
+            OK
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -345,6 +395,7 @@ function predictNextMonth(
 
 export function AreaChartComponent() {
   const [selectedYear, setSelectedYear] = useState(2024);
+  const [data, setData] = useState<any>(null);
 
   // Transform the selected year's data for the chart
   const chartData = transformYearData(yearData[selectedYear]);
@@ -372,7 +423,7 @@ export function AreaChartComponent() {
   return (
     <div className="w-full bg-white dark:bg-black p-2">
       <h1 className="text-2xl font-bold">
-        Lịch sử giá tại <Locate />
+        Lịch sử giá tại <Locate onDataUpdate={setData} />
       </h1>
 
       <div className="flex items-end justify-end my-2">
@@ -550,7 +601,7 @@ export function AreaChartComponent() {
             </LineChart>
           )}
         </ChartContainer>
-        <TableDemo />
+        <TableDemo data={data} />
       </div>
     </div>
   );
