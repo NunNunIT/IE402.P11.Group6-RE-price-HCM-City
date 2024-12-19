@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useAuthWrapperFunction } from "@/hooks";
+import { toast } from "sonner";
 
 export default function SaveRealBtn({
   component = "real-estate",
@@ -18,7 +19,6 @@ export default function SaveRealBtn({
   realEstateId: string;
 }) {
   const [like, setLike] = useState(false);
-  const [notification, setNotification] = useState<string | null>(null);
 
   const type = component === "real-estate" ? "bất động sản" : "địa điểm";
 
@@ -73,15 +73,10 @@ export default function SaveRealBtn({
 
         // Hiển thị thông báo dựa trên trạng thái
         if (newLikeState) {
-          setNotification("Đã thêm bất động sản vào danh sách yêu thích");
+          toast.success("Đã thêm bất động sản vào danh sách yêu thích");
         } else {
-          setNotification("Đã bỏ bất động sản khỏi danh sách yêu thích");
+          toast.success("Đã bỏ bất động sản khỏi danh sách yêu thích");
         }
-
-        // Tự động ẩn thông báo sau 3 giây
-        setTimeout(() => {
-          setNotification(null);
-        }, 3000);
 
         return newLikeState;
       });
@@ -89,10 +84,7 @@ export default function SaveRealBtn({
       console.error("Error caught in onLike:", error.message);
 
       // Hiển thị thông báo lỗi
-      setNotification("Đã có lỗi xảy ra. Vui lòng thử lại.");
-      setTimeout(() => {
-        setNotification(null);
-      }, 3000);
+      toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.");
     }
   };
 
@@ -123,13 +115,6 @@ export default function SaveRealBtn({
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-      )}
-
-      {/* Thông báo */}
-      {notification && (
-        <div className="fixed bottom-4 left-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg animate-slide-in z-50">
-          {notification}
-        </div>
       )}
     </div>
   );

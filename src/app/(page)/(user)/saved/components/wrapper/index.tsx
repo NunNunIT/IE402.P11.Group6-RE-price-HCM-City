@@ -3,15 +3,19 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
-// Lazy load components
+// Lazy load các component
 const RealEstateCard = dynamic(() => import("@/components/card/realestate"));
 const LocationCard = dynamic(() => import("@/components/card/location"));
 
-export default function Wrapper({ typeCard }: { typeCard: string }) {
+export default function Wrapper({
+  typeCard,
+}: {
+  typeCard: "realEstate" | "location";
+}) {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch data from the API
+  // Fetch dữ liệu từ API
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
@@ -22,11 +26,13 @@ export default function Wrapper({ typeCard }: { typeCard: string }) {
         if (typeCard === "realEstate") {
           url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/me/favRealEstate`;
         } else if (typeCard === "location") {
-          url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/me/favLocations`;
+          url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/me/favLocation`;
         }
 
+        console.log("Fetching URL:", url); // Log URL để kiểm tra
+
         if (!url) {
-          console.error("Invalid typeCard provided!");
+          console.error("Giá trị typeCard không hợp lệ!");
           setLoading(false);
           return;
         }
@@ -38,15 +44,18 @@ export default function Wrapper({ typeCard }: { typeCard: string }) {
 
         const { data } = await response.json();
 
-        // Automatically add `typeCard` to each item
+        // Kiểm tra dữ liệu trả về
+        console.log(`Dữ liệu ${typeCard} nhận được:`, data);
+
+        // Thêm typeCard vào từng mục
         const processedData = data.map((item: any) => ({
           ...item,
-          typeCard, // Add type (realEstate or location) to each item
+          typeCard,
         }));
 
         setItems(processedData);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Lỗi khi fetch dữ liệu:", error);
       } finally {
         setLoading(false);
       }
@@ -55,7 +64,7 @@ export default function Wrapper({ typeCard }: { typeCard: string }) {
     fetchItems();
   }, [typeCard]);
 
-  // Render the cards dynamically
+  // Render các thẻ (cards)
   const renderCards = () => {
     if (typeCard === "realEstate") {
       return items.map((item, index) => (
@@ -71,20 +80,20 @@ export default function Wrapper({ typeCard }: { typeCard: string }) {
           }}
         />
       ));
-      // } else if (typeCard === "location") {
-      //   return items.map((item, index) => (
-      //     <LocationCard
-      //       key={index}
-      //       data={{
-      //         image: item.image,
-      //         title: item.title,
-      //         location: item.location,
-      //         duration: item.duration,
-      //         workshopType: item.workshopType,
-      //         rating: item.rating,
-      //       }}
-      //     />
-      //   ));
+    } else if (typeCard === "location") {
+      return items.map((item, index) => (
+        <LocationCard
+          key={index}
+          data={{
+            _id: item._id,
+            title: item.title,
+            imageUrl: item.imageUrl,
+            locate: item.locate,
+            category: item.category,
+            avgStarGGMap: item.avgStarGGMap,
+          }}
+        />
+      ));
     }
     return null;
   };
