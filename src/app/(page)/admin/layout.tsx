@@ -9,11 +9,14 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Quản trị viên",
-  description:
-    "Trang quản trị viên.",
+  description: "Trang quản trị viên.",
 };
 
-export default async function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   // TODO: Uncomment this code to enable authentication
   // const session = await auth();
   // if (![ENUM_ROLE.Admin, ENUM_ROLE.Staff].includes(session?.user?.role)) return notFound();
@@ -25,7 +28,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <div className="w-full sticky top-0 p-3 bg-white dark:bg-zinc-900 z-50">
           <SidebarTrigger />
         </div>
-        {children}
+        <div className="w-full max-w-6xl mx-auto px-2">{children}</div>
       </div>
     </SidebarProvider>
   );

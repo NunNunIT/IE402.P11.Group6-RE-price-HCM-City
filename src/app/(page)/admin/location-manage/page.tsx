@@ -365,8 +365,8 @@ const LocationManage = () => {
   const { data, isLoading, error } = useSWR("/api/locations", fetcher);
   return (
     <>
-      <div className="flex flex-col p-5 min-h-[100dvh]">
-        <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-col min-h-[100dvh]">
+        <div className="w-full flex flex-row justify-between items-center">
           <h1 className="md:text-4xl text-2xl font-bold my-3">
             Quản lý địa điểm
           </h1>

@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
+    <>
       <div className="flex items-center py-4">
         <Input
           placeholder="Tìm kiếm theo khu vực..."
@@ -164,6 +164,6 @@ export function DataTable<TData, TValue>({
           Sau
         </Button>
       </div>
-    </div>
+    </>
   );
 }

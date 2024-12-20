@@ -88,7 +88,7 @@ const FormSchema = z.object({
         });
       }
     }),
-  interior: z.string().optional(),
+  interior: z.enum(["noneInterior", "fullInterior"]).optional(),
   bed: z.number().optional(),
   bath: z.number().optional(),
   direction: z
@@ -115,7 +115,7 @@ export default function InputForm() {
       area: "",
       price: undefined,
       legal: undefined,
-      interior: "",
+      interior: undefined,
       bed: undefined,
       bath: undefined,
       direction: undefined,
@@ -182,17 +182,13 @@ export default function InputForm() {
     }
   };
 
-  // Lắng nghe sự thay đổi của "polygon"
-  //   const polygonValue = form.watch("polygon");
-
-  //   useEffect(() => {
-  //     console.log(form.getValues("polygon")); // Log giá trị của "polygon"
-  //   }, [polygonValue]); // useEffect sẽ được gọi lại mỗi khi polygonValue thay đổi
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
+          <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+            Thông tin cơ bản
+          </h2>
           <FormField
             control={form.control}
             name="title"
@@ -223,6 +219,9 @@ export default function InputForm() {
         </div>
 
         <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
+          <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+            Hình ảnh
+          </h2>
           <FormField
             control={form.control}
             name="imgs"
@@ -242,6 +241,9 @@ export default function InputForm() {
         </div>
 
         <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
+          <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+            Thông tin chi tiết
+          </h2>
           <FormField
             control={form.control}
             name="type"
@@ -307,7 +309,15 @@ export default function InputForm() {
               <FormItem>
                 <FormLabel className="font-semibold">Diện tích</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nhập diện tích" {...field} />
+                  <Input
+                    placeholder="Nhập diện tích"
+                    endIcon={
+                      <span className="rounded-md bg-zinc-600 text-white">
+                        Đơn vị: m²
+                      </span>
+                    }
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -324,8 +334,13 @@ export default function InputForm() {
                   <Input
                     type="number"
                     placeholder="Nhập giá bán"
-                    {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
+                    endIcon={
+                      <span className="rounded-md bg-zinc-600 text-white">
+                        Đơn vị: tỷ
+                      </span>
+                    }
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -335,6 +350,9 @@ export default function InputForm() {
         </div>
 
         <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
+          <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+            Thông tin khác
+          </h2>
           <FormField
             control={form.control}
             name="interior"
@@ -343,49 +361,68 @@ export default function InputForm() {
                 <FormLabel className="font-semibold">Nội thất</FormLabel>
                 <FormControl>
                   <Input placeholder="Nhập nội thất (nếu có)" {...field} />
+                  <Select
+                    onValueChange={(value) => field.onChange(value)}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Nội thất" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {["noneInterior", "fullInterior"].map((item, index) => (
+                          <SelectItem key={index} value={item}>
+                            {TranslateKey(item)}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="bed"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="font-semibold">Số phòng ngủ</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Nhập số phòng ngủ"
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-3">
+            <FormField
+              control={form.control}
+              name="bed"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Số phòng ngủ</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Nhập số phòng ngủ"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="bath"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="font-semibold">Số phòng tắm</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Nhập số phòng tắm"
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="bath"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Số phòng tắm</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Nhập số phòng tắm"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}
@@ -428,6 +465,9 @@ export default function InputForm() {
         </div>
 
         <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
+          <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+            Vị trí
+          </h2>
           <FormField
             control={form.control}
             name="locate"

@@ -52,7 +52,7 @@ export const columns: ColumnDef<DataColumns>[] = [
         <Image
           src={row.getValue("imageUrl")}
           alt={"Hình ảnh"}
-          className="object-cover aspect-square"
+          className="w-32 object-cover aspect-square"
           width={100}
           height={100}
           unoptimized

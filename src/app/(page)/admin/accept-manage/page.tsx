@@ -42,7 +42,7 @@ export default function DemoPage() {
   );
 
   return (
-    <div className="container mx-auto py-10 px-2">
+    <div className="container mx-auto py-10">
       <div className="flex flex-row justify-between items-center">
         <h1>Xét duyệt</h1>
       </div>

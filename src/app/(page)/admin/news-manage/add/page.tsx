@@ -21,9 +21,9 @@ import Editor from "@/components/rich-text/editor";
 import { uploadFilesToCloudinary } from "@/lib/func/cloudinary";
 
 const FormSchema = z.object({
-  title: z.string().min(1, "Title is required."),
-  content: z.string().min(1, "Content is required."),
-  img: z.array(z.string()).min(1, "At least one image must be uploaded."), // Add imageUrls field
+  title: z.string().min(1, "Tiêu đề không được bỏ trống"),
+  content: z.string().min(1, "Nội dung không được bỏ trống"),
+  img: z.array(z.string()).min(1, "Ít nhất một ảnh"), // Add imageUrls field
 });
 
 export default function NewsForm() {

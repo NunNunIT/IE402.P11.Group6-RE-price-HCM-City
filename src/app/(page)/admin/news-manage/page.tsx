@@ -37,6 +37,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 type News = {
   id: string;
@@ -101,6 +102,21 @@ const columns = (
   //   enableSorting: false,
   //   enableHiding: false,
   // },
+  {
+    accessorKey: "imgUrl",
+    header: "",
+    cell: ({ row }) => (
+      <div className="capitalize">
+        <Image
+          src={row.getValue("imgUrl")}
+          alt={row.getValue("title")}
+          width="1000"
+          height="1000"
+          className="w-32 aspect-square object-cover overflow-hidden"
+        />
+      </div>
+    ),
+  },
   {
     accessorKey: "title",
     header: ({ column }) => (
@@ -195,13 +211,10 @@ export default function NewsManage() {
   });
 
   return (
-    <div className="flex flex-col items-start justify-start min-h-[100dvh] px-4 md:px-8">
-      <div className="flex flex-row justify-between items-center">
+    <div className="flex flex-col items-start justify-start min-h-[100dvh]">
+      <div className="w-full flex flex-row justify-between items-center">
         <h1 className="md:text-4xl text-2xl font-bold my-3">Quản lý tin tức</h1>
-        <Button
-          href="/admin/news-manage/add"
-          variant="default"
-        >
+        <Button href="/admin/news-manage/add" variant="default">
           Tạo tin tức mới
         </Button>
       </div>

@@ -39,7 +39,7 @@ export const PUT = auth(
       //         error: "USER_NOT_PERMISSION"
       //     });
       const realEstate = await RealEstate.findByIdAndUpdate(id, {
-        isAuth: true,
+        isAuth: "auth",
       });
       console.log(realEstate);
       if (!realEstate)

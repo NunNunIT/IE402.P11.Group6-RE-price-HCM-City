@@ -231,6 +231,9 @@ export default function AddLocation() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
+              <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+                GoogleMap
+              </h2>
               <FormField
                 control={form.control}
                 name="ggMapId"
@@ -264,6 +267,9 @@ export default function AddLocation() {
             </div>
 
             <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
+              <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+                Thông tin cơ bản
+              </h2>
               <FormField
                 control={form.control}
                 name="title"
@@ -353,6 +359,9 @@ export default function AddLocation() {
             </div>
 
             <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
+              <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+                Vị trí
+              </h2>
               <FormField
                 control={form.control}
                 name="locate"
@@ -366,9 +375,7 @@ export default function AddLocation() {
                   </FormItem>
                 )}
               />
-            </div>
 
-            <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg">
               <FormField
                 control={form.control}
                 name="coordinates"
@@ -392,6 +399,9 @@ export default function AddLocation() {
             </div>
 
             <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
+              <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+                Hình ảnh
+              </h2>
               <FormField
                 control={form.control}
                 name="imageUrls"
@@ -414,6 +424,9 @@ export default function AddLocation() {
               />
             </div>
             <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
+              <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
+                Đánh giá
+              </h2>
               <FormField
                 control={form.control}
                 name="avgStarGGMap"
@@ -446,7 +459,7 @@ export default function AddLocation() {
 
             <div className="sticky bottom-0 p-2 z-10 bg-white">
               <Button type="submit" className="w-full">
-                Gửi
+                Thêm
               </Button>
             </div>
           </form>
