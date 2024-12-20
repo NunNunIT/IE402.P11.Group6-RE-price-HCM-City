@@ -55,7 +55,7 @@ export const GET = async (req: NextRequest) => {
       ...(district ? { "locate.huyen": district } : {}),
       ...(ward ? { "locate.xa": ward } : {}),
       ...(isNotNullAndUndefined(isAuth) ? { isAuth } : {}),
-      ...(propertyType !== "all" ? { propertyType } : {}),
+      ...(propertyType !== "all" ? { type: propertyType } : {}),
       ...(priceRange !== "all" ? generateFilterRange("price", priceRange) : {}),
       ...(areaRange !== "all" ? generateFilterRange("area", areaRange) : {}),
     })
