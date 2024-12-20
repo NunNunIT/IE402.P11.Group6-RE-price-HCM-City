@@ -1,64 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { useCallback } from "react";
+import useSWR from "swr";
 
-// Lazy load components
 const RealEstateCard = dynamic(() => import("@/components/card/realestate"));
 const LocationCard = dynamic(() => import("@/components/card/location"));
 
-export default function Wrapper({ typeCard }: { typeCard: string }) {
-  const [items, setItems] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+const getKey = (typeCard: "realEstate" | "location") => {
+  return `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/me/fav${typeCard.charAt(0).toUpperCase()}${typeCard.slice(1)}`
+}
 
-  // Fetch data from the API
-  useEffect(() => {
-    const fetchItems = async () => {
-      setLoading(true);
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch");
+  const payload = await res.json();
+  return payload.data;
+}
 
-      try {
-        let url = "";
+export default function Wrapper({ typeCard }: { typeCard: "realEstate" | "location" }) {
+  const { data, isLoading, error } = useSWR(getKey(typeCard), fetcher)
 
-        if (typeCard === "realEstate") {
-          url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/me/favRealEstate`;
-        } else if (typeCard === "location") {
-          url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/me/favLocations`;
-        }
-
-        if (!url) {
-          console.error("Invalid typeCard provided!");
-          setLoading(false);
-          return;
-        }
-
-        const response = await fetch(url);
-
-        if (!response.ok)
-          throw new Error(`HTTP error! Status: ${response.status}`);
-
-        const { data } = await response.json();
-
-        // Automatically add `typeCard` to each item
-        const processedData = data.map((item: any) => ({
-          ...item,
-          typeCard, // Add type (realEstate or location) to each item
-        }));
-
-        setItems(processedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchItems();
-  }, [typeCard]);
-
-  // Render the cards dynamically
-  const renderCards = () => {
+  const renderCards = useCallback(() => {
     if (typeCard === "realEstate") {
-      return items.map((item, index) => (
+      return data?.map((item: any, index: number) => (
         <RealEstateCard
           key={index}
           data={{
@@ -71,29 +36,29 @@ export default function Wrapper({ typeCard }: { typeCard: string }) {
           }}
         />
       ));
-      // } else if (typeCard === "location") {
-      //   return items.map((item, index) => (
-      //     <LocationCard
-      //       key={index}
-      //       data={{
-      //         image: item.image,
-      //         title: item.title,
-      //         location: item.location,
-      //         duration: item.duration,
-      //         workshopType: item.workshopType,
-      //         rating: item.rating,
-      //       }}
-      //     />
-      //   ));
+    } else if (typeCard === "location") {
+      return data?.map((item: any, index: number) => (
+        <LocationCard
+          key={index}
+          data={{
+            _id: item._id,
+            imageUrl: item.imageUrls?.[0],
+            title: item.title,
+            locate: item.locate,
+            category: item.category,
+            avgStarGGMap: item.avgStarGGMap,
+          }}
+        />
+      ));
     }
     return null;
-  };
+  }, [data, typeCard]);
 
   return (
     <div className="w-full grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-3 md:p-0 p-2">
-      {loading ? (
+      {isLoading || error ? (
         <div className="col-span-full text-center">Đang tải...</div>
-      ) : items.length > 0 ? (
+      ) : data.length > 0 ? (
         renderCards()
       ) : (
         <div className="col-span-full text-center">
