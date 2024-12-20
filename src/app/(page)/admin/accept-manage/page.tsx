@@ -37,7 +37,7 @@ async function getData(url: string): Promise<DataColumns[]> {
 
 export default function DemoPage() {
   const { data, isLoading, error } = useSWR(
-    "/api/real-estates?getAll=true&isAuth=false",
+    "/api/accept-re",
     getData
   );
 

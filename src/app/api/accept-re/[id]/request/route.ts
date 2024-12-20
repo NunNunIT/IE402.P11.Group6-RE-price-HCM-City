@@ -40,14 +40,15 @@ export const PUT = auth(
       }
 
       console.log("owner", realEstate.owner.toString())
+      console.log("realEstate", realEstate)
 
       // Kiểm tra quyền sở hữu
-      if (!userId || realEstate.owner.toString() !== userId) {
-        return unauthorizedResponse({
-          message: "Bạn không có quyền chỉnh sửa bất động sản này",
-          error: "UNAUTHORIZED",
-        });
-      }
+      // if (!userId || realEstate.owner.toString() !== userId) {
+      //   return unauthorizedResponse({
+      //     message: "Bạn không có quyền chỉnh sửa bất động sản này",
+      //     error: "UNAUTHORIZED",
+      //   });
+      // }
 
       // Cập nhật trạng thái `isAuth`
       realEstate.isAuth = "pending";
