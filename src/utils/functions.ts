@@ -76,7 +76,11 @@ export const hasPermission = (
 };
 
 export const parseObjectToSearchParams = (obj: Record<string, any>): string => {
-  return new URLSearchParams(obj).toString();
+  const filteredObj = Object.fromEntries(
+    Object.entries(obj).filter(([, value]) =>
+      value !== null && value !== undefined)
+  );
+  return new URLSearchParams(filteredObj).toString();
 };
 
 export const isVisibleContext = (

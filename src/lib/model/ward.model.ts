@@ -19,4 +19,4 @@ export const WardSchema: Schema = new Schema({
   analysis: { type: analysisSchema },
 }, { timestamps: true, strict: false });
 
-export const Ward = models?.Ward ?? model<IWard>('Ward', WardSchema);
+export const Ward = models?.Ward ?? model('Ward', WardSchema);

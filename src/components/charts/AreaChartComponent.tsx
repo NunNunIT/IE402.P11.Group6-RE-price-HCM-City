@@ -14,7 +14,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -31,7 +30,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -41,86 +39,15 @@ import LocationSelect from "../VNLocationSelector";
 import { FaArrowCircleDown, FaArrowCircleUp } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { IoIosArrowDown } from "react-icons/io";
-import { number } from "zod";
-
-// Data structure for yearly data
-type YearData = {
-  [year: string]: {
-    priceAVG: number;
-    [month: string]: number; // Represents months as "01", "02", ..., "12"
-  };
-};
+import useSWR from "swr";
+import { parseObjectToSearchParams } from "@/utils";
 
 type MonthData = {
   month: string;
   price: number;
 };
 
-// Yearly data
-const yearData: YearData = {
-  "2022": {
-    priceAVG: 150,
-    "01": 96,
-    "02": 121,
-    "03": 129,
-    "04": 146,
-    "05": 171,
-    "06": 263,
-    "07": 215,
-    "08": 292,
-    "09": 253,
-    "10": 357,
-    "11": 375,
-    "12": 286,
-  },
-  "2023": {
-    priceAVG: 220,
-    "01": 225,
-    "02": 185,
-    "03": 219,
-    "04": 274,
-    "05": 241,
-    "06": 288,
-    "07": 224,
-    "08": 290,
-    "09": 262,
-    "10": 258,
-    "11": 290,
-    "12": 255,
-  },
-  "2024": {
-    priceAVG: 214,
-    "01": 213,
-    "02": 247,
-    "03": 273,
-    "04": 59,
-    "05": 192,
-    "06": 240,
-    "07": 278,
-    "08": 157,
-    "09": 216,
-    "10": 355,
-    "11": 219,
-    "12": 262,
-  },
-};
-
-const invoices = [
-  {
-    invoice: "INV001",
-    totalAmount: "$250.00",
-  },
-  {
-    invoice: "INV002",
-    totalAmount: "$150.00",
-  },
-  {
-    invoice: "INV003",
-    totalAmount: "$350.00",
-  },
-];
-
-function TableDemo({ data }: { data: any }) {
+function TableDemo({ data, year }: { data: any, year?: number }) {
   if (!data) {
     return (
       <div className="text-gray-500 text-center">
@@ -129,8 +56,8 @@ function TableDemo({ data }: { data: any }) {
     );
   }
 
-  const rows = data.districts || data.wards || []; // Hiển thị `districts` hoặc `wards`
-
+  const rows = data.wards || data.districts || [];
+  if (rows.length === 0) return null;
   return (
     <Table>
       <TableHeader>
@@ -148,7 +75,7 @@ function TableDemo({ data }: { data: any }) {
           <TableRow key={index}>
             <TableCell className="font-medium">{item.name}</TableCell>
             <TableCell className="text-center">
-              {item.analysis !== null ? `${item.analysis}` : "N/A"}{" "}
+              {item.analysis !== null ? `${item.analysis[year].priceAVG}` : "N/A"}{" "}
               <span className="text-zinc-600 font-medium">
                 tr/m<sup>2</sup>
               </span>
@@ -160,60 +87,50 @@ function TableDemo({ data }: { data: any }) {
   );
 }
 
-function Locate({ onDataUpdate }: { onDataUpdate: (data: any) => void }) {
-  const [value, onChangeValue] = useState<any>(undefined);
+interface ILocation {
+  province?: string;
+  district?: string;
+  ward?: string;
+}
 
-  // Hàm fetch dữ liệu từ API
+function Locate({ value, onChangeValue }: { value: ILocation, onChangeValue: (__data: ILocation) => void }) {
+  const [delayValue, setDelayValue] = useState<ILocation>(value);
+  const [isOpen, setIsOpen] = useState(false);
   const handleSubmit = () => {
-    if (!value?.province) {
+    if (!delayValue?.province) {
       alert("Vui lòng chọn tỉnh/thành phố!");
       return;
     }
 
-    const queryParams = new URLSearchParams();
-    if (value.province) queryParams.append("province", value.province);
-    if (value.district) queryParams.append("district", value.district);
-    if (value.ward) queryParams.append("ward", value.ward);
-
-    fetch(
-      `${
-        process.env.NEXT_PUBLIC_BACKEND_URL
-      }/api/analysis?${queryParams.toString()}`
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        if (result?.data) {
-          onDataUpdate(result.data); // Cập nhật dữ liệu lên component cha
-        } else {
-          console.error("Lỗi từ API:", result.message || "Không có dữ liệu.");
-          onDataUpdate(null);
-        }
-      })
-      .catch((error) => {
-        console.error("Lỗi khi gọi API:", error);
-        onDataUpdate(null);
-      });
+    // ! DON'T TORCH THIS
+    onChangeValue({
+      province: delayValue.province,
+      district: delayValue.district,
+      ward: delayValue.ward,
+    });
+    setIsOpen(false);
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <span className="flex flex-row gap-1 text-red-500 text-2xl font-bold">
+        <span className="inline-flex flex-row gap-1 text-red-500 text-2xl font-bold items-center cursor-pointer">
           {[
             value?.ward ? `Phường ${value.ward}` : null,
             value?.district,
-            value?.province || "TP Hồ Chí Minh",
+            value?.province || "Hồ Chí Minh",
           ]
             .filter(Boolean)
-            .join(", ")}{" "}
-          <IoIosArrowDown className="size-8 text-red-500" />
+            .join(", ")
+          }
+          <IoIosArrowDown className="size-4 text-red-500 ml-1" />
         </span>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Chọn khu vực</DialogTitle>
         </DialogHeader>
-        <LocationSelect value={value} onChange={onChangeValue} depthLevel={3} />
+        <LocationSelect value={delayValue} onChange={setDelayValue} depthLevel={3} />
         <DialogFooter className="items-end">
           <Button type="button" onClick={handleSubmit}>
             OK
@@ -226,9 +143,8 @@ function Locate({ onDataUpdate }: { onDataUpdate: (data: any) => void }) {
 
 // Transform year data for the chart
 const transformYearData = (data: Record<string, number> | undefined | null) => {
-  if (!data) {
-    return []; // Trả về mảng rỗng nếu không có dữ liệu
-  }
+  if (!data) return [];
+
   return Object.entries(data)
     .filter(([key]) => key !== "priceAVG") // Loại bỏ `priceAVG`
     .sort(([a], [b]) => parseInt(a) - parseInt(b)) // Sắp xếp các tháng theo số
@@ -247,37 +163,25 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 function calculateMonthRate(
-  chartData: MonthData[],
+  chartData: MonthData[] | null,
   lastChartData: MonthData[] | null,
   currentMonth: number
 ): string | null {
   const currentMonthStr = currentMonth.toString().padStart(2, "0");
-
-  // Find the current month's data
   const currentData = chartData.find((item) => item.month === currentMonthStr);
-
-  // Determine the previous month's string, handling the case for December (month 12)
   const previousMonthStr = (currentMonth - 1).toString().padStart(2, "0");
-  let previousData: MonthData | null = null;
 
-  // Check if the previous month is December and get the data accordingly
-  if (previousMonthStr === "00") {
-    if (lastChartData) {
-      previousData = lastChartData.find((item) => item.month === "12");
-    }
+  let previousData: MonthData | null = null;
+  if (previousMonthStr === "00" && lastChartData) {
+    previousData = lastChartData.find((item) => item.month === "12");
   } else {
     previousData = chartData.find((item) => item.month === previousMonthStr);
   }
 
-  // Calculate the rate of increase/decrease
-  if (currentData && previousData) {
-    const cal =
-      ((currentData.price - previousData.price) / previousData.price) * 100;
-    return cal.toFixed(1); // Return the rate as a string with one decimal
-  }
+  if (!currentData || !previousData) return null;
 
-  // Return null if data is insufficient for calculation
-  return null;
+  const cal = ((currentData.price - previousData.price) / previousData.price) * 100;
+  return cal.toFixed(4);
 }
 
 // Helper function to get the month numbers for a given quarter
@@ -393,50 +297,61 @@ function predictNextMonth(
   return null; // Return null if there's insufficient data
 }
 
+const fetcher = async (url: string) => {
+  const res = await fetch(url, { cache: "reload" });
+  if (!res.ok) throw new Error("Failed to fetch data");
+  const payload = await res.json();
+  return payload.data;
+}
+
 export function AreaChartComponent() {
-  const [selectedYear, setSelectedYear] = useState(2024);
-  const [data, setData] = useState<any>(null);
+  const [selectedYear, setSelectedYear] = useState((new Date()).getFullYear());
+  const [location, setLocation] = useState<ILocation>({ province: "Hồ Chí Minh" });
+  const { data, isLoading, error, isValidating } = useSWR(
+    `/api/analysis?${parseObjectToSearchParams(location)}`,
+    fetcher,
+    { keepPreviousData: true }
+  );
 
   // Transform the selected year's data for the chart
-  const chartData = transformYearData(yearData[selectedYear]);
-  const lastChartData = transformYearData(yearData[selectedYear - 1]);
-
+  const chartData = transformYearData(data?.analysis[selectedYear]);
+  const lastChartData = transformYearData(data?.analysis[selectedYear - 1]);
   const currentMonth = new Date().getMonth() + 1;
-  const avgPrice = yearData[selectedYear]["priceAVG"];
-  const currentPrice =
-    yearData[selectedYear][currentMonth.toString().padStart(2, "0")];
-
+  const currentMonthKey = currentMonth.toString().padStart(2, "0");
+  const avgPrice = data?.analysis[selectedYear].priceAVG;
+  const currentPrice = data?.analysis[selectedYear][currentMonthKey];
   const monthRate = calculateMonthRate(chartData, lastChartData, currentMonth);
-  const quarterRate = calculateQuarterRate(
-    chartData,
-    lastChartData,
-    currentMonth
-  );
+  const quarterRate = calculateQuarterRate(chartData, lastChartData, currentMonth);
   const predictData = predictNextMonth(chartData, lastChartData, currentMonth);
 
   // Dynamically calculate Y-axis domain
   const yAxisDomain = [
-    Math.floor(Math.min(...chartData.map((data) => data.price)) / 100) * 100,
-    Math.ceil(Math.max(...chartData.map((data) => data.price)) / 100) * 100,
+    Math.floor(
+      Math.min(...chartData.map((data) => data.price / 100)) * 100
+    ) - 5,
+    Math.ceil(
+      Math.max(...chartData.map((data) => data.price / 100)) * 100
+    ) + 5
   ];
 
   return (
     <div className="w-full bg-white dark:bg-black p-2">
       <h1 className="text-2xl font-bold">
-        Lịch sử giá tại <Locate onDataUpdate={setData} />
+        Lịch sử giá tại <Locate value={location} onChangeValue={setLocation} />
       </h1>
 
       <div className="flex items-end justify-end my-2">
         <div className="flex flex-row border-2 rounded-lg border-zinc-300 w-fit overflow-hidden">
-          {[2024, 2023, 2022, 2021, 2020].map((year, index) => (
+          {[2024, 2023, 2022,
+            // 2021, 2020
+          ].map((year, index) => (
             <div
               key={index}
               onClick={() => setSelectedYear(year)}
-              className={`border-r-2 border-zinc-300 p-2 cursor-pointer ${
-                selectedYear === year
-                  ? "bg-red-500/30 text-red-500 font-semibold"
-                  : ""
-              }`}
+              className={`border-r-2 border-zinc-300 p-2 cursor-pointer ${selectedYear === year
+                ? "bg-red-500/30 text-red-500 font-semibold"
+                : ""
+                }`}
             >
               <span className="text-sm">{year}</span>
             </div>
@@ -444,165 +359,172 @@ export function AreaChartComponent() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-6 my-6">
-        {chartData.length !== 0 && (
-          <div className="grid md:grid-cols-[1fr_1.5fr_1fr] grid-col-1 gap-3 border-2 border-zinc-300 rounded-md md:p-6 p-3">
-            <div className="flex flex-col gap-2 py-3">
-              <div className="flex md:flex-col flex-row-reverse justify-between">
-                <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                  {avgPrice}
-                  <span className="text-zinc-600 font-medium text-base">
-                    tr/m<sup>2</sup>
-                  </span>
+      {isLoading && error ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="flex flex-col gap-6 my-6 relative">
+          {isValidating && (
+            <div className="absolute inset-0"/>
+          )}
+          {chartData.length !== 0 && (
+            <div className="grid md:grid-cols-[1fr_1.5fr_1fr] grid-col-1 gap-3 border-2 border-zinc-300 rounded-md md:p-6 p-3">
+              <div className="flex flex-col gap-2 py-3">
+                <div className="flex md:flex-col flex-row-reverse justify-between">
+                  <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
+                    {Number(avgPrice.toFixed(4))}
+                    <span className="text-zinc-600 font-medium text-base">
+                      tr/m<sup>2</sup>
+                    </span>
+                  </div>
+                  <span className="text-zinc-600">Giá trung bình năm</span>
                 </div>
-                <span className="text-zinc-600">Giá trung bình năm</span>
-              </div>
-              <div className="flex md:flex-col flex-row-reverse justify-between md:mt-0 mt-2">
-                <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                  {currentPrice}
-                  <span className="text-zinc-600 font-medium text-base">
-                    tr/m<sup>2</sup>
-                  </span>
-                </div>
-                <span className="text-zinc-600 text-base">
-                  Giá trị phổ biến tháng hiện tại
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
-              <>
-                {/* Check if monthRate is null */}
-                {monthRate === null ? (
-                  <span className="text-zinc-600 text-base">
-                    Không có dữ liệu so sánh với tháng trước
-                  </span>
-                ) : // Conditional rendering based on whether rate is negative or positive
-                monthRate[0] === "-" ? (
-                  <>
-                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                      <FaArrowCircleDown className="size-8 text-red-500" />
-                      {monthRate}%
-                    </span>
-                    <span className="text-zinc-600 text-base">
-                      Giá trị giảm {monthRate}% so với tháng trước
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
-                      <FaArrowCircleUp className="size-8 text-green-600" />
-                      {monthRate}%
-                    </span>
-                    <span className="text-zinc-600 text-base">
-                      Giá trị tăng {monthRate}% so với tháng trước
-                    </span>
-                  </>
-                )}
-              </>
-              <>
-                {/* Check if quarterRate is null */}
-                {quarterRate === null ? (
-                  <span className="text-zinc-600 text-base">
-                    Không có dữ liệu so sánh với quý trước
-                  </span>
-                ) : // Conditional rendering based on whether rate is negative or positive
-                quarterRate[0] === "-" ? (
-                  <>
-                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                      <FaArrowCircleDown className="size-8 text-red-500" />
-                      {quarterRate}%
-                    </span>
-                    <span className="text-zinc-600 text-base">
-                      Giá trị giảm {quarterRate}% so với quý trước
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
-                      <FaArrowCircleUp className="size-8 text-green-600" />
-                      {quarterRate}%
-                    </span>
-                    <span className="text-zinc-600 text-base">
-                      Giá trị tăng {quarterRate}% so với quý trước
-                    </span>
-                  </>
-                )}
-              </>
-            </div>
-            <div className="flex md:flex-col flex-row-reverse md:justify-center items-center justify-between gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
-              {predictData === null ? (
-                <span className="text-zinc-600 text-base">
-                  Không có dữ liệu dự đoán
-                </span>
-              ) : (
-                <>
-                  <div className="flex flex-row items-center justify-start gap-2 md:text-2xl text-xl text-red-500 font-semibold">
-                    {predictData}
+                <div className="flex md:flex-col flex-row-reverse justify-between md:mt-0 mt-2">
+                  <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
+                    {Number(currentPrice.toFixed(4))}
                     <span className="text-zinc-600 font-medium text-base">
                       tr/m<sup>2</sup>
                     </span>
                   </div>
                   <span className="text-zinc-600 text-base">
-                    Dự đoán giá trị tháng sau
+                    Giá trị phổ biến tháng hiện tại
                   </span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
+                <>
+                  {/* Check if monthRate is null */}
+                  {monthRate === null ? (
+                    <span className="text-zinc-600 text-base">
+                      Không có dữ liệu so sánh với tháng trước
+                    </span>
+                  ) : // Conditional rendering based on whether rate is negative or positive
+                    monthRate[0] === "-" ? (
+                      <>
+                        <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
+                          <FaArrowCircleDown className="size-8 text-red-500" />
+                          {monthRate}%
+                        </span>
+                        <span className="text-zinc-600 text-base">
+                          Giá trị giảm {monthRate}% so với tháng trước
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
+                          <FaArrowCircleUp className="size-8 text-green-600" />
+                          {monthRate}%
+                        </span>
+                        <span className="text-zinc-600 text-base">
+                          Giá trị tăng {monthRate}% so với tháng trước
+                        </span>
+                      </>
+                    )}
                 </>
-              )}
+                <>
+                  {/* Check if quarterRate is null */}
+                  {quarterRate === null ? (
+                    <span className="text-zinc-600 text-base">
+                      Không có dữ liệu so sánh với quý trước
+                    </span>
+                  ) : // Conditional rendering based on whether rate is negative or positive
+                    quarterRate[0] === "-" ? (
+                      <>
+                        <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
+                          <FaArrowCircleDown className="size-8 text-red-500" />
+                          {quarterRate}%
+                        </span>
+                        <span className="text-zinc-600 text-base">
+                          Giá trị giảm {quarterRate}% so với quý trước
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
+                          <FaArrowCircleUp className="size-8 text-green-600" />
+                          {quarterRate}%
+                        </span>
+                        <span className="text-zinc-600 text-base">
+                          Giá trị tăng {quarterRate}% so với quý trước
+                        </span>
+                      </>
+                    )}
+                </>
+              </div>
+              <div className="flex md:flex-col flex-row-reverse md:justify-center items-center justify-between gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
+                {predictData === null ? (
+                  <span className="text-zinc-600 text-base">
+                    Không có dữ liệu dự đoán
+                  </span>
+                ) : (
+                  <>
+                    <div className="flex flex-row items-center justify-start gap-2 md:text-2xl text-xl text-red-500 font-semibold">
+                      {predictData.toFixed(2)}
+                      <span className="text-zinc-600 font-medium text-base">
+                        tr/m<sup>2</sup>
+                      </span>
+                    </div>
+                    <span className="text-zinc-600 text-base">
+                      Dự đoán giá trị tháng sau
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        )}
-
-        <ChartContainer config={chartConfig}>
-          {chartData.length === 0 ? (
-            <div className="text-center text-gray-500 text-xl">
-              Không có dữ liệu
-            </div>
-          ) : (
-            <LineChart
-              data={chartData}
-              margin={{
-                left: 0,
-                right: 0,
-              }}
-              width={1000} // Extended chart width
-              height={400} // Keep height unchanged
-            >
-              <CartesianGrid vertical={false} strokeDasharray="3 3" />
-              <XAxis
-                dataKey="month"
-                tickLine={false}
-                axisLine={false}
-                // tickMargin={8}
-                tickFormatter={(value) => `${value}`}
-              />
-              <YAxis domain={yAxisDomain} /> {/* Dynamic Y-axis */}
-              <Legend verticalAlign="top" height={36} />
-              <ChartTooltip
-                cursor={{ strokeDasharray: "3 3" }}
-                content={<ChartTooltipContent indicator="line" />}
-              />
-              <Line
-                type="monotone"
-                dataKey="price"
-                stroke={chartConfig.price.color}
-                strokeWidth={2}
-                dot={{ stroke: chartConfig.price.color, strokeWidth: 2 }}
-                name={chartConfig.price.label}
-              />
-              <ReferenceLine
-                y={yearData[selectedYear].priceAVG}
-                stroke={chartConfig.average.color}
-                strokeDasharray="3 3"
-                label={{
-                  position: "top",
-                  value: chartConfig.average.label,
-                  fill: chartConfig.average.color,
-                }}
-              />
-            </LineChart>
           )}
-        </ChartContainer>
-        <TableDemo data={data} />
-      </div>
+
+          <ChartContainer config={chartConfig}>
+            {chartData.length === 0 ? (
+              <div className="text-center text-gray-500 text-xl">
+                Không có dữ liệu
+              </div>
+            ) : (
+              <LineChart
+                data={chartData}
+                margin={{
+                  left: 0,
+                  right: 0,
+                }}
+                width={1000} // Extended chart width
+                height={400} // Keep height unchanged
+              >
+                <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  axisLine={false}
+                  // tickMargin={8}
+                  tickFormatter={(value) => `${value}`}
+                />
+                <YAxis domain={yAxisDomain} /> {/* Dynamic Y-axis */}
+                <Legend verticalAlign="top" height={36} />
+                <ChartTooltip
+                  cursor={{ strokeDasharray: "3 3" }}
+                  content={<ChartTooltipContent indicator="line" />}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="price"
+                  stroke={chartConfig.price.color}
+                  strokeWidth={2}
+                  dot={{ stroke: chartConfig.price.color, strokeWidth: 2 }}
+                  name={chartConfig.price.label}
+                />
+                <ReferenceLine
+                  y={data?.analysis[selectedYear].priceAVG}
+                  stroke={chartConfig.average.color}
+                  strokeDasharray="3 3"
+                  label={{
+                    position: "top",
+                    value: chartConfig.average.label,
+                    fill: chartConfig.average.color,
+                  }}
+                />
+              </LineChart>
+            )}
+          </ChartContainer>
+          <TableDemo data={data} year={selectedYear} />
+        </div>
+      )}
     </div>
   );
 }
