@@ -361,7 +361,6 @@ export default function InputForm() {
               <FormItem>
                 <FormLabel className="font-semibold">Nội thất</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nhập nội thất (nếu có)" {...field} />
                   <Select
                     onValueChange={(value) => field.onChange(value)}
                     defaultValue={field.value}
