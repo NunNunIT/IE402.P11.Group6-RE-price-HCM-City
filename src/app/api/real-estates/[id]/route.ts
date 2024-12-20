@@ -2,14 +2,12 @@ import {
   retry,
   badRequestResponse,
   errorResponse,
-  haversineDistance,
   notFoundResponse,
-  sortHandler,
   successResponse,
 } from "@/utils";
 
 import { NextRequest } from "next/server";
-import { Location, RealEstate } from "@/lib/model";
+import { RealEstate } from "@/lib/model";
 import { isValidObjectId } from "mongoose";
 
 export const GET = async (
@@ -27,7 +25,7 @@ export const GET = async (
       RealEstate.findById(id)
         .populate("owner", "username avt email phone")
         .populate("polygon", "points")
-        .lean());
+        .lean()) as { [key: string]: any };
 
     if (!realEstate)
       return notFoundResponse({
@@ -35,24 +33,24 @@ export const GET = async (
         error: "REAL_ESTATE_NOT_FOUND",
       });
 
-    const { locate } = realEstate as any;
-    const { locateSort } = sortHandler(`locate:${locate.lat},${locate.long}`);
-    let locations = (await Location.find()
-      .select("title locate category imageUrls")
-      .lean()) as any[];
-    const temp = locations.map((location) => {
-      const distance = haversineDistance(locateSort, location.locate);
-      return { ...location, distance };
-    });
-    temp.sort((a, b) => a.distance - b.distance);
-    locations = temp
-      .map(({ distance: __distance, imageUrls, ...location }) => ({
-        ...location,
-        imageUrl: imageUrls?.[0],
-      }))
-      .slice(0, 24);
+    // const { locate } = realEstate as any;
+    // const { locateSort } = sortHandler(`locate:${locate.lat},${locate.long}`);
+    // let locations = (await Location.find({ district: realEstate.district })
+    //   .select("title locate category imageUrls")
+    //   .lean()) as any[];
+    // const temp = locations.map((location) => {
+    //   const distance = haversineDistance(locateSort, location.locate);
+    //   return { ...location, distance };
+    // });
+    // temp.sort((a, b) => a.distance - b.distance);
+    // locations = temp
+    //   .map(({ distance: __distance, imageUrls, ...location }) => ({
+    //     ...location,
+    //     imageUrl: imageUrls?.[0],
+    //   }))
+    //   .slice(0, 24);
 
-    return successResponse({ data: { ...realEstate, locations } });
+    return successResponse({ data: realEstate });
   } catch (error) {
     console.error(">> Error in @GET /api/real-estates/[id]:", error.message);
     return errorResponse({

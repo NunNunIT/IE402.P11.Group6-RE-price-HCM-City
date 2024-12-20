@@ -95,7 +95,6 @@ export const GET = async (req: NextRequest) => {
       }
     }
 
-
     realEstates = realEstates.map(({ imageUrls, ...realEstate }) => ({
       ...realEstate,
       imageUrl: imageUrls[0],
