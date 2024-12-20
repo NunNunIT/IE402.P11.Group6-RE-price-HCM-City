@@ -49,6 +49,7 @@ export type DataColumns = {
   area: number;
   imageUrl: string;
   locate: locate;
+  isAuth: string;
 };
 
 export const columns: ColumnDef<DataColumns>[] = [
@@ -107,6 +108,27 @@ export const columns: ColumnDef<DataColumns>[] = [
       return (
         <div className="text-right font-medium">
           {locate.diachi}, {locate.xa}, {locate.huyen}, {locate.tinh}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "isAuth",
+    header: () => <div className="text-left font-semibold">Xác thực</div>,
+    cell: ({ row }) => {
+      console.log(row.getValue("isAuth"));
+      return (
+        <div className="text-left font-medium">
+          {row.getValue("isAuth") == "pending" && (
+            <span className="px-2 py-1 rounded-md bg-orange-700 text-white text-nowrap">
+              Đang đợi
+            </span>
+          )}
+          {row.getValue("isAuth") == "auth" && (
+            <span className="px-2 py-1 rounded-md bg-green-700 text-white text-nowrap">
+              Xác thực
+            </span>
+          )}
         </div>
       );
     },

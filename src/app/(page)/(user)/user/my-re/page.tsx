@@ -30,6 +30,7 @@ async function getData(url: string): Promise<DataColumns[]> {
       area: item.area,
       locate: item.locate,
       imageUrl: item.imageUrl,
+      isAuth: item.isAuth,
     }));
   } catch (error) {
     console.error("Error fetching data:", error);

@@ -12,6 +12,7 @@ interface RealEstateCardProps {
   locate?: locate;
   price?: number;
   area?: number;
+  isAuth?: string
 }
 
 interface Props {
@@ -39,13 +40,19 @@ const RealEstateCard: React.FC<Props> = ({ data }) => {
           />
           {position && (
             <span className="absolute p-2 bg-black/60 bottom-0 w-full text-sm text-white truncate text-right">
-              Cách bạn {Number(haversineDistance(position, data?.locate).toFixed(2))} km
+              Cách bạn{" "}
+              {Number(haversineDistance(position, data?.locate).toFixed(2))} km
             </span>
           )}
         </div>
         {/* Content */}
         <div className="p-2 flex flex-col gap-2">
           <h3 className="text-base font-semibold text-zinc-800 dark:text-zinc-200 line-clamp-2">
+            {data?.isAuth && (
+              <span className="bg-green-700 rounded-md py-1 px-2 text-white">
+                Xác thực
+              </span>
+            )}
             {data?.title}
           </h3>
           <div className="text-sm text-zinc-500 flex gap-2 items-center">

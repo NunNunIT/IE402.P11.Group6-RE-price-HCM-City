@@ -4,7 +4,9 @@ import { RealEstate } from "@/lib/model";
 
 export const GET = async (req: NextRequest) => {
   try {
-    let realEstates = await RealEstate.find({ isAuth: "pending" })
+    let realEstates = await RealEstate.find({
+      isAuth: { $in: ["pending", "auth"] },
+    })
       .select("-desc")
       .populate("owner", "username avt")
       .lean();
