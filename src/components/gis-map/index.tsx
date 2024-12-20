@@ -44,7 +44,7 @@ interface IMapProps {
   isShowDistrict?: boolean;
   value?: [number, number];
   onChange?: (__value: [number, number]) => void;
-  polygon: [number, number][];
+  polygon?: [number, number][];
   onPolygonComplete?: (__polygon: [number, number][]) => void;
 }
 

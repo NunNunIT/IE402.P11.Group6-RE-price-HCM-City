@@ -34,13 +34,7 @@ export const GET = async (req: NextRequest) => {
     }
     responseData.district = districtSearch
 
-    const wards = await Ward.find({
-      ...(wardSearch
-        ? { name: { $regex: wardSearch, $options: "i" } }
-        : { district: districts[0]._id })
-    })
-    if (wards.length === 0) return notFoundResponse({ message: "Ward not found" });
-
+    const wards = await Ward.find({ district: districts[0]._id })
     if (!wardSearch) {
       responseData.analysis = districts[0].analysis
       responseData.wards = wards.map(w => ({
@@ -50,6 +44,7 @@ export const GET = async (req: NextRequest) => {
       return successResponse({ data: responseData });
     }
     responseData.ward = wardSearch
+    responseData.wards = wards
     responseData.analysis = wards[0].analysis
     return successResponse({ data: responseData });
   } catch (error) {

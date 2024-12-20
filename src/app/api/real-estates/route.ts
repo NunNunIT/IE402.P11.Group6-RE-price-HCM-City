@@ -39,7 +39,7 @@ export const GET = async (req: NextRequest) => {
   const sort = searchParams.getAll("sort");
   const getAll = !!searchParams.get("getAll"); // Chuyển getAll thành boolean
   const relative = !!searchParams.get("relative");
-  const isAuth = searchParams.get("isAuth") == "true";
+  const isAuth = searchParams.has("isAuth") ? searchParams.get("isAuth") == "true" : undefined;
   const propertyTypeDefault = searchParams.get("propertyType");
   const priceRangeDefault = searchParams.get("priceRange");
   const areaRangeDefault = searchParams.get("areaRange");
