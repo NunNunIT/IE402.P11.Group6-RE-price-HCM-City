@@ -42,6 +42,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string>("all");
 
   const table = useReactTable({
     data,
@@ -57,6 +58,21 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const handleFilterChange = (filterValue: string) => {
+    setSelectedFilter(filterValue);
+
+    if (filterValue === "all") {
+      setColumnFilters((filters) =>
+        filters.filter((filter) => filter.id !== "isAuth")
+      );
+    } else {
+      setColumnFilters((filters) => [
+        ...filters.filter((filter) => filter.id !== "isAuth"),
+        { id: "isAuth", value: filterValue },
+      ]);
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center py-4">
@@ -68,6 +84,33 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="outline" className="mr-2">
+              Lọc
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuCheckboxItem
+              checked={selectedFilter === "all"}
+              onCheckedChange={() => handleFilterChange("all")}
+            >
+              Tất cả
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem
+              checked={selectedFilter === "pending"}
+              onCheckedChange={() => handleFilterChange("pending")}
+            >
+              Đang chờ
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem
+              checked={selectedFilter === "auth"}
+              onCheckedChange={() => handleFilterChange("auth")}
+            >
+              Xác thực
+            </DropdownMenuCheckboxItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -153,7 +196,7 @@ export function DataTable<TData, TValue>({
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-         Trước
+          Trước
         </Button>
         <Button
           variant="outline"

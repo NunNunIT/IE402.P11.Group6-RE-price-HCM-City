@@ -67,24 +67,22 @@ export default function Home() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-      <div className="flex flex-col items-center justify-center min-h-[100dvh] max-w-6xl mx-auto">
-        <SearchRe />
-        {/* Danh sách bất động sản */}
-        <div className="w-full grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-3 md:p-0 p-2">
-          {cards.map((item, index) => (
-            <RealEstateCard key={index} data={item} />
-          ))}
-        </div>
-
-        {/* Loader */}
-        {loading && (
-          <div className="py-4">
-            <span>Đang tải thêm...</span>
-          </div>
-        )}
-
-        {/* Trạm quan sát */}
-        <div ref={observerRef} className="h-10"></div>
+    <>
+      <div className="w-full grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-3 md:p-0 p-2">
+        {cards.map((item, index) => (
+          <RealEstateCard key={index} data={item} />
+        ))}
       </div>
+
+      {/* Loader */}
+      {loading && (
+        <div className="py-4">
+          <span>Đang tải thêm...</span>
+        </div>
+      )}
+
+      {/* Trạm quan sát */}
+      <div ref={observerRef} className="h-10"></div>
+    </>
   );
 }

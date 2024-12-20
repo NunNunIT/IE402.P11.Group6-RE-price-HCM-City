@@ -1,3 +1,4 @@
+import { SearchRe } from "@/components/search";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,5 +12,10 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>): React.ReactNode {
-  return children;
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[100dvh] max-w-6xl mx-auto">
+      <SearchRe />
+      {children}
+    </div>
+  );
 }
