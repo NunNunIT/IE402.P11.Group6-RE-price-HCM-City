@@ -1,12 +1,27 @@
 import {
   errorResponse,
   haversineDistance,
+  isInclude,
   isNotNullAndUndefined,
+  REAL_ESTATE_FILTERS,
   sortHandler,
   successResponse,
 } from "@/utils";
 import { NextRequest } from "next/server";
 import { RealEstate } from "@/lib/model";
+
+function generateFilterRange(filter: string, range: string) {
+  if (!range) return {};
+  const [min, max] = range.split('-').map(Number);
+  return {
+    ...(filter ? {
+      [filter]: {
+        ...(isNotNullAndUndefined(min) ? { $gte: min } : {}),
+        ...(isNotNullAndUndefined(max) ? { $lte: max } : {})
+      }
+    } : {}),
+  };
+}
 
 export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
@@ -19,6 +34,18 @@ export const GET = async (req: NextRequest) => {
   const getAll = !!searchParams.get("getAll"); // Chuyển getAll thành boolean
   const relative = !!searchParams.get("relative");
   const isAuth = searchParams.get("isAuth") == "true";
+  const propertyTypeDefault = searchParams.get("propertyType");
+  const priceRangeDefault = searchParams.get("priceRange");
+  const areaRangeDefault = searchParams.get("areaRange");
+  const propertyType = isInclude(propertyTypeDefault, REAL_ESTATE_FILTERS.propertyType.map(([value]) => value))
+    ? propertyTypeDefault
+    : REAL_ESTATE_FILTERS.propertyType[0][0];
+  const priceRange = isInclude(priceRangeDefault, REAL_ESTATE_FILTERS.priceRange.map(([value]) => value))
+    ? priceRangeDefault
+    : REAL_ESTATE_FILTERS.priceRange[0][0];
+  const areaRange = isInclude(areaRangeDefault, REAL_ESTATE_FILTERS.areaRange.map(([value]) => value))
+    ? areaRangeDefault
+    : REAL_ESTATE_FILTERS.areaRange[0][0];
 
   try {
     const { locateSort, mongooseSort } = sortHandler(sort);
@@ -28,7 +55,11 @@ export const GET = async (req: NextRequest) => {
       ...(district ? { "locate.huyen": district } : {}),
       ...(ward ? { "locate.xa": ward } : {}),
       ...(isNotNullAndUndefined(isAuth) ? { isAuth } : {}),
+      ...(propertyType !== "all" ? { propertyType } : {}),
+      ...(priceRange !== "all" ? generateFilterRange("price", priceRange) : {}),
+      ...(areaRange !== "all" ? generateFilterRange("area", areaRange) : {}),
     })
+      .select("-desc")
       .populate("owner", "username avt")
       .sort(mongooseSort)
       .lean();
