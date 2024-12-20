@@ -298,7 +298,7 @@ function predictNextMonth(
 }
 
 const fetcher = async (url: string) => {
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: "reload" });
   if (!res.ok) throw new Error("Failed to fetch data");
   const payload = await res.json();
   return payload.data;
@@ -307,7 +307,11 @@ const fetcher = async (url: string) => {
 export function AreaChartComponent() {
   const [selectedYear, setSelectedYear] = useState((new Date()).getFullYear());
   const [location, setLocation] = useState<ILocation>({ province: "Hồ Chí Minh" });
-  const { data, isLoading, error } = useSWR(`/api/analysis?${parseObjectToSearchParams(location)}`, fetcher);
+  const { data, isLoading, error, isValidating } = useSWR(
+    `/api/analysis?${parseObjectToSearchParams(location)}`,
+    fetcher,
+    { keepPreviousData: true }
+  );
 
   // Transform the selected year's data for the chart
   const chartData = transformYearData(data?.analysis[selectedYear]);
@@ -358,7 +362,10 @@ export function AreaChartComponent() {
       {isLoading && error ? (
         <p>Loading...</p>
       ) : (
-        <div className="flex flex-col gap-6 my-6">
+        <div className="flex flex-col gap-6 my-6 relative">
+          {isValidating && (
+            <div className="absolute inset-0"/>
+          )}
           {chartData.length !== 0 && (
             <div className="grid md:grid-cols-[1fr_1.5fr_1fr] grid-col-1 gap-3 border-2 border-zinc-300 rounded-md md:p-6 p-3">
               <div className="flex flex-col gap-2 py-3">
