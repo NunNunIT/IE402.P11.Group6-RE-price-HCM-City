@@ -3,6 +3,7 @@
 import { Toaster as Toaster2 } from "@/components/ui/toaster"
 import { auth } from "@/lib/auth";
 import dynamic from "next/dynamic";
+import { PositionProvider } from "./position";
 
 const AlertProvider = dynamic(() => import("./alert-dialog").then(mod => mod.AlertProvider), { ssr: false });
 const Toaster = dynamic(() => import("@/components/ui/sonner").then(mod => mod.Toaster), { ssr: false });
@@ -13,14 +14,16 @@ export async function GlobalProvider({ children }: { children: React.ReactNode }
   const session = await auth();
 
   return (
-    <SessionProvider session={session}>
-      <AuthDialogProvider>
-        <AlertProvider>
-          {children}
-          <Toaster />
-          <Toaster2 />
-        </AlertProvider>
-      </AuthDialogProvider>
-    </SessionProvider>
+    <PositionProvider>
+      <SessionProvider session={session}>
+        <AuthDialogProvider>
+          <AlertProvider>
+            {children}
+            <Toaster />
+            <Toaster2 />
+          </AlertProvider>
+        </AuthDialogProvider>
+      </SessionProvider>
+    </PositionProvider>
   )
 }

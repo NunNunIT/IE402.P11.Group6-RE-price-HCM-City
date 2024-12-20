@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { FaChevronDown, FaLocationDot } from "react-icons/fa6";
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import {
   Sheet,
   SheetClose,
@@ -24,15 +24,16 @@ import {
 } from "@/components/ui/sheet";
 
 import { Button } from "@/components/ui/button";
-import { CiSearch } from "react-icons/ci";
 import { FaCheck } from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
 import { LocateIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getRelativeLocation } from "@/utils/functions";
+// import { getRelativeLocation } from "@/utils/functions";
 import selectData from "../data.json";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { useMediaQuery } from "usehooks-ts";
+import { usePosition } from "@/provider/position";
+import { getRelativeLocation } from "@/utils";
 
 const Select: React.FC<ISelectorLocationComponentProps> = ({
   multiChoice = false,
@@ -48,12 +49,31 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
   onlySheet,
   positioning = false,
   typeOptions = 1,
-  setCurrentPosition,
+  // setCurrentPosition,
   viewOnly = false,
 }) => {
   const isDesktop = useMediaQuery("(min-width: 860px)");
   const [searchText, setSearchText] = useState("");
   const [filteredOptions, setFilteredOptions] = useState<any[]>(selectData);
+
+  const { position, allowAccessCurrentPosition } = usePosition();
+  useEffect(() => {
+    (async () => {
+      if (!position) return;
+      const payload = await getRelativeLocation(position);
+      if (!payload) return;
+
+      const {
+        address: { state: rawState },
+      } = payload;
+      if (!rawState) return;
+
+      const state = rawState.replace("Tỉnh", "").replace("province", "").trim();
+      if (!state) return;
+
+      setSelectedValue(state);
+    })()
+  }, [position, setSelectedValue]);
 
   const renderButtonPositioning = () => (
     <Button
@@ -66,67 +86,66 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
     </Button>
   );
 
-  const allowAccessCurrentPosition = useCallback(() => {
-    if (!navigator.geolocation) {
-      toast.error("Trình duyệt không hỗ trợ truy cập vị trí của bạn");
-      return;
-    }
+  // const allowAccessCurrentPosition = useCallback(() => {
+  //   if (!navigator.geolocation) {
+  //     toast.error("Trình duyệt không hỗ trợ truy cập vị trí của bạn");
+  //     return;
+  //   }
 
-    const success = async (position: GeolocationPosition) => {
-      const { latitude, longitude } = position.coords;
-      const newCurrentPosition = { lat: latitude, long: longitude };
-      setCurrentPosition(newCurrentPosition);
+  //   const success = async (position: GeolocationPosition) => {
+  //     const { latitude, longitude } = position.coords;
+  //     const newCurrentPosition = { lat: latitude, long: longitude };
+  //     setCurrentPosition(newCurrentPosition);
 
-      const payload = await getRelativeLocation(newCurrentPosition);
-      if (!payload) return;
+  //     const payload = await getRelativeLocation(newCurrentPosition);
+  //     if (!payload) return;
 
-      const {
-        address: { state: rawState },
-      } = payload;
-      if (!rawState) return;
+  //     const {
+  //       address: { state: rawState },
+  //     } = payload;
+  //     if (!rawState) return;
 
-      const state = rawState.replace("Tỉnh", "").replace("province", "").trim();
-      if (!state) return;
+  //     const state = rawState.replace("Tỉnh", "").replace("province", "").trim();
+  //     if (!state) return;
 
-      setSelectedValue(state);
-    };
+  //     setSelectedValue(state);
+  //   };
 
-    const error = (err: GeolocationPositionError) => {
-      console.error("Error while getting current position:", err.message);
-    };
+  //   const error = (err: GeolocationPositionError) => {
+  //     console.error("Error while getting current position:", err.message);
+  //   };
 
-    const geolocationPromise = () =>
-      new Promise<void>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            await success(position);
-            resolve();
-          },
-          (err) => {
-            error(err);
-            reject(err);
-          }
-        );
-      });
+  //   const geolocationPromise = () =>
+  //     new Promise<void>((resolve, reject) => {
+  //       navigator.geolocation.getCurrentPosition(
+  //         async (position) => {
+  //           await success(position);
+  //           resolve();
+  //         },
+  //         (err) => {
+  //           error(err);
+  //           reject(err);
+  //         }
+  //       );
+  //     });
 
-    toast.promise(geolocationPromise, {
-      loading: "Đang xác định vị trí của bạn...",
-      success: "Đã xác định vị trí của bạn",
-      error: "Không thể truy cập vị trí của bạn",
-    });
-  }, [setCurrentPosition, setSelectedValue]);
-
+  //   toast.promise(geolocationPromise, {
+  //     loading: "Đang xác định vị trí của bạn...",
+  //     success: "Đã xác định vị trí của bạn",
+  //     error: "Không thể truy cập vị trí của bạn",
+  //   });
+  // }, [setCurrentPosition, setSelectedValue]);
 
   const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setFilteredOptions(
       selectData.filter(
-      (option) => option.Name.toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .includes(value.toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, ""))
+        (option) => option.Name.toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .includes(value.toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, ""))
       )
     );
     setSearchText(value);

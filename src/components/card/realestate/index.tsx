@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { LucideDot } from "lucide-react";
 import { SaveRealBtn } from "@/components";
+import { usePosition } from "@/provider/position";
+import { haversineDistance } from "@/utils";
 
 interface RealEstateCardProps {
   _id?: string;
@@ -17,6 +19,8 @@ interface Props {
 }
 
 const RealEstateCard: React.FC<Props> = ({ data }) => {
+  const { position } = usePosition();
+
   return (
     <div className="group h-full max-w-sm transition-shadow shadow-lg hover:shadow-xl rounded-xl overflow-hidden flex flex-col justify-between">
       <Link href={`/real-estate/${data?._id}`}>
@@ -33,9 +37,11 @@ const RealEstateCard: React.FC<Props> = ({ data }) => {
             alt={data?.title}
             className="object-cover w-full h-full group-hover:scale-105 ease-in duration-300"
           />
-          <span className="absolute p-2 bg-black/60 bottom-0 w-full text-sm text-white truncate">
-            {/* {locate?.diachi} */}
-          </span>
+          {position && (
+            <span className="absolute p-2 bg-black/60 bottom-0 w-full text-sm text-white truncate text-right">
+              Cách bạn {Number(haversineDistance(position, data?.locate).toFixed(2))} km
+            </span>
+          )}
         </div>
         {/* Content */}
         <div className="p-2 flex flex-col gap-2">
