@@ -68,7 +68,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-full grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-3 md:p-0 p-2">
+      <div className="w-full grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-3">
         {cards.map((item, index) => (
           <RealEstateCard key={index} data={item} />
         ))}

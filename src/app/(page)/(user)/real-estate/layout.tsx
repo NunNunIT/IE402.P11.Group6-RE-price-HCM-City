@@ -14,8 +14,10 @@ export default function Layout({
 }>): React.ReactNode {
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh] max-w-6xl mx-auto">
-      <SearchRe />
-      {children}
+      <div className="w-full md:p-0 p-2 space-y-3">
+        <SearchRe />
+        {children}
+      </div>
     </div>
   );
 }

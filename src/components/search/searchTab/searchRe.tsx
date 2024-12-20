@@ -103,7 +103,7 @@ export default function SearchRe() {
     <form
       action={`/search-result`}
       method="GET"
-      className={cn("flex flex-col gap-2")}
+      className={cn("flex flex-col gap-2 w-full")}
     >
       <>
         <div

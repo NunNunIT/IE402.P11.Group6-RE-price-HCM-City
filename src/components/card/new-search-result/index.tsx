@@ -10,6 +10,7 @@ interface NewCardProps {
   _id: string;
   imageUrl?: string;
   title?: string;
+  isAuth?: string;
   owner?: any;
   createdAt?: string;
 }
@@ -19,6 +20,7 @@ export default function NewSearchResultCard({
   imageUrl = "https://photo.rever.vn/v3/get/rvhe0PS+4VVS4Z8WZzoVBQToU5B4zzCZg5f9dc2EdjtJdprSpJtPtK0VShcsHCoQDDJ3cXBnMshiyvde_rN47nHA==/750x500/image.jpg",
   title = "Giỏ hàng chuyển nhượng căn hộ Vinhomes Ba Son 1PN, 2PN, 3PN",
   owner,
+  isAuth,
   createdAt,
 }: NewCardProps) {
   return (
@@ -42,6 +44,11 @@ export default function NewSearchResultCard({
       <div className="w-[70%] flex flex-col justify-between py-3">
         <div className="flex flex-col gap-2">
           <h5 className="text-lg font-bold text-gray-900 line-clamp-2">
+            {isAuth == "auth" && (
+              <span className="bg-green-700 rounded-md p-1 text-white text-xs mr-2">
+                Xác thực
+              </span>
+            )}
             {title}
           </h5>
           <div className="flex gap-8"></div>
