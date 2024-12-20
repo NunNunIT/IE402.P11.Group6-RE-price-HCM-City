@@ -72,12 +72,10 @@ export const GET = async (req: NextRequest) => {
       .sort(mongooseSort)
 
     let realEstates = await retry(() =>
-      locateSort.useHaversine
-        ? query
-        : query.skip((page - 1) * limit).limit(limit)
+      getAll || locateSort.useHaversine
+        ? query.lean()
+        : query.skip((page - 1) * limit).limit(limit).lean()
     );
-
-    realEstates = realEstates.map((realEstate) => realEstate.toJSON());
 
     const total = realEstates.length;
 
@@ -92,11 +90,11 @@ export const GET = async (req: NextRequest) => {
       realEstates = temp.map(({ distance: __distance, ...realEstate }) => ({
         ...realEstate,
       }));
+      if (!getAll) {
+        realEstates = realEstates.slice((page - 1) * limit, page * limit);
+      }
     }
 
-    if (!getAll) {
-      realEstates = realEstates.slice((page - 1) * limit, page * limit);
-    }
 
     realEstates = realEstates.map(({ imageUrls, ...realEstate }) => ({
       ...realEstate,
