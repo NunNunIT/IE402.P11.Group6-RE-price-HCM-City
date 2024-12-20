@@ -17,6 +17,33 @@ interface IRealEstateDetailPageProps extends IDefaultPageProps {
   params: { _id: string };
 }
 
+export async function generateMetadata({ params: { _id } }: IRealEstateDetailPageProps) {
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`,
+    { cache: "reload" }
+  )
+    .then(async (res) => {
+      const payload = await res.json();
+      return payload.data;
+    })
+    .catch((error): null => {
+      console.error("🚀 ~ .catch ~ error", error.message);
+      return null;
+    });
+
+  if (!data) return {};
+
+  return {
+    title: data.title,
+    description: data.desc,
+    openGraph: {
+      title: data.title,
+      description: data.desc,
+      images: data.imageUrls,
+    },
+  };
+}
+
 export default async function RealEstateDetailPage({
   params: { _id },
 }: IRealEstateDetailPageProps) {

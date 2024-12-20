@@ -20,13 +20,10 @@ export default function Home() {
     try {
       const res = await fetch(`/api/news?limit=12&page=${page}`);
       if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-      console.log();
-
       const { data } = await res.json();
-      console.log("Data lon:", data);
 
-      if (data?.length > 0) {
-        setCards((prev) => [...prev, ...data]); // Thêm dữ liệu mới vào danh sách
+      if (data.rows?.length > 0) {
+        setCards((prev) => [...prev, ...data.rows]); // Thêm dữ liệu mới vào danh sách
         setPage((prev) => prev + 1); // Tăng số trang
       }
     } catch (error) {

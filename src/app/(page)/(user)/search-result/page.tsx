@@ -1,4 +1,10 @@
 import dynamic from "next/dynamic";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Kết quả tìm kiếm bất động sản",
+  description: "Trang hiển thị kết quả tìm kiếm bất động sản",
+};
 
 const SearchCardWrapper = dynamic(
   () => import("./components").then((mod) => mod.SearchCardWrapper),

@@ -8,6 +8,7 @@ import { SaveBtn } from "@/components";
 import { MAPPING_MARKER_SYMBOL } from "@/utils";
 
 interface LocationCardProps {
+  _id?: string;
   imageUrl?: string;
   title?: string;
   locate?: any;
@@ -15,9 +16,7 @@ interface LocationCardProps {
   avgStarGGMap?: number;
 }
 
-const LocationCard = ({
-  data,
-}: { data?: LocationCardProps }) => {
+const LocationCard = ({ data }: { data?: LocationCardProps }) => {
   return (
     <div className="group max-w-sm overflow-hidden transition-shadow h-fit">
       <Link href="#">
@@ -41,7 +40,9 @@ const LocationCard = ({
           </div>
 
           <div className="absolute top-2 right-2 p-2 bg-indigo-600 text-white flex items-center">
-            {MAPPING_MARKER_SYMBOL[data?.category as keyof typeof MAPPING_MARKER_SYMBOL] ?? "coffee shop"}
+            {MAPPING_MARKER_SYMBOL[
+              data?.category as keyof typeof MAPPING_MARKER_SYMBOL
+            ] ?? "coffee shop"}
           </div>
         </div>
 
@@ -51,13 +52,17 @@ const LocationCard = ({
             {data?.title ?? "name"}
           </h3>
           <p className="text-sm text-zinc-500 dark:text-zinc-300">
-            {data?.locate ? `${data.locate.diachi}, ${data.locate.xa}, ${data.locate.huyen}, ${data.locate.tinh}` : "dia chi"}
+            {data?.locate
+              ? `${data.locate.diachi}, ${data.locate.xa}, ${data.locate.huyen}, ${data.locate.tinh}`
+              : "dia chi"}
           </p>
         </div>
       </Link>
 
-      <SaveBtn component="location" />
-
+      {/* Nút SaveBtn */}
+      <div className="p-2">
+        <SaveBtn locationId={data?._id || ""} />
+      </div>
     </div>
   );
 };

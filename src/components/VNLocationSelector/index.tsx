@@ -64,8 +64,8 @@ export default function LocationSelect({
       : undefined;
     const selectedDistrict = location?.district
       ? selectedProvince?.Districts.find(
-        (district) => district.Name === location.district
-      )
+          (district) => district.Name === location.district
+        )
       : undefined;
 
     return {
@@ -103,11 +103,12 @@ export default function LocationSelect({
       } else if (key === "district" && depthLevel >= ENUM_LOCATION_TYPE.WARD) {
         newLocation.ward = undefined;
         newLocation.wardId = undefined;
-      } else if (key === 'ward' && depthLevel >= ENUM_LOCATION_TYPE.WARD) {
-        newLocation.wardId =
-          VNLocationData.find(province => province.Name === location.province)
-            ?.Districts.find(district => district.Name === location.district)
-            ?.Wards.find(ward => ward.Name === value)?.Id;
+      } else if (key === "ward" && depthLevel >= ENUM_LOCATION_TYPE.WARD) {
+        newLocation.wardId = VNLocationData.find(
+          (province) => province.Name === location.province
+        )
+          ?.Districts.find((district) => district.Name === location.district)
+          ?.Wards.find((ward) => ward.Name === value)?.Id;
       }
 
       setLocation?.(newLocation);
