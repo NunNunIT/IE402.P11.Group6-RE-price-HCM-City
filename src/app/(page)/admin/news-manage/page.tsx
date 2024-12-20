@@ -76,31 +76,31 @@ const handleDelete = async (
 const columns = (
   setNewsData: React.Dispatch<React.SetStateAction<News[]>>
 ): ColumnDef<News>[] => [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected()
-            ? true
-            : table.getIsSomePageRowsSelected()
-            ? "indeterminate"
-            : false
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected()
+  //           ? true
+  //           : table.getIsSomePageRowsSelected()
+  //           ? "indeterminate"
+  //           : false
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "title",
     header: ({ column }) => (
@@ -196,14 +196,17 @@ export default function NewsManage() {
 
   return (
     <div className="flex flex-col items-start justify-start min-h-[100dvh] px-4 md:px-8">
-      <h1 className="md:text-4xl text-2xl font-bold my-3">Quản lý tin tức</h1>
+      <div className="flex flex-row justify-between items-center">
+        <h1 className="md:text-4xl text-2xl font-bold my-3">Quản lý tin tức</h1>
+        <Button
+          href="/admin/news-manage/add"
+          variant="default"
+        >
+          Tạo tin tức mới
+        </Button>
+      </div>
       <div className="w-full max-w-6xl mx-auto">
         <div className="flex items-center py-4">
-          <Link href="/admin/news-manage/add">
-            <Button variant="default" className="mr-4">
-              Tạo tin tức mới
-            </Button>
-          </Link>
           <Input
             placeholder="Tìm kiếm tin tức..."
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}

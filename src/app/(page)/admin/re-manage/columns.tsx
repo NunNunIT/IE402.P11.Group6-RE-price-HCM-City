@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-
+import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,6 +23,24 @@ export type DataColumns = {
   area: number;
   imageUrl: string;
   locate: locate;
+};
+
+// Hàm handleDelete
+const handleDelete = async (id: string) => {
+  try {
+    const response = await fetch(`/api/real-estates/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Xóa không thành công");
+    }
+
+    toast({ title: "Thành công", description: "Xóa bất động sản thành công" });
+  } catch (error) {
+    console.error("Lỗi khi xóa:", error);
+    toast({ title: "Lỗi", description: "Đã có lỗi xảy ra khi xóa", variant: "destructive" });
+  }
 };
 
 export const columns: ColumnDef<DataColumns>[] = [
@@ -53,16 +71,16 @@ export const columns: ColumnDef<DataColumns>[] = [
   },
   {
     accessorKey: "price",
-    header: () => <div className="text-right font-semibold">Giá</div>,
+    header: () => <div className="text-left font-semibold">Giá</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("price"));
 
-      return <div className="text-right font-medium">{amount} tỷ</div>;
+      return <div className="text-left font-medium">{amount} tỷ</div>;
     },
   },
   {
     accessorKey: "area",
-    header: () => <div className="text-right font-semibold">Diện tích</div>,
+    header: () => <div className="text-center font-semibold">Diện tích</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("area"));
 
@@ -75,11 +93,11 @@ export const columns: ColumnDef<DataColumns>[] = [
   },
   {
     accessorKey: "locate",
-    header: () => <div className="text-right font-semibold">Địa chỉ</div>,
+    header: () => <div className="text-center font-semibold">Địa chỉ</div>,
     cell: ({ row }) => {
       const locate = row.original.locate; // Truy cập toàn bộ locate object
       return (
-        <div className="text-right font-medium">
+        <div className="text-left font-medium">
           {locate.diachi}, {locate.xa}, {locate.huyen}, {locate.tinh}
         </div>
       );
@@ -88,6 +106,7 @@ export const columns: ColumnDef<DataColumns>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      const id = row.original._id; // Lấy _id của hàng
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -100,7 +119,7 @@ export const columns: ColumnDef<DataColumns>[] = [
             <DropdownMenuLabel>Hành động</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Xem</DropdownMenuItem>
-            <DropdownMenuItem>Xóa</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDelete(id)}>Xóa</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
+import { SearchRe } from "@/components/search";
 
 // Lazy load components
 const RealEstateCard = dynamic(() => import("@/components/card/realestate"));
@@ -67,6 +68,7 @@ export default function Home() {
 
   return (
       <div className="flex flex-col items-center justify-center min-h-[100dvh] max-w-6xl mx-auto">
+        <SearchRe />
         {/* Danh sách bất động sản */}
         <div className="w-full grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-3 md:p-0 p-2">
           {cards.map((item, index) => (

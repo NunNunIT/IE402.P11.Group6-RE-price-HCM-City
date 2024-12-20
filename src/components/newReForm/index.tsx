@@ -29,6 +29,7 @@ import { ENUM_MAP_MODE } from "@/utils";
 import { toast } from "sonner";
 import { uploadFilesToCloudinary } from "@/lib/func/cloudinary";
 import { useEffect } from "react";
+import Editor from "../rich-text/editor";
 const LocationSelect = dynamic(
   () => import("@/components/VNLocationSelector"),
   { ssr: false, loading: () => <p>Loading...</p> }
@@ -182,11 +183,11 @@ export default function InputForm() {
   };
 
   // Lắng nghe sự thay đổi của "polygon"
-//   const polygonValue = form.watch("polygon");
+  //   const polygonValue = form.watch("polygon");
 
-//   useEffect(() => {
-//     console.log(form.getValues("polygon")); // Log giá trị của "polygon"
-//   }, [polygonValue]); // useEffect sẽ được gọi lại mỗi khi polygonValue thay đổi
+  //   useEffect(() => {
+  //     console.log(form.getValues("polygon")); // Log giá trị của "polygon"
+  //   }, [polygonValue]); // useEffect sẽ được gọi lại mỗi khi polygonValue thay đổi
 
   return (
     <Form {...form}>
@@ -213,7 +214,7 @@ export default function InputForm() {
               <FormItem>
                 <FormLabel className="font-semibold">Mô tả</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Nhập mô tả" {...field} />
+                  <Editor content={field.value} onChange={field.onChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
