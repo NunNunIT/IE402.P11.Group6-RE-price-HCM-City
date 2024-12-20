@@ -39,6 +39,8 @@ export const PUT = auth(
         });
       }
 
+      console.log("owner", realEstate.owner.toString())
+
       // Kiểm tra quyền sở hữu
       if (!userId || realEstate.owner.toString() !== userId) {
         return unauthorizedResponse({
