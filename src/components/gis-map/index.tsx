@@ -44,6 +44,7 @@ interface IMapProps {
   isShowDistrict?: boolean;
   value?: [number, number];
   onChange?: (__value: [number, number]) => void;
+  polygon: [number, number][];
   onPolygonComplete?: (__polygon: [number, number][]) => void;
 }
 
@@ -72,6 +73,7 @@ export default function MapComponent(props: IMapProps) {
   const pointGraphicsLayerRef = useRef<GraphicsLayer | null>(null);
   const editGraphicRef = useRef<GraphicsLayer | null>(null);
   const sketchViewModelRef = useRef<SketchViewModel | null>(null);
+  const sketchLayerRef = useRef<GraphicsLayer | null>(null);
   const polygonLayerRef = useRef<GraphicsLayer | null>(null);
   const [isDrawingMode, setIsDrawingMode] = useState(false);
 
@@ -84,12 +86,14 @@ export default function MapComponent(props: IMapProps) {
       basemap: "topo-vector",
     });
 
-    pointGraphicsLayerRef.current = new GraphicsLayer();
-    polygonLayerRef.current = new GraphicsLayer();
     districtGraphicsLayerRef.current = new GraphicsLayer();
+    polygonLayerRef.current = new GraphicsLayer();
+    sketchLayerRef.current = new GraphicsLayer();
+    pointGraphicsLayerRef.current = new GraphicsLayer();
 
     mapInstanceRef.current.add(districtGraphicsLayerRef.current);
     mapInstanceRef.current.add(polygonLayerRef.current);
+    mapInstanceRef.current.add(sketchLayerRef.current);
     mapInstanceRef.current.add(pointGraphicsLayerRef.current);
 
     if (mergedProps.mode === ENUM_MAP_MODE.Edit) {
@@ -110,7 +114,7 @@ export default function MapComponent(props: IMapProps) {
     if (viewRef.current) {
       sketchViewModelRef.current = new SketchViewModel({
         view: viewRef.current,
-        layer: polygonLayerRef.current,
+        layer: sketchLayerRef.current,
         polygonSymbol: {
           type: "simple-fill",
           color: "rgba(0, 255, 0, 0.2)",
@@ -297,6 +301,29 @@ export default function MapComponent(props: IMapProps) {
       });
     }
   }, [mergedProps.center, mergedProps.zoom]);
+
+  useEffect(() => {
+    if (!polygonLayerRef.current) return;
+    polygonLayerRef.current.removeAll();
+    if (mergedProps.polygon?.length < 3) return;
+    const polygon = new Polygon({
+      rings: [mergedProps.polygon],
+    });
+    const simpleFillSymbol = {
+      type: "simple-fill", // autocast as new SimpleFillSymbol()
+      color: "rgba(0, 0, 255, 0.2)", // Blue transparent fill
+      style: "solid",
+      outline: {
+        color: "blue", // Blue outline
+        width: 2,
+      },
+    };
+    const graphic = new Graphic({
+      geometry: polygon,
+      symbol: simpleFillSymbol,
+    });
+    polygonLayerRef.current.add(graphic);
+  }, [mergedProps.polygon]);
 
   useEffect(() => {
     if (!districtGraphicsLayerRef.current) return;
