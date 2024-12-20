@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
 
 interface IPositionContext {
   position: TPosition | undefined;
@@ -24,7 +23,7 @@ export const PositionProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const allowAccessCurrentPosition = useCallback(() => {
     if (!navigator.geolocation) {
-      toast.error("Trình duyệt không hỗ trợ truy cập vị trí của bạn");
+      console.error("Trình duyệt không hỗ trợ truy cập vị trí của bạn");
       return;
     }
 
@@ -53,11 +52,7 @@ export const PositionProvider: React.FC<PropsWithChildren> = ({ children }) => {
         );
       });
 
-    toast.promise(geolocationPromise, {
-      loading: "Đang xác định vị trí của bạn...",
-      success: "Đã xác định vị trí của bạn",
-      error: "Không thể truy cập vị trí của bạn",
-    });
+    geolocationPromise();
   }, [setPosition]);
 
   useEffect(() => {
