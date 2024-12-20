@@ -14,13 +14,13 @@ interface LocationCardProps {
   locate?: any;
   category?: string;
   avgStarGGMap?: number;
+  distance?: number;
 }
 
 const LocationCard = ({ data }: { data?: LocationCardProps }) => {
   return (
     <div className="group max-w-sm overflow-hidden transition-shadow h-fit">
       <Link href="#">
-        {/* Image */}
         <div className="relative">
           <Image
             width={1000}
