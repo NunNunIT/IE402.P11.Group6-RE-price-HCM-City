@@ -221,3 +221,23 @@ export function isNotNullAndUndefined<T>(value: T | null | undefined): value is 
 export function isInclude<T>(value: any, list: T[]): value is T {
   return list.includes(value)
 }
+
+export const retry = async <T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> => {
+  let attempts = 0;
+
+  while (attempts < retries) {
+    try {
+      return await fn(); // Execute the function and return its result if successful
+    } catch (error) {
+      attempts++;
+      console.error(`>> Attempt ${attempts} failed: ${error.message}`);
+      if (attempts >= retries) {
+        throw new Error('Max retries reached.');
+      }
+
+      const randomWaitingTime = Math.random();
+      // Delay before the next attempt
+      await new Promise(resolve => setTimeout(resolve, delay + randomWaitingTime));
+    }
+  }
+}

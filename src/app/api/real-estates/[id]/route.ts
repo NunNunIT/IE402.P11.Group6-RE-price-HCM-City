@@ -22,10 +22,11 @@ export const GET = async (
         error: "ID_IS_INVALID",
       });
 
-    let realEstate = await RealEstate.findById(id)
-      .populate("owner", "username avt email phone")
-      .populate("polygon", "points")
-      .lean();
+    let realEstate = await retry(() =>
+      RealEstate.findById(id)
+        .populate("owner", "username avt email phone")
+        .populate("polygon", "points")
+        .lean());
 
     if (!realEstate)
       return notFoundResponse({

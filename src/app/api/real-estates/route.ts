@@ -9,6 +9,7 @@ import {
   REAL_ESTATE_PRICE_RANGE_DEFAULT,
   REAL_ESTATE_PROPERTY_TYPE,
   REAL_ESTATE_PROPERTY_TYPE_DEFAULT,
+  retry,
   sortHandler,
   successResponse,
 } from "@/utils";
@@ -64,14 +65,14 @@ export const GET = async (req: NextRequest) => {
       ...(priceRange !== REAL_ESTATE_PRICE_RANGE_DEFAULT ? generateFilterRange("price", priceRange) : {}),
       ...(areaRange !== REAL_ESTATE_AREA_RANGE_DEFAULT ? generateFilterRange("area", areaRange) : {}),
     }
-    console.log("🚀 ~ GET ~ query:", query)
 
-    let realEstates = await RealEstate
-      .find(query)
-      .select("-desc")
-      .populate("owner", "username avt")
-      .sort(mongooseSort)
-      .lean();
+    let realEstates = await retry(() =>
+      RealEstate
+        .find(query)
+        .select("-desc")
+        .populate("owner", "username avt")
+        .sort(mongooseSort)
+        .lean());
 
     const total = realEstates.length;
 
