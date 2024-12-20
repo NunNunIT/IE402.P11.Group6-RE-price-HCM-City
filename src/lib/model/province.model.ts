@@ -14,4 +14,4 @@ export const ProvinceSchema: Schema = new Schema({
   analysis: analysisSchema,
 }, { timestamps: true, strict: false });
 
-export const Province = models?.Province ?? model<IProvince>('Province', ProvinceSchema);
+export const Province = models?.Province ?? model('Province', ProvinceSchema);

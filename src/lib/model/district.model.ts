@@ -16,4 +16,4 @@ export const DistrictSchema: Schema = new Schema({
   analysis: analysisSchema,
 }, { timestamps: true, strict: false });
 
-export const District = models?.District ?? model<IDistrict>('District', DistrictSchema);
+export const District = models?.District ?? model('District', DistrictSchema);
