@@ -14,7 +14,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -31,7 +30,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -41,15 +39,16 @@ import LocationSelect from "../VNLocationSelector";
 import { FaArrowCircleDown, FaArrowCircleUp } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { IoIosArrowDown } from "react-icons/io";
-import { number } from "zod";
+import useSWR from "swr";
+import { parseObjectToSearchParams } from "@/utils";
 
 // Data structure for yearly data
-type YearData = {
-  [year: string]: {
-    priceAVG: number;
-    [month: string]: number; // Represents months as "01", "02", ..., "12"
-  };
-};
+// type YearData = {
+//   [year: string]: {
+//     priceAVG: number;
+//     [month: string]: number; // Represents months as "01", "02", ..., "12"
+//   };
+// };
 
 type MonthData = {
   month: string;
@@ -57,70 +56,88 @@ type MonthData = {
 };
 
 // Yearly data
-const yearData: YearData = {
-  "2022": {
-    priceAVG: 150,
-    "01": 96,
-    "02": 121,
-    "03": 129,
-    "04": 146,
-    "05": 171,
-    "06": 263,
-    "07": 215,
-    "08": 292,
-    "09": 253,
-    "10": 357,
-    "11": 375,
-    "12": 286,
-  },
-  "2023": {
-    priceAVG: 220,
-    "01": 225,
-    "02": 185,
-    "03": 219,
-    "04": 274,
-    "05": 241,
-    "06": 288,
-    "07": 224,
-    "08": 290,
-    "09": 262,
-    "10": 258,
-    "11": 290,
-    "12": 255,
-  },
-  "2024": {
-    priceAVG: 214,
-    "01": 213,
-    "02": 247,
-    "03": 273,
-    "04": 59,
-    "05": 192,
-    "06": 240,
-    "07": 278,
-    "08": 157,
-    "09": 216,
-    "10": 355,
-    "11": 219,
-    "12": 262,
-  },
-};
+// const yearData: YearData = {
+//   "2020": {
+//     priceAVG: 150,
+//     "01": 162,
+//     "02": 138,
+//     "03": 155,
+//     "04": 120,
+//     "05": 175,
+//     "06": 134,
+//     "07": 161,
+//     "08": 140,
+//     "09": 169,
+//     "10": 147,
+//     "11": 165,
+//     "12": 153
+//   },
+//   "2021": {
+//     priceAVG: 150,
+//     "01": 145,
+//     "02": 163,
+//     "03": 133,
+//     "04": 158,
+//     "05": 172,
+//     "06": 130,
+//     "07": 162,
+//     "08": 154,
+//     "09": 138,
+//     "10": 173,
+//     "11": 141,
+//     "12": 169
+//   },
+//   "2022": {
+//     priceAVG: 150,
+//     "01": 96,
+//     "02": 121,
+//     "03": 129,
+//     "04": 146,
+//     "05": 171,
+//     "06": 263,
+//     "07": 215,
+//     "08": 292,
+//     "09": 253,
+//     "10": 357,
+//     "11": 375,
+//     "12": 286,
+//   },
+//   "2023": {
+//     priceAVG: 220,
+//     "01": 225,
+//     "02": 185,
+//     "03": 219,
+//     "04": 274,
+//     "05": 241,
+//     "06": 288,
+//     "07": 224,
+//     "08": 290,
+//     "09": 262,
+//     "10": 258,
+//     "11": 290,
+//     "12": 255,
+//   },
+//   "2024": {
+//     priceAVG: 214,
+//     "01": 213,
+//     "02": 247,
+//     "03": 273,
+//     "04": 59,
+//     "05": 192,
+//     "06": 240,
+//     "07": 278,
+//     "08": 157,
+//     "09": 216,
+//     "10": 355,
+//     "11": 219,
+//     "12": 262,
+//   },
+//   "2025": {
+//     priceAVG: NaN
+//   }
+// };
 
-const invoices = [
-  {
-    invoice: "INV001",
-    totalAmount: "$250.00",
-  },
-  {
-    invoice: "INV002",
-    totalAmount: "$150.00",
-  },
-  {
-    invoice: "INV003",
-    totalAmount: "$350.00",
-  },
-];
-
-function TableDemo({ data }: { data: any }) {
+function TableDemo({ data, year }: { data: any, year?: number }) {
   if (!data) {
     return (
       <div className="text-gray-500 text-center">
@@ -148,7 +165,7 @@ function TableDemo({ data }: { data: any }) {
           <TableRow key={index}>
             <TableCell className="font-medium">{item.name}</TableCell>
             <TableCell className="text-center">
-              {item.analysis !== null ? `${item.analysis}` : "N/A"}{" "}
+              {item.analysis !== null ? `${item.analysis[year].priceAVG}` : "N/A"}{" "}
               <span className="text-zinc-600 font-medium">
                 tr/m<sup>2</sup>
               </span>
@@ -160,60 +177,48 @@ function TableDemo({ data }: { data: any }) {
   );
 }
 
-function Locate({ onDataUpdate }: { onDataUpdate: (data: any) => void }) {
-  const [value, onChangeValue] = useState<any>(undefined);
+interface ILocation {
+  province?: string;
+  district?: string;
+  ward?: string;
+}
 
-  // Hàm fetch dữ liệu từ API
+function Locate({ value, onChangeValue }: { value: ILocation, onChangeValue: (__data: ILocation) => void }) {
+  const [delayValue, setDelayValue] = useState<ILocation>(value);
   const handleSubmit = () => {
-    if (!value?.province) {
+    if (!delayValue?.province) {
       alert("Vui lòng chọn tỉnh/thành phố!");
       return;
     }
 
-    const queryParams = new URLSearchParams();
-    if (value.province) queryParams.append("province", value.province);
-    if (value.district) queryParams.append("district", value.district);
-    if (value.ward) queryParams.append("ward", value.ward);
-
-    fetch(
-      `${
-        process.env.NEXT_PUBLIC_BACKEND_URL
-      }/api/analysis?${queryParams.toString()}`
-    )
-      .then((res) => res.json())
-      .then((result) => {
-        if (result?.data) {
-          onDataUpdate(result.data); // Cập nhật dữ liệu lên component cha
-        } else {
-          console.error("Lỗi từ API:", result.message || "Không có dữ liệu.");
-          onDataUpdate(null);
-        }
-      })
-      .catch((error) => {
-        console.error("Lỗi khi gọi API:", error);
-        onDataUpdate(null);
-      });
+    // ! DON'T TORCH THIS
+    onChangeValue({
+      province: delayValue.province,
+      district: delayValue.district,
+      ward: delayValue.ward
+    });
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <span className="flex flex-row gap-1 text-red-500 text-2xl font-bold">
+        <span className="flex flex-row gap-1 text-red-500 text-2xl font-bold items-center cursor-pointer">
           {[
             value?.ward ? `Phường ${value.ward}` : null,
             value?.district,
-            value?.province || "TP Hồ Chí Minh",
+            value?.province || "Hồ Chí Minh",
           ]
             .filter(Boolean)
-            .join(", ")}{" "}
-          <IoIosArrowDown className="size-8 text-red-500" />
+            .join(", ")
+          }
+          <IoIosArrowDown className="size-8 text-red-500 ml-2" />
         </span>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Chọn khu vực</DialogTitle>
         </DialogHeader>
-        <LocationSelect value={value} onChange={onChangeValue} depthLevel={3} />
+        <LocationSelect value={delayValue} onChange={setDelayValue} depthLevel={3} />
         <DialogFooter className="items-end">
           <Button type="button" onClick={handleSubmit}>
             OK
@@ -393,25 +398,28 @@ function predictNextMonth(
   return null; // Return null if there's insufficient data
 }
 
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch data");
+  const payload = await res.json();
+  return payload.data;
+}
+
 export function AreaChartComponent() {
-  const [selectedYear, setSelectedYear] = useState(2024);
-  const [data, setData] = useState<any>(null);
+  const [selectedYear, setSelectedYear] = useState((new Date()).getFullYear());
+  const [location, setLocation] = useState<ILocation>({ province: "Hồ Chí Minh" });
+  const { data, isLoading, error } = useSWR(`/api/analysis?${parseObjectToSearchParams(location)}`, fetcher);
+  if (isLoading || error) return <div>Loading...</div>;
 
   // Transform the selected year's data for the chart
-  const chartData = transformYearData(yearData[selectedYear]);
-  const lastChartData = transformYearData(yearData[selectedYear - 1]);
-
+  const chartData = transformYearData(data.analysis[selectedYear]);
+  const lastChartData = transformYearData(data.analysis[selectedYear - 1]);
   const currentMonth = new Date().getMonth() + 1;
-  const avgPrice = yearData[selectedYear]["priceAVG"];
-  const currentPrice =
-    yearData[selectedYear][currentMonth.toString().padStart(2, "0")];
-
+  const currentMonthKey = currentMonth.toString().padStart(2, "0");
+  const avgPrice = data.analysis[selectedYear].priceAVG;
+  const currentPrice = data.analysis[selectedYear][currentMonthKey];
   const monthRate = calculateMonthRate(chartData, lastChartData, currentMonth);
-  const quarterRate = calculateQuarterRate(
-    chartData,
-    lastChartData,
-    currentMonth
-  );
+  const quarterRate = calculateQuarterRate(chartData, lastChartData, currentMonth);
   const predictData = predictNextMonth(chartData, lastChartData, currentMonth);
 
   // Dynamically calculate Y-axis domain
@@ -423,7 +431,7 @@ export function AreaChartComponent() {
   return (
     <div className="w-full bg-white dark:bg-black p-2">
       <h1 className="text-2xl font-bold">
-        Lịch sử giá tại <Locate onDataUpdate={setData} />
+        Lịch sử giá tại <Locate value={location} onChangeValue={setLocation} />
       </h1>
 
       <div className="flex items-end justify-end my-2">
@@ -432,11 +440,10 @@ export function AreaChartComponent() {
             <div
               key={index}
               onClick={() => setSelectedYear(year)}
-              className={`border-r-2 border-zinc-300 p-2 cursor-pointer ${
-                selectedYear === year
-                  ? "bg-red-500/30 text-red-500 font-semibold"
-                  : ""
-              }`}
+              className={`border-r-2 border-zinc-300 p-2 cursor-pointer ${selectedYear === year
+                ? "bg-red-500/30 text-red-500 font-semibold"
+                : ""
+                }`}
             >
               <span className="text-sm">{year}</span>
             </div>
@@ -477,27 +484,27 @@ export function AreaChartComponent() {
                     Không có dữ liệu so sánh với tháng trước
                   </span>
                 ) : // Conditional rendering based on whether rate is negative or positive
-                monthRate[0] === "-" ? (
-                  <>
-                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                      <FaArrowCircleDown className="size-8 text-red-500" />
-                      {monthRate}%
-                    </span>
-                    <span className="text-zinc-600 text-base">
-                      Giá trị giảm {monthRate}% so với tháng trước
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
-                      <FaArrowCircleUp className="size-8 text-green-600" />
-                      {monthRate}%
-                    </span>
-                    <span className="text-zinc-600 text-base">
-                      Giá trị tăng {monthRate}% so với tháng trước
-                    </span>
-                  </>
-                )}
+                  monthRate[0] === "-" ? (
+                    <>
+                      <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
+                        <FaArrowCircleDown className="size-8 text-red-500" />
+                        {monthRate}%
+                      </span>
+                      <span className="text-zinc-600 text-base">
+                        Giá trị giảm {monthRate}% so với tháng trước
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
+                        <FaArrowCircleUp className="size-8 text-green-600" />
+                        {monthRate}%
+                      </span>
+                      <span className="text-zinc-600 text-base">
+                        Giá trị tăng {monthRate}% so với tháng trước
+                      </span>
+                    </>
+                  )}
               </>
               <>
                 {/* Check if quarterRate is null */}
@@ -506,27 +513,27 @@ export function AreaChartComponent() {
                     Không có dữ liệu so sánh với quý trước
                   </span>
                 ) : // Conditional rendering based on whether rate is negative or positive
-                quarterRate[0] === "-" ? (
-                  <>
-                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                      <FaArrowCircleDown className="size-8 text-red-500" />
-                      {quarterRate}%
-                    </span>
-                    <span className="text-zinc-600 text-base">
-                      Giá trị giảm {quarterRate}% so với quý trước
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
-                      <FaArrowCircleUp className="size-8 text-green-600" />
-                      {quarterRate}%
-                    </span>
-                    <span className="text-zinc-600 text-base">
-                      Giá trị tăng {quarterRate}% so với quý trước
-                    </span>
-                  </>
-                )}
+                  quarterRate[0] === "-" ? (
+                    <>
+                      <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
+                        <FaArrowCircleDown className="size-8 text-red-500" />
+                        {quarterRate}%
+                      </span>
+                      <span className="text-zinc-600 text-base">
+                        Giá trị giảm {quarterRate}% so với quý trước
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
+                        <FaArrowCircleUp className="size-8 text-green-600" />
+                        {quarterRate}%
+                      </span>
+                      <span className="text-zinc-600 text-base">
+                        Giá trị tăng {quarterRate}% so với quý trước
+                      </span>
+                    </>
+                  )}
               </>
             </div>
             <div className="flex md:flex-col flex-row-reverse md:justify-center items-center justify-between gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
@@ -589,7 +596,7 @@ export function AreaChartComponent() {
                 name={chartConfig.price.label}
               />
               <ReferenceLine
-                y={yearData[selectedYear].priceAVG}
+                y={data?.analysis[selectedYear].priceAVG}
                 stroke={chartConfig.average.color}
                 strokeDasharray="3 3"
                 label={{
@@ -601,7 +608,7 @@ export function AreaChartComponent() {
             </LineChart>
           )}
         </ChartContainer>
-        <TableDemo data={data} />
+        <TableDemo data={data} year={selectedYear} />
       </div>
     </div>
   );
