@@ -288,7 +288,7 @@ const DataTable = ({ data }: { data: { rows: any[], total: number } }) => {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="bg-white">
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -358,7 +358,7 @@ const LocationManage = () => {
   const { data, isLoading, error } = useSWR("/api/locations", fetcher);
   return (
     <>
-      <div className="flex flex-col items-center p-5 min-h-[100dvh]">
+      <div className="flex flex-col p-5 min-h-[100dvh]">
         <h1 className="text-4xl font-bold">Quản lý địa điểm</h1>
         {(isLoading || error) ? (
           <div className="mt-10">Loading...</div>

@@ -40,6 +40,7 @@ export interface IUser {
 
 const UserSchema = new Schema({
   username: { type: String, required: true },
+  password: { type: String },
   email: { type: String, required: true },
   avt: { type: String },
   phone: { type: String },
