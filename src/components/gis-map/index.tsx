@@ -103,9 +103,9 @@ export default function MapComponent(props: IMapProps) {
       map: mapInstanceRef.current,
       center: [mergedProps.center?.long, mergedProps.center?.lat],
       zoom: mergedProps.zoom,
-      // ui: {
-      //   components: ["zoom", "compass"],
-      // },
+      ui: {
+        components: ["zoom", "compass"],
+      },
     });
 
     if (viewRef.current) {
@@ -310,9 +310,9 @@ export default function MapComponent(props: IMapProps) {
   }, []);
 
   return (
-    <div className="sticky top-[5.75rem] max-h-[calc(100dvh_-_6.5rem)] w-full">
+    <div className="sticky top-[7.25rem] max-h-[calc(100dvh_-_7.25rem)] w-full">
       <div className={cn("relative h-full w-full", mergedProps.className)}>
-        <div ref={mapRef} className="h-full min-h-[30rem] w-full" />
+        <div ref={mapRef} className={cn("h-full min-h-[30rem] w-full", mergedProps.className)} />
         <div className="absolute bottom-4 left-4 flex flex-col space-y-2">
           {mergedProps.isShowDistrict && (
             <Button type="button" variant="outline" onClick={toggleArea}>

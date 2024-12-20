@@ -217,3 +217,7 @@ export function haversineDistance(
 export function isNotNullAndUndefined<T>(value: T | null | undefined): value is T {
   return typeof value !== "undefined" && value !== null;
 }
+
+export function isInclude<T>(value: any, list: T[]): value is T {
+  return list.includes(value)
+}

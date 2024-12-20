@@ -14,7 +14,6 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { FaLocationDot } from "react-icons/fa6";
-import { Input } from "@/components/ui/input";
 import { IoSearchOutline } from "react-icons/io5";
 import { SelectorLocationDialogSheet } from "@/components";
 import VNLocationData from "../../VNLocationSelector/data.json";
@@ -29,28 +28,49 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSearchParams } from "next/navigation";
+import { isInclude, REAL_ESTATE_FILTERS } from "@/utils";
 
 export default function SearchRe() {
-  const [searchProvince, setSearchProvince] = useState<string>("Hồ Chí Minh");
+  const searchParams = useSearchParams();
+  const province = searchParams.get("province");
+  const [searchProvince, setSearchProvince] = useState<string>(province || "Hồ Chí Minh");
+  const districtDefault = searchParams.get("district");
+  const wardDefault = searchParams.get("ward");
+  const propertyTypeDefault = searchParams.get("propertyType");
+  const priceRangeDefault = searchParams.get("priceRange");
+  const areaRangeDefault = searchParams.get("areaRange");
 
-  const [value, onValueChange] = useState<string>("");
+  const [value, onValueChange] = useState<string>(`${wardDefault ? wardDefault + ", " : ""}${districtDefault ? districtDefault + ", " : ""}${searchProvince}`);
   const [currentPosition, setCurrentPosition] = useState<TPosition>(undefined);
-  const [propertyType, setPropertyType] = useState(undefined);
-  const [priceRange, setPriceRange] = useState(undefined);
-  const [areaRange, setAreaRange] = useState(undefined);
+  const [propertyType, setPropertyType] = useState(
+    isInclude(propertyTypeDefault, REAL_ESTATE_FILTERS.propertyType.map(([value]) => value))
+      ? propertyTypeDefault
+      : "all"
+  );
+  const [priceRange, setPriceRange] = useState(
+    isInclude(priceRangeDefault, REAL_ESTATE_FILTERS.priceRange.map(([value]) => value))
+      ? priceRangeDefault
+      : "all"
+  );
+  const [areaRange, setAreaRange] = useState(
+    isInclude(areaRangeDefault, REAL_ESTATE_FILTERS.areaRange.map(([value]) => value))
+      ? areaRangeDefault
+      : "all"
+  );
 
   const ward = useMemo(() => {
-    const context = value.split(",");
-    if (context.length === 2) return undefined;
+    const context = value.split(", ");
+    if (context.length <= 2) return '';
     return context[0]
       .replace("Xã ", "")
       .replace("Thị trấn ", "")
       .replace("Phường ", "");
   }, [value]);
   const district = useMemo(() => {
-    const context = value.split(",");
-    if (context.length === 2) return context[0];
-    return context[1];
+    const context = value.split(", ");
+    if (context.length < 2) return '';
+    return context[context.length - 2];
   }, [value]);
 
   return (
@@ -85,7 +105,7 @@ export default function SearchRe() {
             setCurrentPosition={setCurrentPosition}
             typeOptions={2}
           />
-          <Combobox value={value} onValueChange={onValueChange}>
+          <Combobox value={value} onValueChange={(value) => onValueChange(value as any)}>
             <ComboboxInput
               startIcon={<IoSearchOutline className="size-6" />}
               placeholder="Nhập địa điểm tìm kiếm"
@@ -110,9 +130,9 @@ export default function SearchRe() {
                   </ComboboxItem>,
                   ...wards.map((ward) => {
                     const key = `${district.Id + (ward as any)?.Id}`;
-                    const label = `${ward.Level} ${(ward as any)?.Name}, ${
-                      district.Name
-                    }, ${searchProvince}`;
+                    // const label = `${ward.Level} ${(ward as any)?.Name}, ${district.Name
+                    //   }, ${searchProvince}`;
+                    const label = `${(ward as any)?.Name}, ${district.Name}, ${searchProvince}`;
                     return (
                       <ComboboxItem
                         key={key}
@@ -139,52 +159,66 @@ export default function SearchRe() {
 
         <div className="grid md:grid-cols-3 grid-cols-1 gap-2">
           {/* Loại nhà đất */}
-          <Select value={propertyType} onValueChange={setPropertyType}>
+          <Select
+            defaultValue={propertyType}
+            value={propertyType}
+            onValueChange={(value) => setPropertyType(value as any)}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Loại nhà đất" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Loại nhà đất</SelectLabel>
-                <SelectItem value="all">Tất cả nhà đất</SelectItem>
-                <SelectItem value="land">Đất</SelectItem>
-                <SelectItem value="house">Nhà</SelectItem>
+                {REAL_ESTATE_FILTERS.propertyType.map(([value, label]) => (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
           <input type="hidden" name="propertyType" value={propertyType} />
 
           {/* Mức giá */}
-          <Select value={priceRange} onValueChange={setPriceRange}>
+          <Select
+            defaultValue={priceRange}
+            value={priceRange}
+            onValueChange={(value) => setPriceRange(value as any)}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Mức giá" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Mức giá</SelectLabel>
-                <SelectItem value="all">Tất cả mức giá</SelectItem>
-                <SelectItem value="under500tr">Dưới 500 triệu</SelectItem>
-                <SelectItem value="500tr-800tr">500 - 800 triệu</SelectItem>
-                <SelectItem value="800tr-1ty">800 triệu - 1 tỷ</SelectItem>
-                <SelectItem value="up1ty">Trên 1 tỷ</SelectItem>
+                {REAL_ESTATE_FILTERS.priceRange.map(([value, label]) => (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
           <input type="hidden" name="priceRange" value={priceRange} />
 
           {/* Diện tích */}
-          <Select value={areaRange} onValueChange={setAreaRange}>
+          <Select
+            defaultValue={areaRange}
+            value={areaRange}
+            onValueChange={(value) => setAreaRange(value as any)}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Diện tích" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Diện tích</SelectLabel>
-                <SelectItem value="all">Tất cả diện tích</SelectItem>
-                <SelectItem value="under30m">Dưới 30 m²</SelectItem>
-                <SelectItem value="30m-50m">30 - 50 m²</SelectItem>
-                <SelectItem value="50m-80m">50 - 80 m²</SelectItem>
-                <SelectItem value="up80m">Trên 80 m²</SelectItem>
+                {REAL_ESTATE_FILTERS.areaRange.map(([value, label]) => (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>

@@ -43,3 +43,25 @@ export const SORT_VALUE_MAPPING = {
   "1": ESortStatus.ASC,
   "asc": ESortStatus.ASC,
 } as const;
+
+export const REAL_ESTATE_FILTERS = {
+  propertyType: [
+    ["all", "Tất cả"],
+    ["land", "Đất"],
+    ["house", "Nhà"],
+  ],
+  priceRange: [
+    ["all", "Tất cả mức giá"],
+    ["-0.5", "Dưới 500 triệu"],
+    ["0.5-0.8", "500 - 800 triệu"],
+    ["0.8-1", "800 triệu - 1 tỷ"],
+    ["1-", "Trên 1 tỷ"],
+  ],
+  areaRange: [
+    ["all", "Tất cả"],
+    ["-30", "Dưới 30 m²"],
+    ["30-50", "30 - 50 m²"],
+    ["50-80", "50 - 80 m²"],
+    ["80-", "Trên 80 m²"],
+  ],
+} as const;

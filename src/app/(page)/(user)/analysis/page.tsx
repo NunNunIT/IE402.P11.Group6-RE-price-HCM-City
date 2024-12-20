@@ -1,7 +1,7 @@
 import { AreaChartComponent } from "@/components/charts/AreaChartComponent";
 import dynamic from "next/dynamic";
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
-import { ENUM_MARKER_SYMBOL } from "@/utils";
+// import { ENUM_MARKER_SYMBOL } from "@/utils";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default function Page() {
       <div className="sticky top-0 h-screen">
         <GISMap
           zoom={20}
-          className="container h-full"
+          className="container min-h-[calc(100dvh_-_7.75rem)] flex"
           isShowDistrict
           // center={data.locate}
           // points={[
