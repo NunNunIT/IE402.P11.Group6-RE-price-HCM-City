@@ -61,7 +61,7 @@ export default function SearchRe() {
 
   const ward = useMemo(() => {
     const context = value.split(", ");
-    if (context.length <= 2) return undefined;
+    if (context.length <= 2) return '';
     return context[0]
       .replace("Xã ", "")
       .replace("Thị trấn ", "")
@@ -69,7 +69,7 @@ export default function SearchRe() {
   }, [value]);
   const district = useMemo(() => {
     const context = value.split(", ");
-    if (context.length < 2) return undefined;
+    if (context.length < 2) return '';
     return context[context.length - 2];
   }, [value]);
 
