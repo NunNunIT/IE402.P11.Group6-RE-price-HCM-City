@@ -1,17 +1,15 @@
 "use server";
 
-import { ENUM_MARKER_SYMBOL } from "@/utils";
 import { FaLocationDot } from "react-icons/fa6";
 import { ImageViewType1 } from "@/components/imageView";
 import { SaveRealBtn } from "@/components";
-import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import translateKey from "@/lib/func/transfer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CarouselWrapper } from "@/components/carsousel";
+import { CustomizeMap } from "./components";
 
-const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
 interface IRealEstateDetailPageProps extends IDefaultPageProps {
   params: { _id: string };
@@ -188,27 +186,7 @@ export default async function RealEstateDetailPage({
         />
       </div>
 
-      <GISMap
-        zoom={20}
-        className="container"
-        isShowDistrict
-        center={data.locate}
-        points={[
-          ...(Array.isArray(data.locations)
-            ? data.locations.slice(0, 24).map((location: any) => ({
-              ...location.locate,
-              title: location.title,
-              type: location.category,
-            }))
-            : []
-          ),
-          {
-            ...data.locate,
-            title: data.title,
-            type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
-          },
-        ]}
-      />
+      <CustomizeMap locate={data.locate}/>
     </div>
   );
 }

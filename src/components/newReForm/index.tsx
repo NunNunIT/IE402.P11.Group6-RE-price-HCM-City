@@ -22,13 +22,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ImageDropZone } from "@/components";
-import { Textarea } from "@/components/ui/textarea";
 import TranslateKey from "@/lib/func/transfer";
 import dynamic from "next/dynamic";
 import { ENUM_MAP_MODE } from "@/utils";
 import { toast } from "sonner";
 import { uploadFilesToCloudinary } from "@/lib/func/cloudinary";
-import { useEffect } from "react";
+import { useState } from "react";
 import Editor from "../rich-text/editor";
 const LocationSelect = dynamic(
   () => import("@/components/VNLocationSelector"),
@@ -106,6 +105,8 @@ const FormSchema = z.object({
 });
 
 export default function InputForm() {
+  const [mapZoomController, setZoomController] = useState<number | undefined>(undefined);
+  const [mapCenterController, setCenterController] = useState<TPosition | undefined>(undefined);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -475,7 +476,11 @@ export default function InputForm() {
               <FormItem>
                 <FormLabel className="font-semibold">Địa điểm</FormLabel>
                 <FormControl>
-                  <LocationSelect {...field} />
+                  <LocationSelect
+                    {...field}
+                    setZoomController={setZoomController}
+                    setCenterController={setCenterController}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -491,7 +496,8 @@ export default function InputForm() {
                   <GisMap
                     isShowDistrict
                     className="min-h-[30rem] flex items-stretch"
-                    zoom={15}
+                    {...mapZoomController ? { zoom: mapZoomController } : {}}
+                    {...mapCenterController ? { center: mapCenterController } : {}}
                     mode={ENUM_MAP_MODE.Edit}
                     value={field.value?.slice(0, 2) as [number, number]}
                     onChange={field.onChange}

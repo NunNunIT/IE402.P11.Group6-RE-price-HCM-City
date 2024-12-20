@@ -3,7 +3,13 @@ import {
   haversineDistance,
   isInclude,
   isNotNullAndUndefined,
-  REAL_ESTATE_FILTERS,
+  REAL_ESTATE_AREA_RANGE,
+  REAL_ESTATE_AREA_RANGE_DEFAULT,
+  REAL_ESTATE_PRICE_RANGE,
+  REAL_ESTATE_PRICE_RANGE_DEFAULT,
+  REAL_ESTATE_PROPERTY_TYPE,
+  REAL_ESTATE_PROPERTY_TYPE_DEFAULT,
+  retry,
   sortHandler,
   successResponse,
 } from "@/utils";
@@ -37,32 +43,39 @@ export const GET = async (req: NextRequest) => {
   const propertyTypeDefault = searchParams.get("propertyType");
   const priceRangeDefault = searchParams.get("priceRange");
   const areaRangeDefault = searchParams.get("areaRange");
-  const propertyType = isInclude(propertyTypeDefault, REAL_ESTATE_FILTERS.propertyType.map(([value]) => value))
+  const propertyType = isInclude(propertyTypeDefault, REAL_ESTATE_PROPERTY_TYPE)
     ? propertyTypeDefault
-    : REAL_ESTATE_FILTERS.propertyType[0][0];
-  const priceRange = isInclude(priceRangeDefault, REAL_ESTATE_FILTERS.priceRange.map(([value]) => value))
+    : REAL_ESTATE_PROPERTY_TYPE_DEFAULT;
+  const priceRange = isInclude(priceRangeDefault, REAL_ESTATE_PRICE_RANGE)
     ? priceRangeDefault
-    : REAL_ESTATE_FILTERS.priceRange[0][0];
-  const areaRange = isInclude(areaRangeDefault, REAL_ESTATE_FILTERS.areaRange.map(([value]) => value))
+    : REAL_ESTATE_PRICE_RANGE_DEFAULT;
+  const areaRange = isInclude(areaRangeDefault, REAL_ESTATE_AREA_RANGE)
     ? areaRangeDefault
-    : REAL_ESTATE_FILTERS.areaRange[0][0];
+    : REAL_ESTATE_AREA_RANGE_DEFAULT;
 
   try {
     const { locateSort, mongooseSort } = sortHandler(sort);
 
-    let realEstates = await RealEstate.find({
+    const filter = {
       ...(province ? { "locate.tinh": province } : {}),
       ...(district ? { "locate.huyen": district } : {}),
       ...(ward ? { "locate.xa": ward } : {}),
       ...(isNotNullAndUndefined(isAuth) ? { isAuth } : {}),
-      ...(propertyType !== "all" ? { type: propertyType } : {}),
-      ...(priceRange !== "all" ? generateFilterRange("price", priceRange) : {}),
-      ...(areaRange !== "all" ? generateFilterRange("area", areaRange) : {}),
-    })
-      .select("-desc")
+      ...(propertyType !== REAL_ESTATE_PROPERTY_TYPE_DEFAULT ? { type: propertyType } : {}),
+      ...(priceRange !== REAL_ESTATE_PRICE_RANGE_DEFAULT ? generateFilterRange("price", priceRange) : {}),
+      ...(areaRange !== REAL_ESTATE_AREA_RANGE_DEFAULT ? generateFilterRange("area", areaRange) : {}),
+    }
+    const query = RealEstate
+      .find(filter)
+      .select("-desc -polygon")
       .populate("owner", "username avt")
       .sort(mongooseSort)
-      .lean();
+
+    let realEstates = await retry(() =>
+      getAll || locateSort.useHaversine
+        ? query.lean()
+        : query.skip((page - 1) * limit).limit(limit).lean()
+    );
 
     const total = realEstates.length;
 
@@ -77,10 +90,9 @@ export const GET = async (req: NextRequest) => {
       realEstates = temp.map(({ distance: __distance, ...realEstate }) => ({
         ...realEstate,
       }));
-    }
-
-    if (!getAll) {
-      realEstates = realEstates.slice((page - 1) * limit, page * limit);
+      if (!getAll) {
+        realEstates = realEstates.slice((page - 1) * limit, page * limit);
+      }
     }
 
     realEstates = realEstates.map(({ imageUrls, ...realEstate }) => ({

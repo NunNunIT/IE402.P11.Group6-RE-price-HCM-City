@@ -7,6 +7,7 @@ import { SearchResultCard } from "@/components/card";
 import dynamic from "next/dynamic";
 import useSWRInfinite from "swr/infinite";
 import SearchRe from "@/components/search/searchTab/searchRe";
+import { useMapController } from "..";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
@@ -27,6 +28,7 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
     return `/api/real-estates?${baseParams}&page=${pageIndex + 1}&limit=10`;
   };
 
+  const { centerController, zoomController } = useMapController();
   const { data, error, isLoading, size, setSize } = useSWRInfinite(
     getKey,
     fetcher,
@@ -106,7 +108,8 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
       <GISMap
         zoom={15}
         isShowDistrict
-        center={flattenedData?.splice(-1)[0]?.locate}
+        {...(zoomController ? { zoom: zoomController } : {})}
+        {...(centerController ? { center: centerController } : {})}
         points={flattenedData?.map((data) => ({
           ...data.locate,
           title: data.title,
