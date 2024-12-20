@@ -22,7 +22,7 @@ const RealEstateCard: React.FC<Props> = ({ data }) => {
   const { position } = usePosition();
 
   return (
-    <div className="group max-w-sm transition-shadow shadow-lg hover:shadow-xl rounded-xl overflow-hidden flex flex-col justify-between">
+    <div className="group h-full max-w-sm transition-shadow shadow-lg hover:shadow-xl rounded-xl overflow-hidden flex flex-col justify-between">
       <Link href={`/real-estate/${data?._id}`}>
         {/* Image */}
         <div className="relative h-48">
