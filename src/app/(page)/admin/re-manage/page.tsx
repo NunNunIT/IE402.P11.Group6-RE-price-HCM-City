@@ -44,7 +44,7 @@ export default function DemoPage() {
     <div className="container mx-auto py-10 px-2">
       <div className="flex flex-row justify-between items-center">
         <h1>Quản lý bất động sản</h1>
-        <Button href="/create-new-re" startIcon={<PlusIcon className="size-6" />}>Tạo mới</Button>
+        <Button href="/admin/re-manage/add" startIcon={<PlusIcon className="size-6" />}>Tạo mới</Button>
       </div>
       {isLoading || error ? (
         <p>Loading...</p>

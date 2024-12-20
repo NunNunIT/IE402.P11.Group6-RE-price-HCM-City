@@ -64,8 +64,10 @@ const CellActions = ({ location }: { location: any }) => {
         return;
       }
 
-      await mutate((prev?: { _id: string }[]) =>
-        !!prev && prev.filter(_id => _id != location._id))
+      await mutate(
+        (prev?: { _id: string }[]) =>
+          !!prev && prev.filter((_id) => _id != location._id)
+      );
     } catch (error) {
       console.error("Lỗi khi xóa địa điểm! ", error);
     }
@@ -114,34 +116,34 @@ const CellActions = ({ location }: { location: any }) => {
 };
 
 const Columns: ColumnDef<ILocationModel & { _id: any }>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected()
-            ? true
-            : table.getIsSomePageRowsSelected()
-              ? "indeterminate"
-              : false
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected()
+  //           ? true
+  //           : table.getIsSomePageRowsSelected()
+  //           ? "indeterminate"
+  //           : false
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "imageUrl",
-    header: "Hình ảnh",
+    header: "",
     cell: ({ row }) => (
       <div className="capitalize">
         <Image
@@ -149,41 +151,53 @@ const Columns: ColumnDef<ILocationModel & { _id: any }>[] = [
           alt={row.getValue("title")}
           width="1000"
           height="1000"
-          className="w-32"
+          className="w-32 aspect-square object-cover overflow-hidden"
         />
       </div>
     ),
   },
-  {
-    accessorKey: "ggMapId",
-    header: "ID Google Map",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("ggMapId")}</div>
-    ),
-  },
+  // {
+  //   accessorKey: "ggMapId",
+  //   header: "ID Google Map",
+  //   cell: ({ row }) => (
+  //     <div className="capitalize">{row.getValue("ggMapId")}</div>
+  //   ),
+  // },
   {
     accessorKey: "title",
-    header: "Tiêu đề",
+    header: () => <div className="text-left font-semibold">Tiêu đề</div>,
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("title")}</div>
     ),
   },
   {
     accessorKey: "category",
-    header: "Danh mục",
+    header: () => <div className="text-center font-semibold">Danh mục</div>,
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("category")}</div>
     ),
   },
   {
-    accessorKey: "exts",
-    header: "Thành phần mở rộng",
-    cell: ({ row }) => (
-      <div className="capitalize">
-        {(row.getValue("exts") as string[]).join(", ")}
-      </div>
-    ),
+    accessorKey: "locate",
+    header: () => <div className="text-center font-semibold">Địa chỉ</div>,
+    cell: ({ row }) => {
+      const locate = row.original.locate; // Truy cập toàn bộ locate object
+      return (
+        <div className="text-left font-medium">
+          {locate.diachi}, {locate.xa}, {locate.huyen}, {locate.tinh}
+        </div>
+      );
+    },
   },
+  // {
+  //   accessorKey: "exts",
+  //   header: <div className="text-right font-semibold">Địa chỉ</div>,
+  //   cell: ({ row }) => (
+  //     <div className="capitalize">
+  //       {(row.getValue("exts") as string[]).join(", ")}
+  //     </div>
+  //   ),
+  // },
   {
     id: "actions",
     enableHiding: false,
@@ -194,9 +208,11 @@ const Columns: ColumnDef<ILocationModel & { _id: any }>[] = [
   },
 ];
 
-const DataTable = ({ data }: { data: { rows: any[], total: number } }) => {
+const DataTable = ({ data }: { data: { rows: any[]; total: number } }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -232,15 +248,6 @@ const DataTable = ({ data }: { data: { rows: any[], total: number } }) => {
           }
           className="max-w-sm"
         />
-        <div className="mr-6">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push("/admin/location-manage/add")}
-          >
-            Thêm mới bất động sản
-          </Button>
-        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -279,16 +286,16 @@ const DataTable = ({ data }: { data: { rows: any[], total: number } }) => {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   );
                 })}
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="bg-white">
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -352,15 +359,26 @@ const fetcher = async (url: string) => {
 
   const payload = await res.json();
   return payload.data;
-}
+};
 
 const LocationManage = () => {
   const { data, isLoading, error } = useSWR("/api/locations", fetcher);
   return (
     <>
-      <div className="flex flex-col items-center p-5 min-h-[100dvh]">
-        <h1 className="text-4xl font-bold">Quản lý địa điểm</h1>
-        {(isLoading || error) ? (
+      <div className="flex flex-col p-5 min-h-[100dvh]">
+        <div className="flex flex-row justify-between items-center">
+          <h1 className="md:text-4xl text-2xl font-bold my-3">
+            Quản lý địa điểm
+          </h1>
+          <Button
+            href="/admin/location-manage/add"
+            variant="default"
+          >
+            Tạo địa điểm mới
+          </Button>
+        </div>
+
+        {isLoading || error ? (
           <div className="mt-10">Loading...</div>
         ) : (
           <DataTable data={data} />
