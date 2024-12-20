@@ -8,13 +8,17 @@ export const metadata: Metadata = {
   description: "Trang hiển thị kết quả tìm kiếm tin tức",
 };
 
-export default async function SearchResultPage({ searchParams }: IDefaultPageProps) {
+export default async function SearchResultPage({
+  searchParams,
+}: IDefaultPageProps) {
   return (
     <div className="w-full min-h-[100dvh]">
-      <SearchNews />
-      <Suspense fallback={<>Loading...</>}>
-        <SearchCardWrapper {...{ searchParams }} />
-      </Suspense>
+      <div className="max-w-5xl mx-auto w-full">
+        <SearchNews />
+        <Suspense fallback={<>Loading...</>}>
+          <SearchCardWrapper {...{ searchParams }} />
+        </Suspense>
+      </div>
     </div>
   );
 }
