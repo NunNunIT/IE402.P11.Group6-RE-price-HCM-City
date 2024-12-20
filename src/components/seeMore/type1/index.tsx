@@ -24,8 +24,7 @@ export default function SeeMore({
 }) {
   const { data, error, isLoading } = useSWR(linkFetch, fetcher);
 
-  if (error) return <div>Error loading data: {error.message}</div>;
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || error) return <div>Loading...</div>;
 
   const RenderCard = () => {
     switch (typeCard) {
