@@ -10,7 +10,7 @@ const fetcher = async (url: string) => {
   return payload.data;
 }
 
-export function CustomizeMap({ locate }: { locate: { lat: number, long: number } }) {
+export function CustomizeMap({ locate, polygon }: { locate: { lat: number, long: number }, polygon: [number, number][] }) {
   const { data } = useSWR(`/api/locations?sort=locate:${locate.lat},${locate.long}`, fetcher);
 
   return (
@@ -19,6 +19,7 @@ export function CustomizeMap({ locate }: { locate: { lat: number, long: number }
       className="container"
       isShowDistrict
       center={locate}
+      polygon={polygon}
       points={[
         ...(Array.isArray(data.rows)
           ? data.rows.slice(0, 24).map((location: any) => ({

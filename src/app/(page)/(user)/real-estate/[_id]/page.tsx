@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { CarouselWrapper } from "@/components/carsousel";
 import { CustomizeMap } from "./components";
 
-
 interface IRealEstateDetailPageProps extends IDefaultPageProps {
   params: { _id: string };
 }
@@ -186,7 +185,7 @@ export default async function RealEstateDetailPage({
         />
       </div>
 
-      <CustomizeMap locate={data.locate}/>
+      <CustomizeMap locate={data.locate} polygon={data.polygon} />
     </div>
   );
 }
