@@ -60,9 +60,8 @@ const editMarkerSymbol = new PictureMarkerSymbol({
   height: "48px",
 });
 
-// TODO: don't trigger rerender when props change
 export default function MapComponent(props: IMapProps) {
-  const mergedProps = { ...DEFAULT_PROPS, ...props };
+  const mergedProps = Object.assign({}, DEFAULT_PROPS, props);
   const mapRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<MapView | null>(null);
   const mapInstanceRef = useRef<Map | null>(null);

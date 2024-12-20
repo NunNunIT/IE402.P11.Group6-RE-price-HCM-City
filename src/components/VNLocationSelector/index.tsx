@@ -37,6 +37,8 @@ type TLocationSelectProps = Omit<
 > & {
   value: ILocation;
   onChange: Dispatch<SetStateAction<ILocation>>;
+  setZoomController?: Dispatch<SetStateAction<Number>>;
+  setCenterController?: Dispatch<SetStateAction<TPosition>>;
   depthLevel?: ENUM_LOCATION_TYPE;
   placeholders?: {
     province?: string;
@@ -55,6 +57,8 @@ export default function LocationSelect({
   placeholders,
   modal,
   disabled,
+  setZoomController,
+  setCenterController,
   ...props
 }: TLocationSelectProps) {
   const isMobile = useMediaQuery("(max-width: 640px)");
@@ -64,8 +68,8 @@ export default function LocationSelect({
       : undefined;
     const selectedDistrict = location?.district
       ? selectedProvince?.Districts.find(
-          (district) => district.Name === location.district
-        )
+        (district) => district.Name === location.district
+      )
       : undefined;
 
     return {
@@ -96,11 +100,33 @@ export default function LocationSelect({
 
       if (key === "province" && depthLevel >= ENUM_LOCATION_TYPE.DISTRICT) {
         newLocation.district = undefined;
+        const center = VNLocationData.find(
+          (province) => province.Name === value
+        )?.Center;
+        setZoomController?.(10);
+        if (center) {
+          setCenterController?.({
+            lat: center[0],
+            long: center[1],
+          });
+        }
         if (depthLevel >= ENUM_LOCATION_TYPE.WARD) {
           newLocation.ward = undefined;
           newLocation.wardId = undefined;
         }
       } else if (key === "district" && depthLevel >= ENUM_LOCATION_TYPE.WARD) {
+        const center = (VNLocationData.find(
+          (province) => province.Name === location.province
+        )?.Districts.find(
+          (district) => district.Name === value
+        ) as any)?.Center;
+        setZoomController?.(12);
+        if (center) {
+          setCenterController?.({
+            lat: center[0],
+            long: center[1],
+          });
+        }
         newLocation.ward = undefined;
         newLocation.wardId = undefined;
       } else if (key === "ward" && depthLevel >= ENUM_LOCATION_TYPE.WARD) {
@@ -114,7 +140,7 @@ export default function LocationSelect({
       setLocation?.(newLocation);
       return newLocation;
     },
-    [location, depthLevel, setLocation]
+    [location, depthLevel, setLocation, setZoomController, setCenterController]
   );
 
   return (

@@ -28,7 +28,7 @@ import dynamic from "next/dynamic";
 import { ENUM_MAP_MODE } from "@/utils";
 import { toast } from "sonner";
 import { uploadFilesToCloudinary } from "@/lib/func/cloudinary";
-import { useEffect } from "react";
+import { useState } from "react";
 const LocationSelect = dynamic(
   () => import("@/components/VNLocationSelector"),
   { ssr: false, loading: () => <p>Loading...</p> }
@@ -105,6 +105,8 @@ const FormSchema = z.object({
 });
 
 export default function InputForm() {
+  const [mapZoomController, setZoomController] = useState<number | undefined>(undefined);
+  const [mapCenterController, setCenterController] = useState<TPosition | undefined>(undefined);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -180,13 +182,6 @@ export default function InputForm() {
       toast.error("Failed to upload images or save data.");
     }
   };
-
-  // Lắng nghe sự thay đổi của "polygon"
-//   const polygonValue = form.watch("polygon");
-
-//   useEffect(() => {
-//     console.log(form.getValues("polygon")); // Log giá trị của "polygon"
-//   }, [polygonValue]); // useEffect sẽ được gọi lại mỗi khi polygonValue thay đổi
 
   return (
     <Form {...form}>
@@ -434,7 +429,11 @@ export default function InputForm() {
               <FormItem>
                 <FormLabel className="font-semibold">Địa điểm</FormLabel>
                 <FormControl>
-                  <LocationSelect {...field} />
+                  <LocationSelect
+                    {...field}
+                    setZoomController={setZoomController}
+                    setCenterController={setCenterController}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -450,7 +449,8 @@ export default function InputForm() {
                   <GisMap
                     isShowDistrict
                     className="min-h-[30rem] flex items-stretch"
-                    zoom={15}
+                    {...mapZoomController ? { zoom: mapZoomController } : {}}
+                    {...mapCenterController ? { center: mapCenterController } : {}}
                     mode={ENUM_MAP_MODE.Edit}
                     value={field.value?.slice(0, 2) as [number, number]}
                     onChange={field.onChange}
