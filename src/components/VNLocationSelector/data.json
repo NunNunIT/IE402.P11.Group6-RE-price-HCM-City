@@ -3,6 +3,7 @@
     "Id": "a00000000000000000000000",
     "Name": "Hồ Chí Minh",
     "Img": "https://gomet-file.vercel.app/place/hochiminh.jpeg",
+
     "Districts": [
       {
         "Id": "b00000000000000000000000",

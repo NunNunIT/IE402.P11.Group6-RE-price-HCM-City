@@ -1,21 +1,20 @@
 import { Schema, model, models } from 'mongoose';
 
-export interface IPoint {
-  lat: number,
-  long: number,
-}
-
+// Định nghĩa interface cho Polygon
 export interface IPolygon {
-  points: IPoint[],
+  points: [number, number][]; // Mảng các cặp tọa độ [x, y]
 }
 
-const PointSchema: Schema = new Schema({
-  lat: { type: Number, required: true },
-  long: { type: Number, required: true },
-}, { _id: false, strict: false });
+// Định nghĩa schema
+const PolygonSchema = new Schema(
+  {
+    points: {
+      type: [[Number, Number]], // Mảng 2 chiều gồm các số
+      // required: true,   // Trường này bắt buộc phải có
+    },
+  },
+  { strict: false, timestamps: true }
+);
 
-const PolygonSchema: Schema = new Schema({
-  points: { type: [PointSchema], required: true },
-}, { strict: false });
-
-export const Polygon = models?.Polygon ?? model('Polygon', PolygonSchema);
+// Tạo model
+export const Polygon = models?.Polygon || model('Polygon', PolygonSchema);

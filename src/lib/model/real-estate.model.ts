@@ -43,10 +43,9 @@ export interface IRealEstate {
   area: number;
   type: string;
   locate: ILocation;
-  ward: string;
   imageUrls: string[];
   info: IInfo;
-  polygon: string;
+  polygon?: string;
   QA: IQA[];
   isAuth: boolean;
   owner: string;
