@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, PropsWithChildren, useCallback, useContext, useState } from "react";
 
 interface IPositionContext {
   position: TPosition | undefined;
@@ -54,10 +54,6 @@ export const PositionProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     geolocationPromise();
   }, [setPosition]);
-
-  useEffect(() => {
-    allowAccessCurrentPosition();
-  }, [allowAccessCurrentPosition]);
 
   return (
     <PositionContext.Provider value={{ position, allowAccessCurrentPosition }}>
