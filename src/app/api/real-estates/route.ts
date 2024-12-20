@@ -56,7 +56,7 @@ export const GET = async (req: NextRequest) => {
   try {
     const { locateSort, mongooseSort } = sortHandler(sort);
 
-    const query = {
+    const filter = {
       ...(province ? { "locate.tinh": province } : {}),
       ...(district ? { "locate.huyen": district } : {}),
       ...(ward ? { "locate.xa": ward } : {}),
@@ -65,14 +65,19 @@ export const GET = async (req: NextRequest) => {
       ...(priceRange !== REAL_ESTATE_PRICE_RANGE_DEFAULT ? generateFilterRange("price", priceRange) : {}),
       ...(areaRange !== REAL_ESTATE_AREA_RANGE_DEFAULT ? generateFilterRange("area", areaRange) : {}),
     }
+    const query = RealEstate
+      .find(filter)
+      .select("-desc -polygon")
+      .populate("owner", "username avt")
+      .sort(mongooseSort)
 
     let realEstates = await retry(() =>
-      RealEstate
-        .find(query)
-        .select("-desc")
-        .populate("owner", "username avt")
-        .sort(mongooseSort)
-        .lean());
+      locateSort.useHaversine
+        ? query
+        : query.skip((page - 1) * limit).limit(limit)
+    );
+
+    realEstates = realEstates.map((realEstate) => realEstate.toJSON());
 
     const total = realEstates.length;
 
