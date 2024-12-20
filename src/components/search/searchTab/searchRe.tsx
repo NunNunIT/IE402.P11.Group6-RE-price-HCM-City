@@ -32,13 +32,16 @@ import { useSearchParams } from "next/navigation";
 import { isInclude, REAL_ESTATE_FILTERS } from "@/utils";
 
 export default function SearchRe() {
-  const [searchProvince, setSearchProvince] = useState<string>("Hồ Chí Minh");
   const searchParams = useSearchParams();
+  const province = searchParams.get("province");
+  const [searchProvince, setSearchProvince] = useState<string>(province || "Hồ Chí Minh");
+  const districtDefault = searchParams.get("district");
+  const wardDefault = searchParams.get("ward");
   const propertyTypeDefault = searchParams.get("propertyType");
   const priceRangeDefault = searchParams.get("priceRange");
   const areaRangeDefault = searchParams.get("areaRange");
 
-  const [value, onValueChange] = useState<string>("");
+  const [value, onValueChange] = useState<string>(`${wardDefault ? wardDefault + ", " : ""}${districtDefault ? districtDefault + ", " : ""}${searchProvince}`);
   const [currentPosition, setCurrentPosition] = useState<TPosition>(undefined);
   const [propertyType, setPropertyType] = useState(
     isInclude(propertyTypeDefault, REAL_ESTATE_FILTERS.propertyType.map(([value]) => value))
@@ -57,7 +60,7 @@ export default function SearchRe() {
   );
 
   const ward = useMemo(() => {
-    const context = value.split(",");
+    const context = value.split(", ");
     if (context.length === 2) return undefined;
     return context[0]
       .replace("Xã ", "")
@@ -65,7 +68,7 @@ export default function SearchRe() {
       .replace("Phường ", "");
   }, [value]);
   const district = useMemo(() => {
-    const context = value.split(",");
+    const context = value.split(", ");
     if (context.length === 2) return context[0];
     return context[1];
   }, [value]);
