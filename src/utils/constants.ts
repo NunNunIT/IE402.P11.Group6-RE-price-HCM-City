@@ -65,3 +65,11 @@ export const REAL_ESTATE_FILTERS = {
     ["80-", "Trên 80 m²"],
   ],
 } as const;
+
+export const REAL_ESTATE_PROPERTY_TYPE = REAL_ESTATE_FILTERS.propertyType.map(([value]) => value);
+export const REAL_ESTATE_PRICE_RANGE = REAL_ESTATE_FILTERS.priceRange.map(([value]) => value);
+export const REAL_ESTATE_AREA_RANGE = REAL_ESTATE_FILTERS.areaRange.map(([value]) => value);
+
+export const REAL_ESTATE_PROPERTY_TYPE_DEFAULT = REAL_ESTATE_FILTERS.propertyType[0][0];
+export const REAL_ESTATE_PRICE_RANGE_DEFAULT = REAL_ESTATE_FILTERS.priceRange[0][0];
+export const REAL_ESTATE_AREA_RANGE_DEFAULT = REAL_ESTATE_FILTERS.areaRange[0][0];
