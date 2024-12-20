@@ -4,9 +4,9 @@ import { ENUM_MARKER_SYMBOL, parseObjectToSearchParams } from "@/utils";
 import { useEffect, useRef } from "react";
 
 import { SearchResultCard } from "@/components/card";
-import { SearchTab } from "@/components/search";
 import dynamic from "next/dynamic";
 import useSWRInfinite from "swr/infinite";
+import SearchRe from "@/components/search/searchTab/searchRe";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
@@ -65,15 +65,15 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
     <>
       <div className="w-full h-full bg-white dark:bg-zinc-900 p-3 space-y-3">
         <div className="w-full max-w-4xl mx-auto my-auto z-10 md:px-0">
-          <SearchTab />
+          <SearchRe />
         </div>
         <div className="flex flex-col">
           <div className="px-4 mb-4">
             <h1>
               Bất động sản tại{" "}
               <span className="text-orange-500">
-                {searchParams.ward && `${searchParams.ward}, `}
-                {searchParams.district && `${searchParams.district}, `}
+                {!!searchParams.ward && `${searchParams.ward}, `}
+                {!!searchParams.district && `${searchParams.district}, `}
                 {searchParams.province}
               </span>
             </h1>
@@ -89,7 +89,7 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
               ))}
             </div>
           ) : (
-            isLoadingMore && (
+            !isLoadingMore && (
               <div className="flex justify-center items-center h-96">
                 <p>Không có kết quả nào</p>
               </div>

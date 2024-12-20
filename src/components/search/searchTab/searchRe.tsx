@@ -61,7 +61,7 @@ export default function SearchRe() {
 
   const ward = useMemo(() => {
     const context = value.split(", ");
-    if (context.length === 2) return undefined;
+    if (context.length <= 2) return undefined;
     return context[0]
       .replace("Xã ", "")
       .replace("Thị trấn ", "")
@@ -69,8 +69,8 @@ export default function SearchRe() {
   }, [value]);
   const district = useMemo(() => {
     const context = value.split(", ");
-    if (context.length === 2) return context[0];
-    return context[1];
+    if (context.length < 2) return undefined;
+    return context[context.length - 2];
   }, [value]);
 
   return (
@@ -130,8 +130,9 @@ export default function SearchRe() {
                   </ComboboxItem>,
                   ...wards.map((ward) => {
                     const key = `${district.Id + (ward as any)?.Id}`;
-                    const label = `${ward.Level} ${(ward as any)?.Name}, ${district.Name
-                      }, ${searchProvince}`;
+                    // const label = `${ward.Level} ${(ward as any)?.Name}, ${district.Name
+                    //   }, ${searchProvince}`;
+                    const label = `${(ward as any)?.Name}, ${district.Name}, ${searchProvince}`;
                     return (
                       <ComboboxItem
                         key={key}
