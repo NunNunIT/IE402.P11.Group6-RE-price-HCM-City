@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import type { Metadata } from "next";
+import { MapControllerProvider } from "./components";
 
 export const metadata: Metadata = {
   title: "Kết quả tìm kiếm bất động sản",
@@ -15,8 +16,10 @@ export default async function SearchResultPage({
   searchParams,
 }: IDefaultPageProps) {
   return (
-    <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full">
-      <SearchCardWrapper {...{ searchParams }} />
-    </div>
+    <MapControllerProvider>
+      <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full">
+        <SearchCardWrapper {...{ searchParams }} />
+      </div>
+    </MapControllerProvider>
   );
 }

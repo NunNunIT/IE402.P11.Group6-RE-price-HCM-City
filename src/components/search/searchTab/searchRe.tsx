@@ -29,10 +29,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSearchParams } from "next/navigation";
-import { isInclude, REAL_ESTATE_FILTERS } from "@/utils";
+import { isInclude, REAL_ESTATE_AREA_RANGE, REAL_ESTATE_AREA_RANGE_DEFAULT, REAL_ESTATE_FILTERS, REAL_ESTATE_PRICE_RANGE, REAL_ESTATE_PRICE_RANGE_DEFAULT, REAL_ESTATE_PROPERTY_TYPE, REAL_ESTATE_PROPERTY_TYPE_DEFAULT } from "@/utils";
+import { useMapController } from "@/app/(page)/(user)/search-result/components";
 
 export default function SearchRe() {
   const searchParams = useSearchParams();
+  const { setCenterController, setZoomController } = useMapController();
   const province = searchParams.get("province");
   const [searchProvince, setSearchProvince] = useState<string>(province || "Hồ Chí Minh");
   const districtDefault = searchParams.get("district");
@@ -44,19 +46,19 @@ export default function SearchRe() {
   const [value, onValueChange] = useState<string>(`${wardDefault ? wardDefault + ", " : ""}${districtDefault ? districtDefault + ", " : ""}${searchProvince}`);
   const [currentPosition, setCurrentPosition] = useState<TPosition>(undefined);
   const [propertyType, setPropertyType] = useState(
-    isInclude(propertyTypeDefault, REAL_ESTATE_FILTERS.propertyType.map(([value]) => value))
+    isInclude(propertyTypeDefault, REAL_ESTATE_PROPERTY_TYPE)
       ? propertyTypeDefault
-      : "all"
+      : REAL_ESTATE_PROPERTY_TYPE_DEFAULT
   );
   const [priceRange, setPriceRange] = useState(
-    isInclude(priceRangeDefault, REAL_ESTATE_FILTERS.priceRange.map(([value]) => value))
+    isInclude(priceRangeDefault, REAL_ESTATE_PRICE_RANGE)
       ? priceRangeDefault
-      : "all"
+      : REAL_ESTATE_PRICE_RANGE_DEFAULT
   );
   const [areaRange, setAreaRange] = useState(
-    isInclude(areaRangeDefault, REAL_ESTATE_FILTERS.areaRange.map(([value]) => value))
+    isInclude(areaRangeDefault, REAL_ESTATE_AREA_RANGE)
       ? areaRangeDefault
-      : "all"
+      : REAL_ESTATE_AREA_RANGE_DEFAULT
   );
 
   const ward = useMemo(() => {
@@ -70,8 +72,32 @@ export default function SearchRe() {
   const district = useMemo(() => {
     const context = value.split(", ");
     if (context.length < 2) return '';
-    return context[context.length - 2];
-  }, [value]);
+    const district = context[context.length - 2];
+    setZoomController?.(12);
+    const center = (VNLocationData
+      .find((province) => province.Name === searchProvince)
+      ?.Districts
+      .find((_district) => _district.Name === district) as any)
+      ?.Center;
+    if (center) {
+      setCenterController?.({
+        lat: center[0],
+        long: center[1],
+      });
+    }
+  }, [searchProvince, setCenterController, setZoomController, value]);
+
+  const onChangeProvince = (value: string) => {
+    setZoomController?.(10);
+    const center = VNLocationData.find((province) => province.Name === value)?.Center;
+    if (center) {
+      setCenterController?.({
+        lat: center[0],
+        long: center[1],
+      });
+    }
+    setSearchProvince(value);
+  }
 
   return (
     <form
@@ -98,7 +124,7 @@ export default function SearchRe() {
             search={true}
             multiChoice={false}
             selectedValue={searchProvince}
-            setSelectedValue={setSearchProvince}
+            setSelectedValue={onChangeProvince}
             typeTrigger={2}
             positioning
             currentPosition={currentPosition}
