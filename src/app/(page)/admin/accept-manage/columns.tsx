@@ -16,7 +16,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 
 const postConfirmRealEstate = async (id: string) => {
-  const res = await fetch(`/api/real-estates/${id}/confirm`, {
+  const res = await fetch(`/api/accept-re/${id}/confirm`, {
     method: "PUT",
     body: JSON.stringify({
       isAuth: true,
@@ -59,8 +59,8 @@ export const columns: ColumnDef<DataColumns>[] = [
       return (
         <Image
           src={row.getValue("imageUrl")}
-          alt={"Hình ảnh"}
-          className="object-cover aspect-square"
+          alt={row.getValue("title")}
+          className="w-32 object-cover aspect-square"
           width={100}
           height={100}
           unoptimized

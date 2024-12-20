@@ -41,8 +41,8 @@ export default function DemoPage() {
   const { data, isLoading, error } = useSWR('/api/real-estates?getAll=true', getData);
 
   return (
-    <div className="container mx-auto py-10 px-2">
-      <div className="flex flex-row justify-between items-center">
+    <div className="container mx-auto py-10">
+      <div className="w-full flex flex-row justify-between items-center">
         <h1>Quản lý bất động sản</h1>
         <Button href="/admin/re-manage/add" startIcon={<PlusIcon className="size-6" />}>Tạo mới</Button>
       </div>

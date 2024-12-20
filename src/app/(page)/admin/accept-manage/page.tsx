@@ -37,12 +37,12 @@ async function getData(url: string): Promise<DataColumns[]> {
 
 export default function DemoPage() {
   const { data, isLoading, error } = useSWR(
-    "/api/real-estates?getAll=true&isAuth=false",
+    "/api/accept-re",
     getData
   );
 
   return (
-    <div className="container mx-auto py-10 px-2">
+    <div className="container mx-auto py-10">
       <div className="flex flex-row justify-between items-center">
         <h1>Xét duyệt</h1>
       </div>

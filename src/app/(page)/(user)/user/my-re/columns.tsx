@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-
+import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,6 +23,63 @@ export type DataColumns = {
   area: number;
   imageUrl: string;
   locate: locate;
+};
+
+// Hàm handleDelete
+const handleDelete = async (id: string) => {
+  try {
+    const response = await fetch(`/api/real-estates/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Xóa không thành công");
+    }
+
+    toast({ title: "Thành công", description: "Xóa bất động sản thành công" });
+  } catch (error) {
+    console.error("Lỗi khi xóa:", error);
+    toast({
+      title: "Lỗi",
+      description: "Đã có lỗi xảy ra khi xóa",
+      variant: "destructive",
+    });
+  }
+};
+
+// Hàm gửi yêu cầu xác nhận bất động sản
+const requestRealEstate = async (id: string) => {
+  try {
+    const response = await fetch(`/api/accept-re/${id}/request`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        isAuth: true,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorDetails = await response.json();
+      throw new Error(errorDetails.message || "Yêu cầu xác nhận thất bại");
+    }
+
+    const payload = await response.json();
+    toast({
+      title: "Thành công",
+      description: `Xác nhận thành công bất động sản: ${
+        payload.data?.title || "Bất động sản"
+      }`,
+    });
+  } catch (error: any) {
+    console.error("Lỗi khi xác nhận:", error);
+    toast({
+      title: "Lỗi",
+      description: error.message || "Đã có lỗi xảy ra khi xác nhận.",
+      variant: "destructive",
+    });
+  }
 };
 
 export const columns: ColumnDef<DataColumns>[] = [
@@ -88,6 +145,8 @@ export const columns: ColumnDef<DataColumns>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      const id = row.original._id; // Lấy _id của hàng
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -97,10 +156,14 @@ export const columns: ColumnDef<DataColumns>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Hành động</DropdownMenuLabel>
+            {/* <DropdownMenuLabel>Hành động</DropdownMenuLabel> */}
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Xem</DropdownMenuItem>
-            <DropdownMenuItem>Xóa</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => requestRealEstate(id)}>
+              Yêu cầu xác thực
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDelete(id)}>
+              Xóa
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

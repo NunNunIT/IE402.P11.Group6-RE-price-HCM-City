@@ -21,6 +21,8 @@ export default function TranslateKey(key: string): string {
     taynam: "Tây Nam",
     dongnam: "Đông Nam",
     interior: "Nội thất",
+    noneInterior: "Không có nội thất",
+    fullInterior: "Nội thất đầy đủ",
   };
 
   return dictionary[key] || "Không";

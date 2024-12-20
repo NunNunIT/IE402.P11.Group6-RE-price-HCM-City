@@ -47,7 +47,7 @@ export interface IRealEstate {
   info: IInfo;
   polygon?: string;
   QA: IQA[];
-  isAuth: boolean;
+  isAuth: string;
   owner: string;
 }
 
@@ -62,7 +62,7 @@ const RealEstateSchema = new Schema({
   info: { type: InfoSchema },
   polygon: { type: Schema.Types.ObjectId, ref: 'Polygon' }, // Reference to Polygon model
   QA: [QASchema],
-  isAuth: { type: Boolean, default: false },
+  isAuth: { type: String, enum: ["none", "pending", "auth"], default: false },
   owner: { type: Schema.Types.ObjectId, ref: 'User'} // Reference to User model
 }, { timestamps: true, strict: false });
 
