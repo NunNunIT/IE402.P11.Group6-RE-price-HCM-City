@@ -23,7 +23,7 @@ export function CustomizeMap({ locate, polygon }: { locate: { lat: number, long:
       center={locate}
       polygon={polygon}
       points={[
-        ...(Array.isArray(data.rows)
+        ...(Array.isArray(data?.rows)
           ? data.rows.slice(0, 24).map((location: any) => ({
             ...location.locate,
             title: location.title,
