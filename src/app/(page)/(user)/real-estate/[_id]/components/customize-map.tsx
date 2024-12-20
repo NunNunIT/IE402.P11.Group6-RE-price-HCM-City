@@ -1,3 +1,5 @@
+"use client";
+
 import { ENUM_MARKER_SYMBOL } from "@/utils";
 import dynamic from "next/dynamic";
 import useSWR from "swr";
