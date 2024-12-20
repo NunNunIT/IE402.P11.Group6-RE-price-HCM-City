@@ -12,7 +12,7 @@ const fetcher = async (url: string) => {
   return payload.data;
 }
 
-export function CustomizeMap({ locate, polygon }: { locate: { lat: number, long: number }, polygon: [number, number][] }) {
+export function CustomizeMap({ title, locate, polygon }: { title: string, locate: { lat: number, long: number }, polygon: [number, number][] }) {
   const { data } = useSWR(`/api/locations?sort=locate:${locate.lat},${locate.long}`, fetcher);
 
   return (
@@ -32,8 +32,8 @@ export function CustomizeMap({ locate, polygon }: { locate: { lat: number, long:
           : []
         ),
         {
-          ...data.locate,
-          title: data.title,
+          ...locate,
+          title: title,
           type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
         },
       ]}
