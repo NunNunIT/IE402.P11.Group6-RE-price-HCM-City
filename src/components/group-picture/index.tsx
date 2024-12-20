@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -53,24 +54,46 @@ const cityData = [
 
 export default function GroupPicture() {
   return (
-    <div className="dark:bg-gray-800 h-full py-6 sm:py-8 lg:py-12 w-full">
-      <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
-        <h2 className="text-2xl font-bold text-gray-800 lg:text-3xl dark:text-white mb-6">
-          Bất động sản theo địa điểm
-        </h2>
+    <div className="mx-auto h-full w-full max-w-6xl">
+      <h2 className="text-2xl font-bold text-gray-800 lg:text-3xl dark:text-white mb-6">
+        Bất động sản theo địa điểm
+      </h2>
 
-        {/* Grid Layout */}
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
-          {cityData.map((city, index) => (
+      {/* Grid Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <Link
+          href={cityData[0].link}
+          className={`h-full w-full aspect-[4/3] group relative flex items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg`}
+        >
+          <Image
+            unoptimized
+            src={cityData[0].image}
+            loading="lazy"
+            alt={cityData[0].name}
+            width={500}
+            height={500}
+            className="absolute inset-0 h-full w-full object-cover object-center transition duration-200 group-hover:scale-105"
+          />
+
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-70"></div>
+          <div className="relative ml-4 mb-3 text-white md:ml-5">
+            <h3 className="text-lg font-semibold md:text-xl">
+              {cityData[0].name}
+            </h3>
+          </div>
+        </Link>
+        <div className="grid grid-cols-2 gap-2">
+          {cityData.slice(1, 5).map((city, index) => (
             <Link
               href={city.link}
               key={index}
-              className={`group relative flex items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg ${
-                index === 0 ? "md:col-span-2 md:row-span-2" : ""
-              } ${city.height}`}
+              className={`h-full w-full aspect-[4/3] group relative flex items-end overflow-hidden rounded-lg bg-gray-100 shadow-lg`}
             >
-              <img
+              <Image
+                unoptimized
                 src={city.image}
+                height={1000}
+                width={1000}
                 loading="lazy"
                 alt={city.name}
                 className="absolute inset-0 h-full w-full object-cover object-center transition duration-200 group-hover:scale-105"
