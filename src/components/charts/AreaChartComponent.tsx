@@ -41,6 +41,7 @@ import { Button } from "../ui/button";
 import { IoIosArrowDown } from "react-icons/io";
 import useSWR from "swr";
 import { parseObjectToSearchParams } from "@/utils";
+import { useMapController } from "@/app/(page)/(user)/search-result/components";
 
 type MonthData = {
   month: string;
@@ -93,7 +94,17 @@ interface ILocation {
   ward?: string;
 }
 
-function Locate({ value, onChangeValue }: { value: ILocation, onChangeValue: (__data: ILocation) => void }) {
+function Locate({
+  value,
+  onChangeValue,
+  setZoomController,
+  setCenterController
+}: {
+  value: ILocation,
+  onChangeValue: (__data: ILocation) => void,
+  setZoomController: (__value: number) => void,
+  setCenterController: (__value: TPosition) => void
+}) {
   const [delayValue, setDelayValue] = useState<ILocation>(value);
   const [isOpen, setIsOpen] = useState(false);
   const handleSubmit = () => {
@@ -130,7 +141,13 @@ function Locate({ value, onChangeValue }: { value: ILocation, onChangeValue: (__
         <DialogHeader>
           <DialogTitle>Chọn khu vực</DialogTitle>
         </DialogHeader>
-        <LocationSelect value={delayValue} onChange={setDelayValue} depthLevel={3} />
+        <LocationSelect
+          value={delayValue}
+          onChange={setDelayValue}
+          setZoomController={setZoomController}
+          setCenterController={setCenterController}
+          depthLevel={3}
+        />
         <DialogFooter className="items-end">
           <Button type="button" onClick={handleSubmit}>
             OK
@@ -304,8 +321,14 @@ const fetcher = async (url: string) => {
   return payload.data;
 }
 
+const CURRENT_YEAR = (new Date()).getFullYear();
+
 export function AreaChartComponent() {
-  const [selectedYear, setSelectedYear] = useState((new Date()).getFullYear());
+  const {
+    setZoomController,
+    setCenterController,
+  } = useMapController();
+  const [selectedYear, setSelectedYear] = useState(CURRENT_YEAR);
   const [location, setLocation] = useState<ILocation>({ province: "Hồ Chí Minh" });
   const { data, isLoading, error, isValidating } = useSWR(
     `/api/analysis?${parseObjectToSearchParams(location)}`,
@@ -337,7 +360,12 @@ export function AreaChartComponent() {
   return (
     <div className="w-full bg-white dark:bg-black p-2">
       <h1 className="text-2xl font-bold">
-        Lịch sử giá tại <Locate value={location} onChangeValue={setLocation} />
+        Lịch sử giá tại <Locate
+          value={location}
+          onChangeValue={setLocation}
+          setCenterController={setCenterController}
+          setZoomController={setZoomController}
+        />
       </h1>
 
       <div className="flex items-end justify-end my-2">
@@ -364,7 +392,7 @@ export function AreaChartComponent() {
       ) : (
         <div className="flex flex-col gap-6 my-6 relative">
           {isValidating && (
-            <div className="absolute inset-0"/>
+            <div className="absolute inset-0" />
           )}
           {chartData.length !== 0 && (
             <div className="grid md:grid-cols-[1fr_1.5fr_1fr] grid-col-1 gap-3 border-2 border-zinc-300 rounded-md md:p-6 p-3">
@@ -390,81 +418,109 @@ export function AreaChartComponent() {
                   </span>
                 </div>
               </div>
-              <div className="flex flex-col gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
-                <>
-                  {/* Check if monthRate is null */}
-                  {monthRate === null ? (
-                    <span className="text-zinc-600 text-base">
-                      Không có dữ liệu so sánh với tháng trước
-                    </span>
-                  ) : // Conditional rendering based on whether rate is negative or positive
-                    monthRate[0] === "-" ? (
-                      <>
-                        <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                          <FaArrowCircleDown className="size-8 text-red-500" />
-                          {monthRate}%
-                        </span>
-                        <span className="text-zinc-600 text-base">
-                          Giá trị giảm {monthRate}% so với tháng trước
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
-                          <FaArrowCircleUp className="size-8 text-green-600" />
-                          {monthRate}%
-                        </span>
-                        <span className="text-zinc-600 text-base">
-                          Giá trị tăng {monthRate}% so với tháng trước
-                        </span>
-                      </>
-                    )}
-                </>
-                <>
-                  {/* Check if quarterRate is null */}
-                  {quarterRate === null ? (
-                    <span className="text-zinc-600 text-base">
-                      Không có dữ liệu so sánh với quý trước
-                    </span>
-                  ) : // Conditional rendering based on whether rate is negative or positive
-                    quarterRate[0] === "-" ? (
-                      <>
-                        <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                          <FaArrowCircleDown className="size-8 text-red-500" />
-                          {quarterRate}%
-                        </span>
-                        <span className="text-zinc-600 text-base">
-                          Giá trị giảm {quarterRate}% so với quý trước
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
-                          <FaArrowCircleUp className="size-8 text-green-600" />
-                          {quarterRate}%
-                        </span>
-                        <span className="text-zinc-600 text-base">
-                          Giá trị tăng {quarterRate}% so với quý trước
-                        </span>
-                      </>
-                    )}
-                </>
-              </div>
-              <div className="flex md:flex-col flex-row-reverse md:justify-center items-center justify-between gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
-                {predictData === null ? (
-                  <span className="text-zinc-600 text-base">
-                    Không có dữ liệu dự đoán
-                  </span>
+              <div className="flex flex-col gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3 items-center justify-center">
+                {selectedYear === CURRENT_YEAR ? (
+                  <>
+                    {/* Check if monthRate is null */}
+                    {monthRate === null ? (
+                      <span className="text-zinc-600 text-base">
+                        Không có dữ liệu so sánh với tháng trước
+                      </span>
+                    ) : // Conditional rendering based on whether rate is negative or positive
+                      monthRate[0] === "-" ? (
+                        <>
+                          <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
+                            <FaArrowCircleDown className="size-8 text-red-500" />
+                            {monthRate}%
+                          </span>
+                          <span className="text-zinc-600 text-base">
+                            Giá trị giảm {monthRate}% so với tháng trước
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
+                            <FaArrowCircleUp className="size-8 text-green-600" />
+                            {monthRate}%
+                          </span>
+                          <span className="text-zinc-600 text-base">
+                            Giá trị tăng {monthRate}% so với tháng trước
+                          </span>
+                        </>
+                      )}
+                    {/* Check if quarterRate is null */}
+                    {quarterRate === null ? (
+                      <span className="text-zinc-600 text-base">
+                        Không có dữ liệu so sánh với quý trước
+                      </span>
+                    ) : // Conditional rendering based on whether rate is negative or positive
+                      quarterRate[0] === "-" ? (
+                        <>
+                          <span className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
+                            <FaArrowCircleDown className="size-8 text-red-500" />
+                            {quarterRate}%
+                          </span>
+                          <span className="text-zinc-600 text-base">
+                            Giá trị giảm {quarterRate}% so với quý trước
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="flex flex-row items-center justify-start gap-2 text-xl text-green-600 font-semibold">
+                            <FaArrowCircleUp className="size-8 text-green-600" />
+                            {quarterRate}%
+                          </span>
+                          <span className="text-zinc-600 text-base">
+                            Giá trị tăng {quarterRate}% so với quý trước
+                          </span>
+                        </>
+                      )}
+                  </>
                 ) : (
                   <>
-                    <div className="flex flex-row items-center justify-start gap-2 md:text-2xl text-xl text-red-500 font-semibold">
-                      {predictData.toFixed(2)}
+                    <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold h-full">
+                      {Math.max(...chartData.map((data) => data.price))}
                       <span className="text-zinc-600 font-medium text-base">
                         tr/m<sup>2</sup>
                       </span>
                     </div>
+                    <span className="text-zinc-600 text-base text-center">
+                      Giá trị cao nhất trong năm tại tháng{" "}
+                      {chartData.find((data) => data.price === Math.max(...chartData.map((data) => data.price)))?.month}
+                    </span>
+                  </>
+                )}
+              </div>
+              <div className="flex md:flex-col flex-row-reverse md:justify-center items-center justify-between gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
+                {selectedYear === CURRENT_YEAR ? (
+                  predictData === null ? (
                     <span className="text-zinc-600 text-base">
-                      Dự đoán giá trị tháng sau
+                      Không có dữ liệu dự đoán
+                    </span>
+                  ) : (
+                    <>
+                      <div className="flex flex-row items-center justify-start gap-2 md:text-2xl text-xl text-red-500 font-semibold">
+                        {predictData.toFixed(2)}
+                        <span className="text-zinc-600 font-medium text-base">
+                          tr/m<sup>2</sup>
+                        </span>
+                      </div>
+                      <span className="text-zinc-600 text-base">
+                        Dự đoán giá trị tháng sau
+                      </span>
+                    </>
+                  )
+                ) : (
+                  <>
+                    <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold w-full text-left">
+                      {Math.min(...chartData.map((data) => data.price))}
+                      <span className="text-zinc-600 font-medium text-base">
+                        tr/m<sup>2</sup>
+                      </span>
+                    </div>
+                    <span className="text-zinc-600 text-base text-center">
+                      Giá trị thấp nhất trong năm tại tháng{" "}
+                      {chartData.find((data) => data.price === Math.min(...chartData.map((data) => data.price)))?.month}
                     </span>
                   </>
                 )}

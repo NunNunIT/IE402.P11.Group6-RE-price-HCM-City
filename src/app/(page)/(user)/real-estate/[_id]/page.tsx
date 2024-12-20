@@ -194,7 +194,7 @@ export default async function RealEstateDetailPage({
         />
       </div>
 
-      <CustomizeMap locate={data.locate} polygon={data.polygon?.points ?? []} />
+      <CustomizeMap title={data.title} locate={data.locate} polygon={data.polygon?.points ?? []} />
     </div>
   );
 }
