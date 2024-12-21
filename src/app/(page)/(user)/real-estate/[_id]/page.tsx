@@ -63,6 +63,7 @@ export default async function RealEstateDetailPage({
       return null;
     });
   if (!data) return notFound();
+  console.log("🚀 ~ data:", data.polygon.points)
 
   return (
     <div className="grid md:grid-cols-2 grid-cols-1 min-h-[100dvh] w-full mx-auto p-3">
@@ -197,7 +198,7 @@ export default async function RealEstateDetailPage({
       <CustomizeMap
         title={data.title}
         locate={data.locate}
-        polygon={data.polygon?.points ?? []}
+        polygon={data.polygon.points ?? []}
       />
     </div>
   );
