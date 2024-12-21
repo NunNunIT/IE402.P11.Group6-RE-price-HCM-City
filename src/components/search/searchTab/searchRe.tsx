@@ -66,6 +66,7 @@ export default function SearchRe() {
       .replace("Thị trấn ", "")
       .replace("Phường ", "");
   }, [value]);
+
   const district = useMemo(() => {
     const context = value.split(", ");
     if (context.length < 2) return '';
@@ -82,6 +83,7 @@ export default function SearchRe() {
         long: center[1],
       });
     }
+    return district;
   }, [searchProvince, setCenterController, setZoomController, value]);
 
   const onChangeProvince = (value: string) => {
