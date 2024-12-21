@@ -311,10 +311,10 @@ export default function MapComponent(props: IMapProps) {
     });
     const simpleFillSymbol = {
       type: "simple-fill", // autocast as new SimpleFillSymbol()
-      color: "rgba(0, 0, 255, 0.2)", // Blue transparent fill
+      color: [0, 0, 255, 0.2], // Blue transparent fill
       style: "solid",
       outline: {
-        color: "blue", // Blue outline
+        color: [255, 255, 255], // Blue outline
         width: 2,
       },
     };
@@ -322,7 +322,7 @@ export default function MapComponent(props: IMapProps) {
       geometry: polygon,
       symbol: simpleFillSymbol,
     });
-    polygonLayerRef.current.add(graphic);
+    polygonLayerRef.current?.add(graphic);
   }, [mergedProps.polygon]);
 
   useEffect(() => {
