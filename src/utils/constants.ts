@@ -73,3 +73,6 @@ export const REAL_ESTATE_AREA_RANGE = REAL_ESTATE_FILTERS.areaRange.map(([value]
 export const REAL_ESTATE_PROPERTY_TYPE_DEFAULT = REAL_ESTATE_FILTERS.propertyType[0][0];
 export const REAL_ESTATE_PRICE_RANGE_DEFAULT = REAL_ESTATE_FILTERS.priceRange[0][0];
 export const REAL_ESTATE_AREA_RANGE_DEFAULT = REAL_ESTATE_FILTERS.areaRange[0][0];
+
+export const WEB_MERCATOR = "+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs";
+export const WGS84 = "+proj=longlat +datum=WGS84 +no_defs";

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { NextAuthRequest } from "node_modules/next-auth/lib";
 import { RealEstate, Polygon } from "@/lib/model";
 import { auth } from "@/lib/auth";
+import { parseWebMercatorToWGS84Coordinates } from "@/utils/coordinates";
 const mongoose = require("mongoose");
 
 export const POST = auth(async (req: NextAuthRequest) => {
@@ -71,7 +72,7 @@ export const POST = auth(async (req: NextAuthRequest) => {
 
     // Kiểm tra điều kiện để chỉ tạo polygon khi có giá trị hợp lệ
     if (polygon && polygon.length > 0) {
-      const newPolygon = { points: polygon };
+      const newPolygon = { points: polygon.map(parseWebMercatorToWGS84Coordinates) };
       const savedPolygon = await Polygon.create(newPolygon);
       polygonIdString = savedPolygon._id.toString();
       console.log("polygonIdString", polygonIdString);

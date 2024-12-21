@@ -311,7 +311,7 @@ export default function MapComponent(props: IMapProps) {
     });
     const simpleFillSymbol = {
       type: "simple-fill", // autocast as new SimpleFillSymbol()
-      color: [0, 0, 255, 0.2], // Blue transparent fill
+      color: [0, 0, 255, 0.6], // Blue transparent fill
       style: "solid",
       outline: {
         color: [255, 255, 255], // Blue outline
