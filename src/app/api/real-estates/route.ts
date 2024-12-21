@@ -103,7 +103,9 @@ export const GET = async (req: NextRequest) => {
       imageUrl: imageUrls?.[0],
     }));
 
-    return successResponse({ data: { rows: realEstates, total } });
+    return successResponse({
+      data: { rows: realEstates, total }
+    });
   } catch (error) {
     console.error(">> Error in @GET /api/real-estates:", error.message);
     return errorResponse({

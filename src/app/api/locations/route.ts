@@ -3,6 +3,7 @@ import {
   forbiddenResponse,
   haversineDistance,
   isNotNullAndUndefined,
+  retry,
   sortHandler,
   successResponse,
 } from "@/utils";
@@ -28,15 +29,30 @@ export const GET = async (req: NextRequest) => {
 
   try {
     const { locateSort, mongooseSort } = sortHandler(sort);
-    let locations = await Location.find({
+
+    const filter = {
       ...(province ? { "locate.tinh": province } : {}),
       ...(district ? { "locate.huyen": district } : {}),
       ...(ward ? { "locate.xa": ward } : {}),
       ...(title ? { title: { $regex: title, $options: "i" } } : {}),
-    })
+    }
+
+    const query = Location
+      .find(filter)
+      .select("-description")
       .populate("owner", "username avt")
       .sort(mongooseSort)
-      .lean();
+
+    let [locations] = await Promise.all([
+      retry(() =>
+        getAll || locateSort.useHaversine
+          // ! LIMIT 100
+          ? query.limit(100).lean()
+          : query.skip((page - 1) * limit).limit(limit).lean()
+      )
+    ]);
+
+    const total = locations.length;
 
     if (locateSort.useHaversine) {
       const temp = locations
@@ -49,21 +65,18 @@ export const GET = async (req: NextRequest) => {
       locations = temp.map(({ distance: __distance, ...location }) => ({
         ...location,
       }));
+      if (!getAll) {
+        locations = locations.slice((page - 1) * limit, page * limit);
+      }
     }
-
-    const total = locations.length;
-    if (!getAll) locations = locations.slice((page - 1) * limit, page * limit);
 
     locations = locations.map(({ imageUrls, ...location }) => ({
       ...location,
-      imageUrl: imageUrls[0],
+      imageUrl: imageUrls?.[0],
     }));
 
     return successResponse({
-      data: {
-        rows: locations,
-        total,
-      },
+      data: { rows: locations, total },
     });
   } catch (error) {
     console.error("Error in @GET /api/locations:", error.message);

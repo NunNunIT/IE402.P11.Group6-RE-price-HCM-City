@@ -13,7 +13,7 @@ const fetcher = async (url: string) => {
 }
 
 export function CustomizeMap({ title, locate, polygon }: { title: string, locate: { lat: number, long: number }, polygon: [number, number][] }) {
-  const { data } = useSWR(`/api/locations?sort=locate:${locate.lat},${locate.long}`, fetcher);
+  const { data } = useSWR(`/api/locations?sort=locate:${locate.lat},${locate.long}&limit=24`, fetcher);
 
   return (
     <GISMap

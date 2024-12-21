@@ -80,7 +80,7 @@ export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
               </span>
             </h1>
             {!(isLoading || error) && (
-              <p>Hiện có {data[0].total} tin đăng bán tại khu vực này</p>
+              <p>Hiện có {data[0].total}+ tin đăng bán tại khu vực này</p>
             )}
           </div>
 
