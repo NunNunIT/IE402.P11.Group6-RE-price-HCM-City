@@ -44,7 +44,7 @@ const FormSchema = z.object({
   imgs: z.array(z.string()).min(1, "Ít nhất một hình ảnh phải được tải lên."),
   type: z.enum(["land", "house"]).optional(),
   area: z.string().min(1, "Diện tích không được bỏ trống."),
-  price: z.number().min(1, "Giá bán không được bỏ trống."),
+  price: z.string().min(1, "Giá bán không được bỏ trống."),
   legal: z.enum(["sodo", "hopdong", "dangchoso", "khac", ""]).optional(),
   coordinates: z.tuple([z.number(), z.number()]),
   polygon: z.array(z.tuple([z.number(), z.number()])),
@@ -114,7 +114,7 @@ export default function InputForm() {
       desc: "",
       type: undefined,
       area: "",
-      price: undefined,
+      price: "",
       legal: undefined,
       interior: undefined,
       bed: undefined,
@@ -335,13 +335,13 @@ export default function InputForm() {
                   <Input
                     type="number"
                     placeholder="Nhập giá bán"
-                    onChange={(e) => field.onChange(Number(e.target.value))}
                     endIcon={
                       <span className="rounded-md bg-zinc-600 text-white">
                         Đơn vị: tỷ
                       </span>
                     }
                     {...field}
+                    // onChange={(e) => field.onChange(Number(e.target.value))}
                   />
                 </FormControl>
                 <FormMessage />
