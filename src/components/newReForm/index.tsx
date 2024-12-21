@@ -47,7 +47,7 @@ const FormSchema = z.object({
   price: z.string().min(1, "Giá bán không được bỏ trống."),
   legal: z.enum(["sodo", "hopdong", "dangchoso", "khac", ""]).optional(),
   coordinates: z.tuple([z.number(), z.number()]),
-  polygon: z.array(z.tuple([z.number(), z.number()])),
+  polygon: z.array(z.tuple([z.number(), z.number()])).optional(),
   locate: z
     .object({
       province: z.string().nullable().optional(),

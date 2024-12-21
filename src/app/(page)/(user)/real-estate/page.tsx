@@ -13,13 +13,13 @@ const SeeMoreType1 = dynamic(() => import("@/components/seeMore/type1"), {
 export default function Home() {
   const [cards, setCards] = useState<any[]>([]); // Dữ liệu bất động sản
   const [page, setPage] = useState(1); // Quản lý số trang
-  const [loading, setLoading] = useState(false); // Trạng thái tải
+  const [isLoading, setIsLoading] = useState(false); // Trạng thái tải
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   // Hàm gọi API để lấy thêm dữ liệu
   const fetchMoreData = useCallback(async () => {
-    if (loading) return;
-    setLoading(true);
+    if (isLoading) return;
+    setIsLoading(true);
 
     try {
       const res = await fetch(`/api/real-estates?limit=12&page=${page}`);
@@ -36,9 +36,9 @@ export default function Home() {
     } catch (error) {
       console.error("Lỗi khi tải thêm dữ liệu:", error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-  }, [page, loading]);
+  }, [page, isLoading]);
 
   // Sử dụng Intersection Observer API
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function Home() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !loading) {
+        if (entry.isIntersecting && !isLoading) {
           fetchMoreData();
         }
       },
@@ -59,7 +59,7 @@ export default function Home() {
     return () => {
       observer.disconnect();
     };
-  }, [fetchMoreData, loading]);
+  }, [fetchMoreData, isLoading]);
 
   // Gọi API lần đầu tiên khi component được mount
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function Home() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="w-full max-w-6xl mx-auto">
+    <div className="w-full max-w-6xl mx-auto flex flex-col pt-4 min-h-[calc(100dvh_-_7.25rem)]">
       <SearchRe />
 
       <div className="mt-3 w-full grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-3">
@@ -76,14 +76,12 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Loader */}
-      {loading && (
+      {isLoading && (
         <div className="py-4">
           <span>Đang tải thêm...</span>
         </div>
       )}
 
-      {/* Trạm quan sát */}
       <div ref={observerRef} className="h-10"></div>
     </div>
   );
