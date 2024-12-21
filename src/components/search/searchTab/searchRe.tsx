@@ -35,15 +35,12 @@ import { useMapController } from "@/app/(page)/(user)/search-result/components";
 export default function SearchRe() {
   const searchParams = useSearchParams();
   const { setCenterController, setZoomController } = useMapController();
-  const province = searchParams.get("province");
-  const [searchProvince, setSearchProvince] = useState<string>(province || "Hồ Chí Minh");
-  const districtDefault = searchParams.get("district");
-  const wardDefault = searchParams.get("ward");
   const propertyTypeDefault = searchParams.get("propertyType");
   const priceRangeDefault = searchParams.get("priceRange");
   const areaRangeDefault = searchParams.get("areaRange");
+  const [searchProvince, setSearchProvince] = useState<string>("Hồ Chí Minh");
 
-  const [value, onValueChange] = useState<string>(`${wardDefault ? wardDefault + ", " : ""}${districtDefault ? districtDefault + ", " : ""}${searchProvince}`);
+  const [value, onValueChange] = useState<string>("");
   const [currentPosition, setCurrentPosition] = useState<TPosition>(undefined);
   const [propertyType, setPropertyType] = useState(
     isInclude(propertyTypeDefault, REAL_ESTATE_PROPERTY_TYPE)

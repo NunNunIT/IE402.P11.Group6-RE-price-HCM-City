@@ -16,7 +16,7 @@ export const useMapController = () => {
 }
 
 export function MapControllerProvider({ children }: PropsWithChildren) {
-  const [zoomController, setZoomController] = useState<number>(15);
+  const [zoomController, setZoomController] = useState<number>(10);
   const [centerController, setCenterController] = useState<TPosition>(undefined);
 
   return (

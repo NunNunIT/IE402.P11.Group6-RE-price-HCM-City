@@ -71,18 +71,19 @@ export const GET = async (req: NextRequest) => {
       .populate("owner", "username avt")
       .sort(mongooseSort)
 
-    let [realEstates, total] = await Promise.all([
+    let [realEstates] = await Promise.all([
       retry(() =>
         getAll || locateSort.useHaversine
-          ? query.lean()
+          ? query
           : query.skip((page - 1) * limit).limit(limit).lean()
       ),
-      retry(() =>
-        query.countDocuments())
     ]);
+
+    const total = realEstates.length;
 
     if (locateSort.useHaversine) {
       const temp = realEstates
+        .map((realEstate) => "toObject" in realEstate ? realEstate.toObject() : realEstate)
         .map((realEstate) => {
           const distance = haversineDistance(locateSort, realEstate.locate);
           return { ...realEstate, distance };
