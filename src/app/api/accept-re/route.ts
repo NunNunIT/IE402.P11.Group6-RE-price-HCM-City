@@ -1,8 +1,7 @@
 import { errorResponse, successResponse } from "@/utils";
-import { NextRequest } from "next/server";
 import { RealEstate } from "@/lib/model";
 
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
   try {
     let realEstates = await RealEstate.find({
       isAuth: { $in: ["pending", "auth"] },
@@ -16,7 +15,7 @@ export const GET = async (req: NextRequest) => {
       imageUrl: imageUrls[0],
     }));
 
-    return successResponse({ data: { rows: realEstates, total } });
+    return successResponse({ data: { rows: realEstates, total: -1 } });
   } catch (error) {
     console.error(">> Error in @GET /api/accept-re:", error.message);
     return errorResponse({
