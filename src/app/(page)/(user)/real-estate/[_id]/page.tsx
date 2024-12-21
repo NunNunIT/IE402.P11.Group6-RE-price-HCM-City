@@ -70,9 +70,9 @@ export default async function RealEstateDetailPage({
         <ImageViewType1 images={data.imageUrls} />
 
         <div className="flex flex-col gap-3">
-          <h1 className="font-bold text-3xl">
+          <h1 className="font-bold text-3xl leading-10">
             {data?.isAuth == "auth" && (
-              <span className="bg-green-700 rounded-md p-1 text-white text-xs mr-2">
+              <span className="h-full bg-green-700 rounded-md px-1 py-1 text-white text-base mr-2 align-middle">
                 Xác thực
               </span>
             )}
@@ -194,7 +194,11 @@ export default async function RealEstateDetailPage({
         />
       </div>
 
-      <CustomizeMap title={data.title} locate={data.locate} polygon={data.polygon?.points ?? []} />
+      <CustomizeMap
+        title={data.title}
+        locate={data.locate}
+        polygon={data.polygon?.points ?? []}
+      />
     </div>
   );
 }
