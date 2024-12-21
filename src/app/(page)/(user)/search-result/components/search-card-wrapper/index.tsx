@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import useSWRInfinite from "swr/infinite";
 import SearchRe from "@/components/search/searchTab/searchRe";
 import { useMapController } from "..";
+import VNLocationData from "@/components/VNLocationSelector/data.json";
 
 const GISMap = dynamic(() => import("@/components/gis-map"), { ssr: false });
 
@@ -21,6 +22,20 @@ const fetcher = async (url: string) => {
 
 export const SearchCardWrapper = ({ searchParams }: IDefaultPageProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const { setZoomController, setCenterController } = useMapController();
+  useEffect(() => {
+    const province = searchParams.province;
+    const district = searchParams.district;
+    if (!district) return;
+    const center = (VNLocationData
+      .find((item) => item.Name === province)
+      ?.Districts
+      .find((item) => item.Name === district) as any)
+      ?.Center;
+    setZoomController(12);
+    if (!center) return;
+    setCenterController(center);
+  }, [])
 
   const getKey = (pageIndex: number, previousPageData: any[]) => {
     if (previousPageData && previousPageData.length === 0) return null; // End of data
