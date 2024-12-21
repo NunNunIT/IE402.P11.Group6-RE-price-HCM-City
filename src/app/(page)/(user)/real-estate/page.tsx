@@ -67,7 +67,9 @@ export default function Home() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <>
+    <div className="w-full max-w-6xl mx-auto">
+      <SearchRe />
+
       <div className="w-full grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-3">
         {cards.map((item, index) => (
           <RealEstateCard key={index} data={item} />
@@ -83,6 +85,6 @@ export default function Home() {
 
       {/* Trạm quan sát */}
       <div ref={observerRef} className="h-10"></div>
-    </>
+    </div>
   );
 }
