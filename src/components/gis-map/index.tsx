@@ -9,8 +9,13 @@ import {
   useRef,
   useState,
 } from "react";
+import * as projection from "@arcgis/core/geometry/projection";
 
-import { ENUM_MAP_MODE, ENUM_MARKER_SYMBOL } from "@/utils";
+import {
+  ENUM_MAP_MODE,
+  ENUM_MARKER_SYMBOL,
+  isNotNullAndUndefined,
+} from "@/utils";
 import Graphic from "@arcgis/core/Graphic";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import Map from "@arcgis/core/Map";
@@ -44,7 +49,7 @@ interface IMapProps {
   isShowDistrict?: boolean;
   value?: [number, number];
   onChange?: (__value: [number, number]) => void;
-  polygon?: [number, number][];
+  polygon?: { rings: [number, number][]; title?: string };
   onPolygonComplete?: (__polygon: [number, number][]) => void;
 }
 
@@ -126,18 +131,42 @@ export default function MapComponent(props: IMapProps) {
         },
       });
 
-      sketchViewModelRef.current.on("create", (event) => {
-        if (event.state === "complete") {
-          const geometry = event.graphic.geometry as Polygon;
-          const polygonCoords = geometry.rings[0].map(
-            (point) => [point[0], point[1]] as [number, number]
-          );
+      sketchViewModelRef.current.on("create", async (event) => {
+        try {
+          if (event.state === "complete") {
+            const geometry = event.graphic.geometry as __esri.Polygon;
 
-          // Callback to parent component with polygon coordinates
-          mergedProps.onPolygonComplete?.(polygonCoords);
+            // Ensure the projection module is loaded before proceeding
+            if (!projection.isLoaded()) {
+              await projection.load();
+            }
 
-          // Reset drawing mode
-          setIsDrawingMode(false);
+            // Verify if the geometry has rings and a spatial reference
+            if (geometry.rings?.length > 0 && geometry.spatialReference) {
+              const wgs84Coords = geometry.rings[0].map((point) => {
+                const projectedPoint = projection.project(
+                  {
+                    x: point[0],
+                    y: point[1],
+                    spatialReference: geometry.spatialReference,
+                  } as __esri.Point,
+                  { wkid: 4326 }
+                ) as __esri.Point; // Ensure the return type is __esri.Point
+
+                return [projectedPoint.x, projectedPoint.y] as [number, number];
+              });
+
+              mergedProps.onPolygonComplete?.(wgs84Coords);
+
+              setIsDrawingMode(false);
+            } else {
+              console.error(
+                "Invalid polygon geometry: Missing rings or spatial reference."
+              );
+            }
+          }
+        } catch (error) {
+          console.error("An error occurred during the create event:", error);
         }
       });
     }
@@ -305,9 +334,14 @@ export default function MapComponent(props: IMapProps) {
   useEffect(() => {
     if (!polygonLayerRef.current) return;
     polygonLayerRef.current.removeAll();
-    if (mergedProps.polygon?.length < 3) return;
+    if (
+      !mergedProps.polygon?.rings ||
+      mergedProps.polygon.rings.length < 3 ||
+      !isNotNullAndUndefined(mergedProps.polygon?.title)
+    )
+      return;
     const polygon = new Polygon({
-      rings: [mergedProps.polygon],
+      rings: [mergedProps.polygon.rings],
     });
     const simpleFillSymbol = {
       type: "simple-fill", // autocast as new SimpleFillSymbol()
@@ -321,6 +355,12 @@ export default function MapComponent(props: IMapProps) {
     const graphic = new Graphic({
       geometry: polygon,
       symbol: simpleFillSymbol,
+      attributes: {
+        title: mergedProps.polygon.title,
+      },
+      popupTemplate: {
+        title: "{title}",
+      },
     });
     polygonLayerRef.current?.add(graphic);
   }, [mergedProps.polygon]);
@@ -338,7 +378,10 @@ export default function MapComponent(props: IMapProps) {
   return (
     <div className="sticky top-[7.25rem] max-h-[calc(100dvh_-_7.25rem)] w-full">
       <div className={cn("relative h-full w-full", mergedProps.className)}>
-        <div ref={mapRef} className={cn("h-full min-h-[30rem] w-full", mergedProps.className)} />
+        <div
+          ref={mapRef}
+          className={cn("h-full min-h-[30rem] w-full", mergedProps.className)}
+        />
         <div className="absolute bottom-4 left-4 flex flex-col space-y-2">
           {mergedProps.isShowDistrict && (
             <Button type="button" variant="outline" onClick={toggleArea}>

@@ -11,8 +11,6 @@ export const GET = async (req: NextRequest) => {
       .populate("owner", "username avt")
       .lean();
 
-    const total = realEstates.length;
-
     realEstates = realEstates.map(({ imageUrls, ...realEstate }) => ({
       ...realEstate,
       imageUrl: imageUrls[0],

@@ -70,13 +70,10 @@ export const POST = auth(async (req: NextAuthRequest) => {
 
     let polygonIdString = null;
 
-    // Kiểm tra điều kiện để chỉ tạo polygon khi có giá trị hợp lệ
     if (polygon && polygon.length > 0) {
-      const newPolygon = { points: polygon.map(parseWebMercatorToWGS84Coordinates) };
+      const newPolygon = { points: polygon };
       const savedPolygon = await Polygon.create(newPolygon);
       polygonIdString = savedPolygon._id.toString();
-      console.log("polygonIdString", polygonIdString);
-      // Add polygon property to newRealEstate
       newRealEstate = {
         ...newRealEstate,
         polygon: new mongoose.Types.ObjectId(polygonIdString),
@@ -85,10 +82,8 @@ export const POST = auth(async (req: NextAuthRequest) => {
 
     console.log("newRealEstate", newRealEstate);
 
-    // Lưu tài liệu vào cơ sở dữ liệu (giả sử dùng Mongoose hoặc ORM khác)
     const createdRealEstate = await RealEstate.create(newRealEstate);
 
-    // Trả về tài liệu vừa được tạo
     return NextResponse.json(
       {
         message: "Real estate created successfully",
