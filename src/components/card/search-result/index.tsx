@@ -19,6 +19,7 @@ interface RealEstateCardProps {
   area?: number;
   locate?: any;
   owner?: any;
+  isAuth?: string;
   createdAt?: string;
 }
 
@@ -30,6 +31,7 @@ export default function SearchResultCard({
   area = 60,
   locate,
   owner,
+  isAuth,
   createdAt,
 }: RealEstateCardProps) {
   const [isLiked, setIsLiked] = useState(false);
@@ -71,6 +73,11 @@ export default function SearchResultCard({
           className="flex flex-col gap-2"
         >
           <h5 className="text-lg font-bold text-gray-900 line-clamp-2">
+            {isAuth == "auth" && (
+              <span className="bg-green-700 rounded-md p-1 text-white text-xs mr-2">
+                Xác thực
+              </span>
+            )}
             {title}
           </h5>
           <div className="flex gap-8">
@@ -101,7 +108,11 @@ export default function SearchResultCard({
                 {owner?.username ?? "Unknown"}
               </p>
               <p className="text-[8px] text-gray-500">
-                Ngày đăng: {(createdAt ? new Date(createdAt) : new Date()).toLocaleDateString()}
+                Ngày đăng:{" "}
+                {(createdAt
+                  ? new Date(createdAt)
+                  : new Date()
+                ).toLocaleDateString()}
               </p>
             </div>
           </div>

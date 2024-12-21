@@ -48,8 +48,8 @@ const RealEstateCard: React.FC<Props> = ({ data }) => {
         {/* Content */}
         <div className="p-2 flex flex-col gap-2">
           <h3 className="text-base font-semibold text-zinc-800 dark:text-zinc-200 line-clamp-2">
-            {data?.isAuth && (
-              <span className="bg-green-700 rounded-md py-1 px-2 text-white">
+            {data?.isAuth == "auth" && (
+              <span className="bg-green-700 rounded-md p-1 text-white text-xs mr-2">
                 Xác thực
               </span>
             )}

@@ -13,8 +13,7 @@ export default function Layout({
   children: React.ReactNode;
 }>): React.ReactNode {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[100dvh] max-w-6xl mx-auto">
-      <SearchRe />
+    <div className="flex flex-col items-center justify-center min-h-[100dvh]">
       {children}
     </div>
   );

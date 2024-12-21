@@ -14,7 +14,9 @@ interface IRealEstateDetailPageProps extends IDefaultPageProps {
   params: { _id: string };
 }
 
-export async function generateMetadata({ params: { _id } }: IRealEstateDetailPageProps) {
+export async function generateMetadata({
+  params: { _id },
+}: IRealEstateDetailPageProps) {
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`,
     { cache: "reload" }
@@ -68,7 +70,14 @@ export default async function RealEstateDetailPage({
         <ImageViewType1 images={data.imageUrls} />
 
         <div className="flex flex-col gap-3">
-          <h1 className="font-bold text-3xl">{data.title}</h1>
+          <h1 className="font-bold text-3xl leading-10">
+            {data?.isAuth == "auth" && (
+              <span className="h-full bg-green-700 rounded-md px-1 py-1 text-white text-base mr-2 align-middle">
+                Xác thực
+              </span>
+            )}
+            {data.title}
+          </h1>
           <div className="flex flex-row gap-2 items-center font-semibold">
             <FaLocationDot />
             <span>
@@ -185,7 +194,11 @@ export default async function RealEstateDetailPage({
         />
       </div>
 
-      <CustomizeMap title={data.title} locate={data.locate} polygon={data.polygon?.points ?? []} />
+      <CustomizeMap
+        title={data.title}
+        locate={data.locate}
+        polygon={data.polygon?.points ?? []}
+      />
     </div>
   );
 }
