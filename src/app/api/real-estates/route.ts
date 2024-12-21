@@ -67,14 +67,15 @@ export const GET = async (req: NextRequest) => {
     }
     const query = RealEstate
       .find(filter)
-      .select("-desc -polygon")
+      .select("-desc")
       .populate("owner", "username avt")
       .sort(mongooseSort)
 
     let [realEstates] = await Promise.all([
       retry(() =>
         getAll || locateSort.useHaversine
-          ? query
+          // ! LIMIT 100
+          ? query.limit(100).lean()
           : query.skip((page - 1) * limit).limit(limit).lean()
       ),
     ]);
@@ -83,7 +84,6 @@ export const GET = async (req: NextRequest) => {
 
     if (locateSort.useHaversine) {
       const temp = realEstates
-        .map((realEstate) => "toObject" in realEstate ? realEstate.toObject() : realEstate)
         .map((realEstate) => {
           const distance = haversineDistance(locateSort, realEstate.locate);
           return { ...realEstate, distance };
@@ -100,7 +100,7 @@ export const GET = async (req: NextRequest) => {
 
     realEstates = realEstates.map(({ imageUrls, ...realEstate }) => ({
       ...realEstate,
-      imageUrl: imageUrls[0],
+      imageUrl: imageUrls?.[0],
     }));
 
     return successResponse({ data: { rows: realEstates, total } });
