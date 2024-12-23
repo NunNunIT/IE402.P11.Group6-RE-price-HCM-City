@@ -26,7 +26,7 @@ import { ImageDropZone } from "@/components";
 import { ENUM_MARKER_SYMBOL } from "@/utils";
 import { DATA_SERVICES } from "@/data/select";
 import MultipleSelector from "@/components/ui/multiple-selector";
-import { notFound, useParams, useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { ENUM_MAP_MODE } from "@/utils";
@@ -63,8 +63,7 @@ const EXTENSION_OPTIONS = DATA_SERVICES.options.map((option) => {
   return { label: option.value, value: option.value };
 });
 
-export default function EditLocation() {
-  const { id } = useParams();
+export default function EditLocation({ params: { id } }: { params: { id: string } }) {
   const router = useRouter();
   const { data, isLoading, error } = useSWR(`/api/locations/${id}`, fetcher);
 
@@ -127,29 +126,19 @@ export default function EditLocation() {
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     try {
       const uploadedImageUrls = await handleImageUpload(values.imageUrls);
-
-      // Tạo dữ liệu body mới cho API
       const updateValues = {
         ...values,
-        imageUrls: uploadedImageUrls, // Thay thế imageUrls bằng URL đã upload
+        imageUrls: uploadedImageUrls,
       };
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/locations/${id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify(updateValues),
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        }
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/locations/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(updateValues),
+        headers: { "Content-Type": "application/json" },
+      });
 
-      // Kiểm tra nếu yêu cầu không thành công
-      if (!res.ok) {
-        throw new Error(`Failed to submit data: ${res.statusText}`);
-      }
+      if (!res.ok) throw new Error(`Failed to submit data: ${res.statusText}`);
 
-      // Xử lý kết quả thành công
       await res.json();
       toast.info("Cập nhật địa điểm thành công", {
         description: "Địa điểm đã đưuọc cập nhật",
@@ -159,11 +148,10 @@ export default function EditLocation() {
     } catch (error) {
       // Xử lý lỗi khi upload hoặc gửi yêu cầu
       console.error("Error during form submission:", error);
-      toast("Error submitting form", {
-        description:
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred.",
+      toast.error("Error submitting form", {
+        description: error instanceof Error
+          ? error.message
+          : "An unexpected error occurred.",
       });
     }
   };
