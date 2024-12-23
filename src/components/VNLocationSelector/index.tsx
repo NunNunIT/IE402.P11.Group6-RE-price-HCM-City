@@ -22,6 +22,7 @@ import VNLocationData from "../VNLocationSelector/data.json";
 import { ENUM_LOCATION_TYPE, checkIncludeByAscii } from "@/utils";
 import { cn } from "@/lib/utils";
 import { Input } from "../ui/input";
+import { useMapController } from "@/app/(page)/(user)/search-result/components";
 
 export interface ILocation {
   province?: string | null;
@@ -62,6 +63,7 @@ export default function LocationSelect({
   ...props
 }: TLocationSelectProps) {
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const { setDistrict } = useMapController();
   const selectData = useMemo(() => {
     const selectedProvince = location?.province
       ? VNLocationData.find((province) => province.Name === location?.province)
@@ -115,6 +117,7 @@ export default function LocationSelect({
           newLocation.wardId = undefined;
         }
       } else if (key === "district" && depthLevel >= ENUM_LOCATION_TYPE.WARD) {
+        setDistrict?.(value);
         const center = (VNLocationData.find(
           (province) => province.Name === location.province
         )?.Districts.find(

@@ -25,6 +25,7 @@ import PopupTemplate from "@arcgis/core/PopupTemplate";
 import { cn } from "@/lib/utils";
 import { districts } from "./assets";
 import SketchViewModel from "@arcgis/core/widgets/Sketch/SketchViewModel";
+import { useMapController } from "@/app/(page)/(user)/search-result/components";
 
 // Ensure CSS is loaded
 function loadCss() {
@@ -82,6 +83,7 @@ export default function MapComponent(props: IMapProps) {
   const sketchLayerRef = useRef<GraphicsLayer | null>(null);
   const polygonLayerRef = useRef<GraphicsLayer | null>(null);
   const [isDrawingMode, setIsDrawingMode] = useState(false);
+  const { district: visibleDistrict } = useMapController();
 
   const [zoom, setZoom] = useState(mergedProps.zoom);
 
@@ -246,6 +248,7 @@ export default function MapComponent(props: IMapProps) {
       return;
     districtGraphicsLayerRef.current?.removeAll();
     districts.forEach((district) => {
+      if (visibleDistrict && visibleDistrict !== district.name) return;
       const polygon = new Polygon({
         rings: [district.rings],
       });
@@ -262,7 +265,7 @@ export default function MapComponent(props: IMapProps) {
       });
       districtGraphicsLayerRef.current?.add(graphic);
     });
-  }, [mergedProps.isShowDistrict]);
+  }, [visibleDistrict, mergedProps.isShowDistrict]);
 
   useEffect(() => {
     if (!pointGraphicsLayerRef.current) return;
