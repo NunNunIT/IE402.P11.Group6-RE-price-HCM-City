@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { NextAuthRequest } from "node_modules/next-auth/lib";
 import { RealEstate, Polygon } from "@/lib/model";
 import { auth } from "@/lib/auth";
-import { parseWebMercatorToWGS84Coordinates } from "@/utils/coordinates";
 const mongoose = require("mongoose");
 
 export const POST = auth(async (req: NextAuthRequest) => {
