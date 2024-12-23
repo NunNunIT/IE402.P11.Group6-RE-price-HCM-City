@@ -56,7 +56,6 @@ const isActiveLink = (pathname: string, link: string) => {
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const router = useRouter();
 
   return (
     <Sidebar>
