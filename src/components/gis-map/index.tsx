@@ -45,6 +45,7 @@ interface IMapProps {
     type?: ENUM_MARKER_SYMBOL;
     title: string;
     description: string;
+    size?: number;
   }[];
   isShowDistrict?: boolean;
   value?: [number, number];
@@ -274,8 +275,8 @@ export default function MapComponent(props: IMapProps) {
 
       const pictureMarkerSymbol = new PictureMarkerSymbol({
         url: `/symbols/${point.type ?? ENUM_MARKER_SYMBOL.DEFAULT}.png`,
-        width: "32px",
-        height: "32px",
+        width: `${point.size ?? 32}px`,
+        height: `${point.size ?? 32}px`,
       });
 
       const pointGraphic = new Graphic({
