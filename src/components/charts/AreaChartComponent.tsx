@@ -347,13 +347,12 @@ export function AreaChartComponent() {
   const quarterRate = calculateQuarterRate(chartData, lastChartData, currentMonth);
   const predictData = predictNextMonth(chartData, lastChartData, currentMonth);
 
-  // Dynamically calculate Y-axis domain
   const yAxisDomain = [
     Math.floor(
-      Math.min(...chartData.map((data) => data.price / 100)) * 100
+      Math.min(...chartData.filter(v => Boolean(v.price)).map((data) => data.price / 100)) * 100
     ) - 5,
     Math.ceil(
-      Math.max(...chartData.map((data) => data.price / 100)) * 100
+      Math.max(...chartData.filter(v => Boolean(v.price)).map((data) => data.price / 100)) * 100
     ) + 5
   ];
 
@@ -370,7 +369,7 @@ export function AreaChartComponent() {
 
       <div className="flex items-end justify-end my-2">
         <div className="flex flex-row border-2 rounded-lg border-zinc-300 w-fit overflow-hidden">
-          {[2024, 2023, 2022,
+          {[2025, 2024, 2023, 2022,
             // 2021, 2020
           ].map((year, index) => (
             <div
@@ -387,7 +386,7 @@ export function AreaChartComponent() {
         </div>
       </div>
 
-      {isLoading && error ? (
+      {isLoading || error ? (
         <p>Loading...</p>
       ) : (
         <div className="flex flex-col gap-6 my-6 relative">
@@ -522,7 +521,7 @@ export function AreaChartComponent() {
                     </div>
                     <span className="text-zinc-600 text-base text-center">
                       Giá trị thấp nhất trong năm tại tháng{" "}
-                      {chartData.find((data) => data.price === Math.min(...chartData.map((data) => data.price)))?.month}
+                          {chartData.find((data) => data.price === Math.min(...chartData.map((data) => data.price)))?.month}
                     </span>
                   </>
                 )}
