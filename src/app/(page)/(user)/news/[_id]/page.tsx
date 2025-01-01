@@ -1,7 +1,12 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { SeeMoreType2 } from "@/components/seeMore";
 
-export async function generateMetadata({ params: { _id } }: { params: { _id: string } }) {
+export async function generateMetadata({
+  params: { _id },
+}: {
+  params: { _id: string };
+}) {
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news/${_id}`
   )
@@ -29,7 +34,11 @@ export async function generateMetadata({ params: { _id } }: { params: { _id: str
   };
 }
 
-export default async function NewsDetailPage({ params: { _id } }: { params: { _id: string } }) {
+export default async function NewsDetailPage({
+  params: { _id },
+}: {
+  params: { _id: string };
+}) {
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news/${_id}`
   )
@@ -52,9 +61,9 @@ export default async function NewsDetailPage({ params: { _id } }: { params: { _i
 
   return (
     <div className="min-h-screen">
-      <main className="max-w-6xl mx-auto px-4 py-4">
-        <div className="max-w-screen-xl mx-auto mt-8 grid grid-cols-12 gap-8">
-          <div className="col-span-8">
+      <div className="max-w-6xl mx-auto px-4 py-4 grid md:grid-cols-[3fr_1fr] grid-cols-1 gap-8">
+        <div className="w-full mx-auto mt-8 gap-8">
+          <div className="">
             <h2 className="mb-5 font-bold">{data.title}</h2>
             <div className="text-gray-600 flex gap-2 mb-5 text-sm">
               <Image
@@ -73,7 +82,15 @@ export default async function NewsDetailPage({ params: { _id } }: { params: { _i
             <div dangerouslySetInnerHTML={{ __html: data.content }} />
           </div>
         </div>
-      </main>
+        <div className="border rounded-lg p-4">
+          <SeeMoreType2
+            typeCard="news"
+            title="Bài viết khác"
+            linkFetch="/api/news?page=1"
+            seeMoreLink="/news"
+          />
+        </div>
+      </div>
     </div>
   );
 }

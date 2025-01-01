@@ -18,7 +18,7 @@ export default function UserPage() {
   ) : (
     <div className="space-y-6">
       <PersonalInformation data={data} />
-      <PersonalLocation data={data} />
+      {/* <PersonalLocation data={data} /> */}
     </div>
   )
 }
