@@ -39,19 +39,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       else if (new URL(url).origin === baseUrl) return url
       return baseUrl
     },
-    jwt: async ({ token }) => {
-      const { _id, role, avt } = await createUserFromSocial({
-        email: token.email,
-        socialType: token.provider as ENUM_SOCIAL_TYPE,
-        metadata: {
-          username: token.name,
-          avt: token.picture,
-        },
-      })
+    jwt: async ({ token, user, account }) => {
+      if (user && account.provider === "google") {
+        const { _id, role, avt } = await createUserFromSocial({
+          email: token.email,
+          socialType: token.provider as ENUM_SOCIAL_TYPE,
+          metadata: {
+            username: token.name,
+            avt: token.picture,
+          },
+        })
 
-      token._id = _id.toString();
-      token.role = role;
-      token.picture = avt;
+        token._id = _id.toString();
+        token.role = role;
+        token.picture = avt;
+      }
+
+      if (user && account.provider === "credentials") {
+        token = {
+          ...token,
+          _id: user._id.toString(),
+          name: user.username,
+          picture: user.avt,
+          role: user.role
+        };
+      }
 
       return token;
     },

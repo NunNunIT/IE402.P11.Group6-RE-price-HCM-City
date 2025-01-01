@@ -16,7 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
-import { ENUM_ROLE } from "@/utils";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const FormSchema = z.object({
   email: z.string().min(1, {
@@ -47,6 +48,7 @@ const loginByAdminStaff = async (data: ICredentials) => {
 
 export default function AdminLoginForm() {
   const [isPending, setIsPending] = useState(false);
+  const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -68,11 +70,8 @@ export default function AdminLoginForm() {
     }
 
     setIsPending(false);
-    if (session?.user?.role === ENUM_ROLE.Admin) {
-      window.location.href = "/admin";
-    } else if (session?.user?.role === ENUM_ROLE.Staff) {
-      window.location.href = "/admin/accept-manage";
-    }
+    toast.success("Đăng nhập thành công!!!");
+    router.replace("/admin");
   }
 
   return (
