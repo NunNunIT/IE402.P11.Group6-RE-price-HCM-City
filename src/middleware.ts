@@ -5,8 +5,6 @@ import { authConfig } from "./lib/auth/config";
 
 const privatePages: string[] = ["/user/*", "/create-new-re", "/admin/*", "/notifications/*"];
 
-let socketInitialized = false;
-
 const checkPathnameRegex = (pages: string[], pathName: string): boolean => {
   const pagesRegex = pages
     .flatMap((p) => {

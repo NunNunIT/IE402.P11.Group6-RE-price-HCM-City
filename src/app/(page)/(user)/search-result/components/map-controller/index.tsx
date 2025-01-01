@@ -7,6 +7,8 @@ interface IMapControllerProviderProps {
   centerController: TPosition;
   setZoomController: (__zoom: number) => void;
   setCenterController: (__center: TPosition) => void;
+  district: string;
+  setDistrict: (__district: string) => void;
 }
 
 const MapControllerContext = createContext<IMapControllerProviderProps>({} as IMapControllerProviderProps);
@@ -18,13 +20,16 @@ export const useMapController = () => {
 export function MapControllerProvider({ children }: PropsWithChildren) {
   const [zoomController, setZoomController] = useState<number>(10);
   const [centerController, setCenterController] = useState<TPosition>(undefined);
+  const [district, setDistrict] = useState<string>("");
 
   return (
     <MapControllerContext.Provider value={{
       zoomController,
       centerController,
       setZoomController,
-      setCenterController
+      setCenterController,
+      district,
+      setDistrict,
     }}>
       {children}
     </MapControllerContext.Provider>

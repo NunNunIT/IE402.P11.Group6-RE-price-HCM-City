@@ -45,6 +45,7 @@ export function CustomizeMap({
           ...locate,
           title: title,
           type: ENUM_MARKER_SYMBOL.REAL_ESTATE,
+          size: 56,
         },
       ]}
     />

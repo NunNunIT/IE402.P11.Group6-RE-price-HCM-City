@@ -22,8 +22,7 @@ import {
 import Link from "next/link";
 import { HiHomeModern } from "react-icons/hi2";
 
-// Menu items.
-const items = [
+export const ITEMS = [
   {
     title: "Trang chủ",
     url: "/",
@@ -57,7 +56,6 @@ const isActiveLink = (pathname: string, link: string) => {
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const router = useRouter();
 
   return (
     <Sidebar>
@@ -73,7 +71,7 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent className="mt-3">
             <SidebarMenu>
-              {items.map((item) => (
+              {ITEMS.map((item) => (
                 <SidebarMenuItem key={item.title} className="mt-2">
                   <SidebarMenuButton
                     asChild

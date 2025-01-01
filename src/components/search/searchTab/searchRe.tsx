@@ -39,6 +39,7 @@ export default function SearchRe() {
   const priceRangeDefault = searchParams.get("priceRange");
   const areaRangeDefault = searchParams.get("areaRange");
   const [searchProvince, setSearchProvince] = useState<string>("Hồ Chí Minh");
+  const { setDistrict } = useMapController();
 
   const [value, onValueChange] = useState<string>("");
   const [currentPosition, setCurrentPosition] = useState<TPosition>(undefined);
@@ -59,6 +60,7 @@ export default function SearchRe() {
   );
 
   const ward = useMemo(() => {
+    if (!value) return '';
     const context = value.split(", ");
     if (context.length <= 2) return '';
     return context[0]
@@ -83,8 +85,9 @@ export default function SearchRe() {
         long: center[1],
       });
     }
+    setDistrict?.(district);
     return district;
-  }, [searchProvince, setCenterController, setZoomController, value]);
+  }, [searchProvince, setCenterController, setDistrict, setZoomController, value]);
 
   const onChangeProvince = (value: string) => {
     setZoomController?.(10);

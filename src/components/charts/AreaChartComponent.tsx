@@ -396,7 +396,7 @@ export function AreaChartComponent() {
           )}
           {chartData.length !== 0 && (
             <div className="grid md:grid-cols-[1fr_1.5fr_1fr] grid-col-1 gap-3 border-2 border-zinc-300 rounded-md md:p-6 p-3">
-              <div className="flex flex-col gap-2 py-3">
+              <div className="flex flex-col gap-2 py-3 items-start justify-center">
                 <div className="flex md:flex-col flex-row-reverse justify-between">
                   <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
                     {Number(avgPrice.toFixed(4))}
@@ -406,24 +406,26 @@ export function AreaChartComponent() {
                   </div>
                   <span className="text-zinc-600">Giá trung bình năm</span>
                 </div>
-                <div className="flex md:flex-col flex-row-reverse justify-between md:mt-0 mt-2">
-                  <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
-                    {Number(currentPrice.toFixed(4))}
-                    <span className="text-zinc-600 font-medium text-base">
-                      tr/m<sup>2</sup>
+                {selectedYear === CURRENT_YEAR && (
+                  <div className="flex md:flex-col flex-row-reverse justify-between md:mt-0 mt-2">
+                    <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
+                      {Number(currentPrice.toFixed(4))}
+                      <span className="text-zinc-600 font-medium text-base">
+                        tr/m<sup>2</sup>
+                      </span>
+                    </div>
+                    <span className="text-zinc-600 text-base">
+                      Giá trị phổ biến tháng hiện tại
                     </span>
                   </div>
-                  <span className="text-zinc-600 text-base">
-                    Giá trị phổ biến tháng hiện tại
-                  </span>
-                </div>
+                )}
               </div>
               <div className="flex flex-col gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3 items-center justify-center">
                 {selectedYear === CURRENT_YEAR ? (
                   <>
                     {/* Check if monthRate is null */}
                     {monthRate === null ? (
-                      <span className="text-zinc-600 text-base">
+                      <span className="text-zinc-600 text-base w-fit">
                         Không có dữ liệu so sánh với tháng trước
                       </span>
                     ) : // Conditional rendering based on whether rate is negative or positive
@@ -478,7 +480,7 @@ export function AreaChartComponent() {
                   </>
                 ) : (
                   <>
-                    <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold h-full">
+                    <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold">
                       {Math.max(...chartData.map((data) => data.price))}
                       <span className="text-zinc-600 font-medium text-base">
                         tr/m<sup>2</sup>
@@ -491,7 +493,7 @@ export function AreaChartComponent() {
                   </>
                 )}
               </div>
-              <div className="flex md:flex-col flex-row-reverse md:justify-center items-center justify-between gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
+              <div className="flex md:flex-col flex-row-reverse md:justify-center items-center justify-center gap-2 md:border-l-2 md:border-t-0 border-t-2 border-zinc-300 md:pl-3 py-3">
                 {selectedYear === CURRENT_YEAR ? (
                   predictData === null ? (
                     <span className="text-zinc-600 text-base">
@@ -512,7 +514,7 @@ export function AreaChartComponent() {
                   )
                 ) : (
                   <>
-                    <div className="flex flex-row items-center justify-start gap-2 text-xl text-red-500 font-semibold w-full text-left">
+                    <div className="flex flex-row gap-2 text-xl text-red-500 font-semibold text-center justify-center items-center">
                       {Math.min(...chartData.map((data) => data.price))}
                       <span className="text-zinc-600 font-medium text-base">
                         tr/m<sup>2</sup>
