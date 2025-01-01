@@ -2,9 +2,36 @@ import { ENUM_SOCIAL_TYPE } from "@/utils";
 import NextAuth from "next-auth";
 import { authConfig } from "./config";
 import { createUserFromSocial } from "../services";
+import Credentials from "next-auth/providers/credentials"
+import { User } from "../model/user.model";
+import bcrypt from "bcryptjs";
+
+
+const authorize = async ({ email, password }: ICredentials) => {
+  try {
+    const user = await User.findOne({ email });
+    if (!user) throw new Error("Wrong credentials!");
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password ?? "");
+    if (!isPasswordCorrect) throw new Error("Wrong credentials!");
+
+    return user;
+  } catch (error) {
+    console.error(">> Error in login:", error.message);
+    return null;
+  }
+};
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
+  providers: [...authConfig.providers, Credentials({
+    name: "Admin Login",
+    credentials: {
+      email: { label: "Email", type: "email" },
+      password: { label: "Password", type: "password" },
+    },
+    authorize,
+  })],
   callbacks: {
     authorized: async ({ auth }) => !!auth,
     async redirect({ url, baseUrl }) {

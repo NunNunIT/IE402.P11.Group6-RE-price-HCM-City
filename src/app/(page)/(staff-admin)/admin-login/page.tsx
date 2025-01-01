@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
+import { ENUM_ROLE } from "@/utils";
 
 const FormSchema = z.object({
   email: z.string().min(1, {
@@ -54,6 +55,8 @@ export default function AdminLoginForm() {
     },
   });
 
+  const { data: session } = useSession();
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsPending(true);
     const res = await loginByAdminStaff(data as ICredentials);
@@ -65,6 +68,11 @@ export default function AdminLoginForm() {
     }
 
     setIsPending(false);
+    if (session?.user?.role === ENUM_ROLE.Admin) {
+      window.location.href = "/admin";
+    } else if (session?.user?.role === ENUM_ROLE.Staff) {
+      window.location.href = "/admin/accept-manage";
+    }
   }
 
   return (
