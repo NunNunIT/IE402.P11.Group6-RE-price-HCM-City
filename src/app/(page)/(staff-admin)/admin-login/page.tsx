@@ -4,47 +4,70 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { signIn, useSession } from "next-auth/react";
 
 const FormSchema = z.object({
-  username: z.string().min(1, {
-    message: "Tên đăng nhập không được bỏ trống",
-  }),
+  email: z.string().min(1, {
+    message: "Email không được bỏ trống",
+  }).email("Email không hợp lệ"),
   password: z.string().min(1, {
     message: "Mật khẩu không được bỏ trống",
   }),
 });
 
-export default function InputForm() {
+const loginByAdminStaff = async (data: ICredentials) => {
+  if (!data.email || !data.password) throw new Error("Missing email or password!");
+
+  try {
+    const result = await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
+
+    if (result.error) throw new Error(result.error);
+    return result;
+  } catch (err) {
+    console.log(err);
+    return { error: "Invalid email or password" };
+  }
+}
+
+export default function AdminLoginForm() {
+  const [isPending, setIsPending] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    setIsPending(true);
+    const res = await loginByAdminStaff(data as ICredentials);
+    if (res?.error) {
+      form.setError("email", { message: res.error });
+      form.setError("password", { message: res.error });
+      setIsPending(false);
+      return;
+    }
+
+    setIsPending(false);
   }
+
+  const { data: session } = useSession();
 
   return (
     <div className="max-w-3xl w-full mx-auto my-3 md:px-0 px-3">
@@ -56,12 +79,12 @@ export default function InputForm() {
         >
           <FormField
             control={form.control}
-            name="username"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tên đăng nhập</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nhập tên đăng nhập" {...field} />
+                  <Input placeholder="abc@gmail.com" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -74,17 +97,18 @@ export default function InputForm() {
               <FormItem>
                 <FormLabel>Mật khẩu</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nhập mật khẩu" {...field} />
+                  <Input placeholder="********" {...field} type="password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" disabled={isPending}>
             Đăng nhập
           </Button>
         </form>
       </Form>
+      {JSON.stringify(session?.user)}
     </div>
   );
 }
