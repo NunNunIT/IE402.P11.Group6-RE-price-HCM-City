@@ -1,6 +1,10 @@
 import dynamic from "next/dynamic";
 import type { Metadata } from "next";
-import { MapControllerProvider } from "./components";
+// import { MapControllerProvider } from "./components";
+const MapControllerProvider = dynamic(
+  () => import("./components").then((mod) => mod.MapControllerProvider),
+  { ssr: false, loading: () => <p>Loading...</p> }
+)
 
 export const metadata: Metadata = {
   title: "Kết quả tìm kiếm bất động sản",

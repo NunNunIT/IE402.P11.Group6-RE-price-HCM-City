@@ -23,14 +23,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ImageDropZone } from "@/components";
+// import { ImageDropZone } from "@/components";
 import { ENUM_MARKER_SYMBOL } from "@/utils";
 import { DATA_SERVICES } from "@/data/select";
-import MultipleSelector from "@/components/ui/multiple-selector";
+// import MultipleSelector from "@/components/ui/multiple-selector";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+const MultipleSelector = dynamic(() => import("@/components/ui/multiple-selector"), {
+  ssr: false,
+});
+const ImageDropZone = dynamic(() => import("@/components/ImageDropZone"), {
+  ssr: false,
+});
 import { ENUM_MAP_MODE } from "@/utils";
-import LocationSelect from "@/components/VNLocationSelector";
+const LocationSelect = dynamic(() => import("@/components/VNLocationSelector"), {
+  ssr: false,
+});
 const GisMap = dynamic(() => import("@/components/gis-map"), {
   ssr: false,
   loading: () => <>Loading...</>,

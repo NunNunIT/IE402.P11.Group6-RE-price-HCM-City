@@ -2,13 +2,13 @@ import React from "react";
 import { CiSearch } from "react-icons/ci";
 
 interface SearchFormProps {
-  onSumit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (__e: React.FormEvent<HTMLFormElement>) => void;
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({ onSumit }) => {
+const SearchForm: React.FC<SearchFormProps> = ({ onSubmit }) => {
   return (
     <form
-      onSubmit={onSumit}
+      onSubmit={onSubmit}
       className="w-[100%] sm:w-[80%] lg:w-[50%] max-w-lg"
     >
       <div className="relative">
