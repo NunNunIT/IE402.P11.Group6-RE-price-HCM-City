@@ -67,8 +67,6 @@ export default function AdminLoginForm() {
     setIsPending(false);
   }
 
-  const { data: session } = useSession();
-
   return (
     <div className="max-w-3xl w-full mx-auto my-3 md:px-0 px-3">
       <h1 className="md:text-4xl text-2xl font-bold my-3">Đăng nhập</h1>
@@ -108,7 +106,6 @@ export default function AdminLoginForm() {
           </Button>
         </form>
       </Form>
-      {JSON.stringify(session?.user)}
     </div>
   );
 }

@@ -46,21 +46,21 @@ const UserSchema = new Schema({
   phone: { type: String },
   birthday: { type: Date },
   gender: { type: String, enum: ENUM_GENDER, default: ENUM_GENDER.Unknown },
-  address: {
-    type: {
-      province: { type: String, default: "" },
-      district: { type: String, default: "" },
-      ward: { type: String, default: "" },
-      street: { type: String, default: "" },
-    },
-    default: {
-      province: "",
-      district: "",
-      ward: "",
-      street: "",
-    },
-    _id: false,
-  },
+  // address: {
+  //   type: {
+  //     province: { type: String, default: "" },
+  //     district: { type: String, default: "" },
+  //     ward: { type: String, default: "" },
+  //     street: { type: String, default: "" },
+  //   },
+  //   default: {
+  //     province: "",
+  //     district: "",
+  //     ward: "",
+  //     street: "",
+  //   },
+  //   _id: false,
+  // },
   locationFav: { type: [{ type: Schema.Types.ObjectId, ref: ENUM_REF_TYPE.Location }], default: [] },
   realEstatesFav: { type: [{ type: Schema.Types.ObjectId, ref: ENUM_REF_TYPE.RealEstate }], default: [] },
   notifications: { type: [NotificationSchema], default: [] },

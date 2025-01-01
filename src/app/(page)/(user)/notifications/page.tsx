@@ -1,46 +1,42 @@
 "use client";
 
-import React, { useState } from "react";
-
 import NotificationCard from "@/components/card/notif-card";
+import useSWR from "swr";
 
-interface Notification {
-  content: string;
+export interface INotification {
+  _id: string;
   title: string;
-  link: string;
-  date: Date;
+  content: string;
   isSeen: boolean;
+  date: string;
+  link: string;
 }
 
-export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      content: "Bài đăng của bạn đã được quản trị viên phê duyệt",
-      title: "Bài đăng đã được phê duyệt",
-      link: "notifications/1",
-      date: new Date("2023-10-01T10:00:00Z"),
-      isSeen: false,
-    },
-    {
-      content: "Bài đăng của bạn đã được quản trị viên phê duyệt",
-      title: "Bài đăng đã được phê duyệt",
-      link: "notifications/1",
-      date: new Date("2023-10-01T10:00:00Z"),
-      isSeen: false,
-    },
-    {
-      content: "Bài đăng của bạn đã được quản trị viên phê duyệt",
-      title: "Bài đăng đã được phê duyệt",
-      link: "notifications/1",
-      date: new Date("2023-10-01T10:00:00Z"),
-      isSeen: false,
-    },
-  ]);
+const fetcher = async (url: string) => {
+  const res = await fetch(url, { cache: "reload" });
+  if (!res) throw new Error("Failed to fetch");
+  const payload = await res.json();
+  return payload.data;
+};
 
-  const handleNotificationClick = (index: number) => {
-    const newNotifications = [...notifications];
-    newNotifications[index].isSeen = true;
-    setNotifications(newNotifications);
+const fetchSeenNotification = async (_id: string) => {
+  const res = await fetch(`/api/notifications/${_id}`, { method: "POST" });
+  if (!res.ok) throw new Error("Failed to fetch");
+  const payload = await res.json();
+  return payload.data;
+};
+
+export default function NotificationsPage() {
+  const { data, isLoading, error, mutate } = useSWR<any[]>(
+    "/api/notifications",
+    fetcher
+  );
+
+  const handleNotificationClick = async (_id: string) => {
+    await fetchSeenNotification(_id);
+    mutate((prev) =>
+      prev?.map((item) => (item._id !== _id ? item : { ...item, isSeen: true }))
+    );
   };
 
   return (
@@ -51,14 +47,17 @@ export default function NotificationsPage() {
         </div>
         <div className="w-full flex sm:flex-row flex-col gap-4">
           <div className="w-full flex flex-col gap-4">
-            {notifications.map((notification, index) => (
-              <NotificationCard
-                key={index}
-                notification={notification}
-                isRead={notification.isSeen}
-                onClick={() => handleNotificationClick(index)}
-              />
-            ))}
+            {isLoading || error ? (
+              <p>Loading...</p>
+            ) : (
+              data?.map((notification, index) => (
+                <NotificationCard
+                  key={index}
+                  notification={notification}
+                  onClick={() => handleNotificationClick(notification._id)}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>

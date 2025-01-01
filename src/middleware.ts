@@ -3,7 +3,7 @@ import { NextAuthRequest } from "node_modules/next-auth/lib";
 import { NextResponse } from "next/server";
 import { authConfig } from "./lib/auth/config";
 
-const privatePages: string[] = ["/user/*", "/create-new-re", "/admin/*"];
+const privatePages: string[] = ["/user/*", "/create-new-re", "/admin/*", "/notifications/*"];
 
 const checkPathnameRegex = (pages: string[], pathName: string): boolean => {
   const pagesRegex = pages
