@@ -4,7 +4,7 @@ import React from 'react'
 import { CommentSection } from 'react-comments-section'
 import 'react-comments-section/dist/index.css'
 
-const DefaultComponent = () => {
+const Comment = () => {
   const { data: session, status } = useSession();
 
   const data = [
@@ -89,4 +89,4 @@ const DefaultComponent = () => {
   )
 }
 
-export default DefaultComponent
+export default Comment

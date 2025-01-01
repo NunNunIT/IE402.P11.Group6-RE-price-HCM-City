@@ -19,6 +19,7 @@ export default function RootLayout({
       <NavBar />
       <BreadcrumbCustom />
       {children}
+      <SpeedInsights />
     </>
   );
 }

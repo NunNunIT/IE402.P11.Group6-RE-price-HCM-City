@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { SeeMoreType2 } from "@/components/seeMore";
-import { Comment } from "@/components";
+import { CommentSection } from "@/components";
 
 export async function generateMetadata({
   params: { _id },
@@ -81,7 +81,7 @@ export default async function NewsDetailPage({
               </div>
             </div>
             <div dangerouslySetInnerHTML={{ __html: data.content }} />
-            <Comment />
+            <CommentSection />
           </div>
         </div>
         <div className="border rounded-lg p-4">
