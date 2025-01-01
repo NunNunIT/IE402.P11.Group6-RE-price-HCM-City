@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { SeeMoreType2 } from "@/components/seeMore";
+import { Comment } from "@/components";
 
 export async function generateMetadata({
   params: { _id },
@@ -63,9 +64,9 @@ export default async function NewsDetailPage({
     <div className="min-h-screen">
       <div className="max-w-6xl mx-auto px-4 py-4 grid md:grid-cols-[3fr_1fr] grid-cols-1 gap-8">
         <div className="w-full mx-auto mt-8 gap-8">
-          <div className="">
-            <h2 className="mb-5 font-bold">{data.title}</h2>
-            <div className="text-gray-600 flex gap-2 mb-5 text-sm">
+          <div className="space-y-6">
+            <h2 className="font-bold">{data.title}</h2>
+            <div className="text-gray-600 flex gap-2 text-sm">
               <Image
                 src={data?.owner?.avt}
                 alt={data?.owner?.username}
@@ -80,6 +81,7 @@ export default async function NewsDetailPage({
               </div>
             </div>
             <div dangerouslySetInnerHTML={{ __html: data.content }} />
+            <Comment />
           </div>
         </div>
         <div className="border rounded-lg p-4">

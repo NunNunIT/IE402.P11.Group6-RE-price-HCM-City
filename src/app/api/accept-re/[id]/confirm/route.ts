@@ -51,10 +51,10 @@ export const PUT = auth(
         });
       const notification = {
         title: "Bất động sản của bạn đã được xác thực",
-        content: ```
+        content: `
         <div>
           Bất động sản <b>${realEstate.title}</b> do bạn đăng ngày ${realEstate.createAt} đã được batdongsan.com xác thực
-        </div>```,
+        </div>`,
         link: `/real-estate/${realEstate._id}`,
         date: new Date(),
         isSeen: false,

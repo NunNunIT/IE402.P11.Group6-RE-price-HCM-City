@@ -6,3 +6,4 @@ export { default as SingleImgDropZone } from "./dropzone/single-img";
 export { default as BreadcrumbCustom } from "./breadcrumb";
 export { default as GroupPicture } from "./group-picture";
 export { default as NewReForm } from "./newReForm";
+export { default as Comment } from "./comments";
