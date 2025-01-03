@@ -8,9 +8,13 @@ export async function generateMetadata({
 }: {
   params: { _id: string };
 }) {
-  const data = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news/${_id}`
-  )
+  const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/news/${_id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "reload",
+  })
     .then(async (res) => {
       const payload = await res.json();
       return payload;

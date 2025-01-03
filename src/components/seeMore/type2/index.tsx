@@ -5,10 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
 
-const fetcher = (url: string) =>
-  fetch(url, { cache: "no-cache" })
-    .then((res) => res.json())
-    .then((payload) => payload.data?.rows);
+const fetcher = (url: string) => fetch(url, { cache: "reload" })
+  .then((res) => res.json())
+  .then((payload) => payload.data?.rows);
 
 export default function SeeMore({
   seeMoreLink,
@@ -31,7 +30,7 @@ export default function SeeMore({
   const RenderCard = () => {
     return (
       <>
-        {data?.map((item: any, index: any) => (
+        {!Array.isArray(data) ? null : data.map((item: any, index: any) => (
           <Link
             href={item?._id ? `/news/${item._id}` : "#"}
             key={index}
