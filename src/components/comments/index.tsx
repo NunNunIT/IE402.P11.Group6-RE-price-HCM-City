@@ -60,10 +60,10 @@ const Comment = () => {
       </a>
       <CommentSection
         currentUser={{
-          currentUserId: session.user.id,
-          currentUserImg: session.user.image,
-          currentUserProfile: session.user.name,
-          currentUserFullName: session.user.name
+          currentUserId: session?.user.id,
+          currentUserImg: session?.user.image,
+          currentUserProfile: session?.user.name,
+          currentUserFullName: session?.user.name
         }}
         commentData={data}
         logIn={{

@@ -31,7 +31,7 @@ export default function SeeMore({
   const RenderCard = () => {
     return (
       <>
-        {data?.map((item: any, index: any) => (
+        {data?.rows?.map((item: any, index: any) => (
           <Link
             href={item?._id ? `/news/${item._id}` : "#"}
             key={index}
