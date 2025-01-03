@@ -68,7 +68,7 @@ const Select: React.FC<ISelectorLocationComponentProps> = ({
       } = payload;
       if (!rawState) return;
 
-      const state = rawState.replace("Tỉnh", "").replace("province", "").trim();
+      const state = rawState.replace("Tỉnh", "").replace("province", "").replace("Province", "").trim();
       if (!state) return;
 
       setSelectedValue(state);

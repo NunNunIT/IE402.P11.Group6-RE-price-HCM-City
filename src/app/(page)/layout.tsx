@@ -3,6 +3,7 @@ import "./globals.css";
 import { Be_Vietnam_Pro } from "next/font/google";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const GlobalProvider = dynamic(
   () => import("@/provider/global").then((mod) => mod.GlobalProvider),
@@ -23,7 +24,6 @@ export const metadata: Metadata = {
     "Trang web hàng đầu về bất động sản tại Việt Nam, cung cấp thông tin mua bán và cho thuê nhà đất chi tiết và chính xác.",
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,6 +42,7 @@ export default function RootLayout({
         className={`unremoved-classname bg-zinc-50 dark:bg-black antialiased`}
       >
         <GlobalProvider>{children}</GlobalProvider>
+        <SpeedInsights />
       </body>
     </html>
   );

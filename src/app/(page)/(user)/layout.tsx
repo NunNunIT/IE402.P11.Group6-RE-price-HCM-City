@@ -1,7 +1,6 @@
 import NavBar from "@/partial/nav";
 import { BreadcrumbCustom } from "@/components";
 import type { Metadata } from "next";
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "Trang chủ",
@@ -19,7 +18,6 @@ export default function RootLayout({
       <NavBar />
       <BreadcrumbCustom />
       {children}
-      <SpeedInsights />
     </>
   );
 }
