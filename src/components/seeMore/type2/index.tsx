@@ -6,7 +6,7 @@ import Link from "next/link";
 import useSWR from "swr";
 
 const fetcher = (url: string) =>
-  fetch(url)
+  fetch(url, { cache: "no-cache" })
     .then((res) => res.json())
     .then((payload) => payload.data?.rows);
 
@@ -31,7 +31,7 @@ export default function SeeMore({
   const RenderCard = () => {
     return (
       <>
-        {data?.rows?.map((item: any, index: any) => (
+        {data?.map((item: any, index: any) => (
           <Link
             href={item?._id ? `/news/${item._id}` : "#"}
             key={index}
