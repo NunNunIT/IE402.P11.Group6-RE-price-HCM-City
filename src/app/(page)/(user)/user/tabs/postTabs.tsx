@@ -19,7 +19,7 @@ const PostTab = () => {
   return (
     <div className="p-5">
       <div className="w-full flex justify-center items-center gap-4 p-3">
-        <SearchForm onSumit={handleSearch} />
+        <SearchForm onSubmit={handleSearch} />
       </div>
       <Tabs value={currentTab} onValueChange={setCurrentTab}>
         <div className="w-full flex justify-center">

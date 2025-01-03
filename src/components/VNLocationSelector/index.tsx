@@ -143,7 +143,7 @@ export default function LocationSelect({
       setLocation?.(newLocation);
       return newLocation;
     },
-    [location, depthLevel, setLocation, setZoomController, setCenterController]
+    [location, depthLevel, setLocation, setZoomController, setCenterController, setDistrict]
   );
 
   return (

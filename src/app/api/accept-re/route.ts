@@ -1,14 +1,15 @@
-import { errorResponse, successResponse } from "@/utils";
+import { errorResponse, retry, successResponse } from "@/utils";
 import { RealEstate } from "@/lib/model";
 
 export const GET = async () => {
   try {
-    let realEstates = await RealEstate.find({
-      isAuth: { $in: ["pending", "auth"] },
-    })
-      .select("-desc")
-      .populate("owner", "username avt")
-      .lean();
+    let realEstates = await retry(() =>
+      RealEstate.find({
+        isAuth: { $in: ["pending", "auth"] },
+      })
+        .select("-desc")
+        .populate("owner", "username avt")
+        .lean());
 
     realEstates = realEstates.map(({ imageUrls, ...realEstate }) => ({
       ...realEstate,

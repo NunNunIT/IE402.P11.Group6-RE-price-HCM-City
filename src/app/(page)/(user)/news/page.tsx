@@ -2,10 +2,14 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
-import { SearchNews } from "@/components/search";
 
 // Lazy load components
-const NewsCard = dynamic(() => import("@/components/card/news"));
+const NewsCard = dynamic(() => import("@/components/card/news"), {
+  ssr: false,
+});
+const SearchNews = dynamic(() => import("@/components/search").then(m => m.SearchNews), {
+  ssr: false,
+});
 
 export default function Home() {
   const [cards, setCards] = useState<any[]>([]); // Dữ liệu bất động sản

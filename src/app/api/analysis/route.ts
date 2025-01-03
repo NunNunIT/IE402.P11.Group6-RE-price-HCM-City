@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { successResponse, errorResponse, badRequestResponse, notFoundResponse } from "@/utils";
+import { successResponse, errorResponse, badRequestResponse, notFoundResponse, updateFutureDataToNaN } from "@/utils";
 import { Province, District, Ward } from "@/lib/model"; // Import các model từ MongoDB
 
 export const GET = async (req: NextRequest) => {
@@ -12,40 +12,45 @@ export const GET = async (req: NextRequest) => {
   try {
     const responseData: Record<string, any> = { province: provinceSearch }
 
-    const province = await Province.findOne({
+    const province = (await Province.findOne({
       name: { $regex: provinceSearch, $options: "i" },
-    })
-    if (!province) return notFoundResponse({ message: "Province not foundF" });
+    })).toObject();
+    if (!province)
+      return notFoundResponse({ message: "Province not foundF" });
 
-    const districts = await District.find({
+    const districts = (await District.find({
       ...(districtSearch
         ? { name: { $regex: districtSearch, $options: "i" } }
         : { province: province._id })
-    })
-    if (districts.length === 0) return notFoundResponse({ message: "District not found" });
+    })).map(v => v?.toObject?.());
+    if (districts.length === 0)
+      return notFoundResponse({ message: "District not found" });
 
     if (!districtSearch) {
-      responseData.analysis = province.analysis
+      responseData.analysis = updateFutureDataToNaN(province.analysis)
       responseData.districts = districts.map(d => ({
         name: d.name,
-        analysis: d.analysis
+        analysis: updateFutureDataToNaN(d.analysis)
       }))
       return successResponse({ data: responseData });
     }
     responseData.district = districtSearch
 
-    const wards = await Ward.find({ district: districts[0]._id })
+    const wards = (await Ward.find({ district: districts[0]._id })).map(v => v?.toObject?.());
     if (!wardSearch) {
-      responseData.analysis = districts[0].analysis
+      responseData.analysis = updateFutureDataToNaN(districts[0].analysis)
       responseData.wards = wards.map(w => ({
         name: w.name,
-        analysis: w.analysis
+        analysis: updateFutureDataToNaN(w.analysis)
       }))
       return successResponse({ data: responseData });
     }
     responseData.ward = wardSearch
-    responseData.wards = wards
-    responseData.analysis = wards[0].analysis
+    responseData.wards = wards.map(w => ({
+      name: w.name,
+      analysis: updateFutureDataToNaN(w.analysis)
+    }))
+    responseData.analysis = updateFutureDataToNaN(wards[0].analysis);
     return successResponse({ data: responseData });
   } catch (error) {
     console.error("Error fetching data:", error);

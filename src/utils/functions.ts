@@ -241,3 +241,50 @@ export const retry = async <T>(fn: () => Promise<T>, retries = 3, delay = 1000):
     }
   }
 }
+
+type AnalysisData = {
+  [year: string]: {
+    [month: string]: number;
+  };
+};
+
+export function updateFutureDataToNaN(
+  analysis: AnalysisData,
+  today: Date = new Date()
+): AnalysisData {
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1;
+  const updatedData: AnalysisData = {};
+
+  for (const year in analysis) {
+    if (Object.prototype.hasOwnProperty.call(analysis, year)) {
+      updatedData[year] = {};
+      let totalPrice = 0;
+      let validMonthCount = 0;
+
+      for (const month in analysis[year]) {
+        if (Object.prototype.hasOwnProperty.call(analysis[year], month)) {
+          const isFuture =
+            parseInt(year) > currentYear ||
+            (parseInt(year) === currentYear && parseInt(month) > currentMonth);
+
+          if (isFuture || month === "priceAVG") {
+            updatedData[year][month] = NaN;
+          } else {
+            const price = analysis[year][month];
+            updatedData[year][month] = price;
+            if (!isNaN(price)) {
+              totalPrice += price;
+              validMonthCount++;
+            }
+          }
+        }
+      }
+
+      updatedData[year]["priceAVG"] =
+        validMonthCount > 0 ? totalPrice / validMonthCount : NaN;
+    }
+  }
+
+  return updatedData;
+}

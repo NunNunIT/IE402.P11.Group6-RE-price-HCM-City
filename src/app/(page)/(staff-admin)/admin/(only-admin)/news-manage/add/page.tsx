@@ -14,10 +14,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ImageDropZone } from "@/components"; // Import ImageDropZone component
-import { useRouter } from "next/navigation"; // Import useRouter from next/navigation
-import Editor from "@/components/rich-text/editor";
+// import { ImageDropZone } from "@/components";
+import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+const Editor = dynamic(() => import("@/components/rich-text/editor"), {
+  ssr: false,
+});
+const ImageDropZone = dynamic(() => import("@/components/ImageDropZone"), {
+  ssr: false,
+});
 import { uploadFilesToCloudinary } from "@/lib/func/cloudinary";
 
 const FormSchema = z.object({
@@ -27,7 +32,7 @@ const FormSchema = z.object({
 });
 
 export default function NewsForm() {
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {

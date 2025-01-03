@@ -99,3 +99,8 @@ interface ISelectComponentProps {
   hideLabel?: boolean;
   urlPart?: string;
 }
+
+interface ICredentials {
+  email: string;
+  password: string;
+}
