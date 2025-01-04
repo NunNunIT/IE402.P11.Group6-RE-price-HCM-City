@@ -39,7 +39,7 @@ export const GET = async (req: NextRequest) => {
   const sort = searchParams.getAll("sort");
   const getAll = !!searchParams.get("getAll"); // Chuyển getAll thành boolean
   const relative = !!searchParams.get("relative");
-  const isAuth = searchParams.has("isAuth") ? searchParams.get("isAuth") == "true" : undefined;
+  const isAuth = !!searchParams.get("isAuth");
   const propertyTypeDefault = searchParams.get("propertyType");
   const priceRangeDefault = searchParams.get("priceRange");
   const areaRangeDefault = searchParams.get("areaRange");
@@ -60,7 +60,7 @@ export const GET = async (req: NextRequest) => {
       ...(province ? { "locate.tinh": province } : {}),
       ...(district ? { "locate.huyen": district } : {}),
       ...(ward ? { "locate.xa": ward } : {}),
-      ...(isNotNullAndUndefined(isAuth) ? { isAuth } : {}),
+      ...(isAuth ? { "isAuth": isAuth } : {"isAuth": "auth"}),
       ...(propertyType !== REAL_ESTATE_PROPERTY_TYPE_DEFAULT ? { type: propertyType } : {}),
       ...(priceRange !== REAL_ESTATE_PRICE_RANGE_DEFAULT ? generateFilterRange("price", priceRange) : {}),
       ...(areaRange !== REAL_ESTATE_AREA_RANGE_DEFAULT ? generateFilterRange("area", areaRange) : {}),

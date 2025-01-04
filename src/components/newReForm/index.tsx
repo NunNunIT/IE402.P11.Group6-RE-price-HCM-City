@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { uploadFilesToCloudinary } from "@/lib/func/cloudinary";
 import { useState } from "react";
 import Editor from "../rich-text/editor";
+import { useRouter } from "next/router";
 const LocationSelect = dynamic(
   () => import("@/components/VNLocationSelector"),
   { ssr: false, loading: () => <p>Loading...</p> }
@@ -104,8 +105,9 @@ const FormSchema = z.object({
     .optional(),
 });
 
-export default function InputForm() {
+export default function InputForm({urlReturn}:{urlReturn: string}) {
   const [mapZoomController, setZoomController] = useState<number | undefined>(undefined);
+  const router = useRouter(); 
   const [mapCenterController, setCenterController] = useState<TPosition | undefined>(undefined);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -172,6 +174,7 @@ export default function InputForm() {
         const result = await response.json();
         console.log("API Response:", result);
         toast.success("Real estate added successfully!");
+        // router.push(urlReturn);
       } else {
         const error = await response.json();
         console.error("API Error:", error);

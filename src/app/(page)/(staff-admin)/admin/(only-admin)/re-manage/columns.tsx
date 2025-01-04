@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import Link from "next/link";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -39,7 +40,11 @@ const handleDelete = async (id: string) => {
     toast({ title: "Thành công", description: "Xóa bất động sản thành công" });
   } catch (error) {
     console.error("Lỗi khi xóa:", error);
-    toast({ title: "Lỗi", description: "Đã có lỗi xảy ra khi xóa", variant: "destructive" });
+    toast({
+      title: "Lỗi",
+      description: "Đã có lỗi xảy ra khi xóa",
+      variant: "destructive",
+    });
   }
 };
 
@@ -118,8 +123,14 @@ export const columns: ColumnDef<DataColumns>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Hành động</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Xem</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(id)}>Xóa</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/re-manage/${id}`} passHref>
+                Xem
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDelete(id)}>
+              Xóa
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -6,7 +6,7 @@ export default function InputForm() {
       <h1 className="md:text-4xl text-2xl font-bold my-3">
         Tạo tin đăng bán bất động sản
       </h1>
-      <NewReForm />
+      <NewReForm urlReturn={"/user/my-re"}/>
     </div>
   );
 }

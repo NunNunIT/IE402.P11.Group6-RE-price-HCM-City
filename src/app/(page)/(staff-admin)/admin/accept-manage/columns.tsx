@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const postConfirmRealEstate = async (id: string) => {
   const res = await fetch(`/api/accept-re/${id}/confirm`, {
@@ -147,6 +148,11 @@ export const columns: ColumnDef<DataColumns>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Hành động</DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/re-manage/${row.original._id}`} passHref>
+                Xem
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem
               className="hover:cursor-pointer"
               onClick={() => {
