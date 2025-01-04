@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { uploadFilesToCloudinary } from "@/lib/func/cloudinary";
 import { useState } from "react";
 import Editor from "../rich-text/editor";
+import { useRouter } from "next/navigation";
 const LocationSelect = dynamic(
   () => import("@/components/VNLocationSelector"),
   { ssr: false, loading: () => <p>Loading...</p> }
@@ -104,7 +105,8 @@ const FormSchema = z.object({
     .optional(),
 });
 
-export default function InputForm({urlReturn}:{urlReturn: string}) {
+export default function InputForm({ urlReturn }: { urlReturn: string }) {
+  const router = useRouter();
   const [mapZoomController, setZoomController] = useState<number | undefined>(undefined);
   const [mapCenterController, setCenterController] = useState<TPosition | undefined>(undefined);
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -131,8 +133,7 @@ export default function InputForm({urlReturn}:{urlReturn: string}) {
       return;
     }
 
-    try {
-      // Bước 1: Chuyển đổi blob URLs thành File
+    const promise = async () => {
       const files = await Promise.all(
         blobUrls.map(async (blobUrl) => {
           const res = await fetch(blobUrl);
@@ -141,52 +142,33 @@ export default function InputForm({urlReturn}:{urlReturn: string}) {
           return new File([blob], fileName, { type: blob.type });
         })
       );
-
-      console.log("Files converted from blob URLs:", files);
-
-      // Bước 2: Upload files lên Cloudinary
-      const uploadedUrls = await uploadFilesToCloudinary(
-        files,
-        "ie402/real-estates"
-      );
-      console.log("Uploaded URLs from Cloudinary:", uploadedUrls);
-
-      // Bước 3: Thay thế imgs trong form
-      const updatedValues = {
-        ...values,
-        imgs: uploadedUrls,
-      };
-
-      console.log("Updated form values:", updatedValues);
-
-      // Bước 4: Gửi dữ liệu tới API `/api/real-estate/add`
-      const response = await fetch("/api/real-estates/add", {
+      const uploadedUrls = await uploadFilesToCloudinary(files, "ie402/real-estates");
+      const updatedValues = { ...values, imgs: uploadedUrls };
+      const res = await fetch("/api/real-estates/add", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedValues), // Gửi dữ liệu dạng JSON
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedValues),
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log("API Response:", result);
-        toast.success("Real estate added successfully!");
-        // router.push(urlReturn);
-      } else {
-        const error = await response.json();
-        console.error("API Error:", error);
-        toast.error(`Failed to add real estate: ${error.message}`);
-      }
-    } catch (error) {
-      console.error("Error processing images:", error);
-      toast.error("Failed to upload images or save data.");
+      if (!res.ok) throw new Error("Failed to add real estate.");
+      const payload = await res.json();
+      return payload.data;
     }
+
+    toast.promise(promise(), {
+      loading: "Uploading images and saving data...",
+      success: (data) => {
+        console.log("🚀 ~ toast.promise ~ data:", data)
+        router.push(urlReturn);
+        return "Real estate added successfully!"
+      },
+      error: "Failed to upload images or save data.",
+    });
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} action={urlReturn} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
           <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
             Thông tin cơ bản
@@ -342,7 +324,6 @@ export default function InputForm({urlReturn}:{urlReturn: string}) {
                       </span>
                     }
                     {...field}
-                    // onChange={(e) => field.onChange(Number(e.target.value))}
                   />
                 </FormControl>
                 <FormMessage />
