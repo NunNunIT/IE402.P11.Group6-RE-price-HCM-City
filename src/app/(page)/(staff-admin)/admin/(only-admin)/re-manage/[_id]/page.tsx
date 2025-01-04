@@ -1,5 +1,3 @@
-"use server";
-
 import { FaLocationDot } from "react-icons/fa6";
 import { ImageViewType1 } from "@/components/imageView";
 import { SaveRealBtn } from "@/components";
@@ -7,7 +5,6 @@ import { notFound } from "next/navigation";
 import translateKey from "@/lib/func/transfer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { CarouselWrapper } from "@/components/carsousel";
 import { CustomizeMap } from "./components";
 
 interface IRealEstateDetailPageProps extends IDefaultPageProps {
@@ -17,14 +14,12 @@ interface IRealEstateDetailPageProps extends IDefaultPageProps {
 export async function generateMetadata({
   params: { _id },
 }: IRealEstateDetailPageProps) {
-  const data = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`,
-    { cache: "reload" }
-  )
-    .then(async (res) => {
-      const payload = await res.json();
-      return payload.data;
-    })
+  const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`, {
+    cache: "reload"
+  }).then(async (res) => {
+    const payload = await res.json();
+    return payload.data;
+  })
     .catch((error): null => {
       console.error("🚀 ~ .catch ~ error", error.message);
       return null;
@@ -46,17 +41,11 @@ export async function generateMetadata({
 export default async function RealEstateDetailPage({
   params: { _id },
 }: IRealEstateDetailPageProps) {
-  const data = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`,
-    { cache: "reload" }
-  )
-    .then(async (res) => {
+  const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/real-estates/${_id}`, {
+    cache: "reload"
+  }).then(async (res) => {
       const payload = await res.json();
-      return payload;
-    })
-    .then(async (payload) => {
-      const data = payload.data;
-      return data;
+      return payload.data;
     })
     .catch((error): null => {
       console.error("🚀 ~ .catch ~ error", error.message);
@@ -172,14 +161,12 @@ export default async function RealEstateDetailPage({
             </div>
           </div>
         </div>
-
-
       </div>
 
       <CustomizeMap
         title={data.title}
         locate={data.locate}
-        polygon={data.polygon.points ?? []}
+        polygon={data.polygon?.points ?? []}
       />
     </div>
   );
