@@ -29,7 +29,6 @@ import { toast } from "sonner";
 import { uploadFilesToCloudinary } from "@/lib/func/cloudinary";
 import { useState } from "react";
 import Editor from "../rich-text/editor";
-import { useRouter } from "next/router";
 const LocationSelect = dynamic(
   () => import("@/components/VNLocationSelector"),
   { ssr: false, loading: () => <p>Loading...</p> }
@@ -107,7 +106,6 @@ const FormSchema = z.object({
 
 export default function InputForm({urlReturn}:{urlReturn: string}) {
   const [mapZoomController, setZoomController] = useState<number | undefined>(undefined);
-  const router = useRouter(); 
   const [mapCenterController, setCenterController] = useState<TPosition | undefined>(undefined);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -188,7 +186,7 @@ export default function InputForm({urlReturn}:{urlReturn: string}) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} action={urlReturn} className="space-y-6">
         <div className="bg-white dark:bg-zinc-900 p-4 rounded-lg space-y-2">
           <h2 className="font-semibold text-2xl border-l-8 border-teal-500 pl-2 text-zinc-900 dark:text-white">
             Thông tin cơ bản
