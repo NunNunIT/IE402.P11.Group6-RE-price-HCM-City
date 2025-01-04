@@ -40,7 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return baseUrl
     },
     jwt: async ({ token, user, account }) => {
-      if (user && account.provider === "google") {
+      if (user && account.provider !== "credentials") {
         const { _id, role, avt } = await createUserFromSocial({
           email: token.email,
           socialType: token.provider as ENUM_SOCIAL_TYPE,
@@ -65,6 +65,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         };
       }
 
+      console.log(">> token:", token);
       return token;
     },
     session: async ({ session, token }) => {
