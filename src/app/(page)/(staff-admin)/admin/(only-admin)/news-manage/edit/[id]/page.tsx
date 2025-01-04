@@ -67,16 +67,6 @@ export default function NewsEdit({ params: { id } }: { params: { id: string } })
       });
 
       if (!res.ok) throw new Error("Failed to update news");
-
-      toast({
-        title: "News updated successfully",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-          </pre>
-        ),
-      });
-
       router.push("/admin/news-manage");
     } catch (error) {
       toast({
