@@ -21,7 +21,6 @@ export default function SearchNews() {
         "dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
       )}
     >
-      {/* Search keyword input */}
       <Input
         type="text"
         name="keyword"
