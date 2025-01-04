@@ -12,9 +12,8 @@ export const GET = async (req: NextRequest) => {
 
   try {
     let news = await News.find({
-      ...(searchKey ? { title: { $regex: searchKey, $options: "i" } } : {}), // Case-insensitive regex search
-    })
-      .limit(limit)
+      ...(searchKey ? { title: { $regex: searchKey, $options: "i" } } : {}),
+    }).limit(limit)
       .skip((page - 1) * limit)
       .lean();
 

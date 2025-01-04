@@ -7,7 +7,6 @@ import {
 
 import { NextRequest } from "next/server";
 import { News } from "@/lib/model";
-import { User } from "@/lib/model"; // Import User model
 import { isValidObjectId } from "mongoose";
 
 export const GET = async (
@@ -22,12 +21,8 @@ export const GET = async (
       });
     }
 
-    // Populate owner with `avt` and `name` fields
     const news = await News.findById(id)
-      .populate({
-        path: "owner",
-        select: "avt username", // Only retrieve `avt` and `name` from User
-      })
+      .populate({ path: "owner", select: "avt username" })
       .lean();
 
     if (!news) {
