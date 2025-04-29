@@ -50,3 +50,6 @@ npm run dev
 6. **Truy cập giao diện web**: [http://localhost:3000](http://localhost:3000)
 
 Hoặc truy cập thẳng vào trang web: [http://ie402-p11-group6.vercel.app/](http://ie402-p11-group6.vercel.app/)
+
+![image](https://github.com/user-attachments/assets/379ff439-7e11-49c5-88b7-c73d87c9eac4)
+
